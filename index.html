@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>시장 통계 대시보드</title>
+<style>
+:root{--bg:#F4F6F8;--card:#fff;--ink:#11233A;--ink2:#4A5B6C;--ink3:#8698A8;--line:#DDE3E9;--accent:#1F6FB2;--ok:#0D7C6B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1720;--card:#16212D;--ink:#E6EDF3;--ink2:#A9B7C4;--ink3:#7A8B9B;--line:#253445;--accent:#6AA8DE;--ok:#4FC1A8}}
+:root[data-theme="dark"]{--bg:#0F1720;--card:#16212D;--ink:#E6EDF3;--ink2:#A9B7C4;--ink3:#7A8B9B;--line:#253445;--accent:#6AA8DE;--ok:#4FC1A8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+main{max-width:960px;margin:0 auto;padding:40px 16px 56px}
+.eyebrow{font:600 11px/1 ui-monospace,Consolas,monospace;letter-spacing:.14em;color:var(--ink3);text-transform:uppercase}
+h1{font-size:26px;margin:10px 0 6px}
+.lead{color:var(--ink2);margin:0 0 28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 18px 16px;color:inherit;text-decoration:none;transition:border-color .15s}
+a.card:hover{border-color:var(--accent)}
+.card h2{font-size:17px;margin:0 0 6px}
+.card p{margin:0 0 14px;color:var(--ink2);font-size:13.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ink3)}
+.asof{color:var(--ok);font-weight:600}
+footer{margin-top:32px;font-size:12px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">AVIAREPS Korea · Market Data</div>
+  <h1>시장 통계 대시보드</h1>
+  <p class="lead">공개 통계를 매월 자동으로 받아 갱신합니다. 카드의 기준월은 각 데이터 파일에서 읽어 옵니다.</p>
+  <div class="grid" id="grid"></div>
+  <footer>원자료: 한국관광공사 데이터랩, 국토교통부 항공정보포털(airportal.go.kr). 각 대시보드 하단에 출처와 갱신일이 있습니다.</footer>
+</main>
+<script>
+const BOARDS = [
+  {href:'outbound/', json:'data/korea-outbound.json', title:'한국인 아웃바운드 목적지', desc:'목적지 국가별 한국인 방문객 순위·증감·추이 (한국관광공사)', cycle:'매월 5일 전후 게시'},
+  {href:'airline/',  json:'data/airline-departures.json', title:'국제선 출발 여객 (항공사별)', desc:'항공사별 국제선 출발 유임+환승여객 월별 추이 (airportal)', cycle:'매월 중순'},
+  {href:'routes/',   json:'data/airport-routes.json', title:'주요 공항별 노선 분석', desc:'인천·김해·김포·청주·대구 국제선 출발 노선·항공사 (airportal)', cycle:'매월 중순'},
+  {href:'region/',   json:'data/region-country.json', title:'출발편 항공 통계 (국가·도시별)', desc:'지역·국가·도시별 국제선 여객, 엑셀 내려받기 (airportal)', cycle:'매월 중순'},
+];
+const grid = document.getElementById('grid');
+BOARDS.forEach(b => {
+  const a = document.createElement('a');
+  a.className = 'card'; a.href = b.href;
+  a.innerHTML = `<h2>${b.title}</h2><p>${b.desc}</p><div class="meta"><span class="asof">기준월 확인 중…</span><span>${b.cycle}</span></div>`;
+  grid.appendChild(a);
+  fetch(b.json, {cache:'no-cache'}).then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(j => { a.querySelector('.asof').textContent = `기준월 ${j.meta.as_of} · 갱신 ${j.meta.updated_at}`; })
+    .catch(() => { a.querySelector('.asof').textContent = '준비 중'; a.querySelector('.asof').style.color = 'var(--ink3)'; });
+});
+</script>
+</body>
+</html>

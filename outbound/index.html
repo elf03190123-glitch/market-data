@@ -1,0 +1,1050 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+<title>한국인 아웃바운드 목적지 대시보드</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#E7ECF0; --card:#FFF; --ink:#11233A; --ink2:#4A5D72; --ink3:#8698A8;
+  --line:#CFD8E0; --hair:#DEE5EA;
+  --mag:#B01B5E; --blue:#1F6FB2; --teal:#0D7C6B; --amber:#B8790A;
+  --up:#0D7C6B; --dn:#B01B5E;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 14px 56px}
+
+/* ---------- header ---------- */
+header{padding:22px 0 14px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+h1{font-size:23px;line-height:1.2;margin:7px 0 0;font-weight:800;letter-spacing:-.02em}
+h1 .sub{display:block;font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--blue);margin-top:5px}
+.srcline{margin-top:9px;font-size:11px;color:var(--ink3);line-height:1.45}
+.flag{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:3px 9px;border:1px solid var(--amber);
+  border-radius:2px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--amber);background:#FDF6E6}
+
+/* ---------- kpi ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);margin-top:16px}
+.kpi{background:var(--card);padding:12px 13px 13px}
+.kpi .lb{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3)}
+.kpi .vl{font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:-.02em;margin-top:5px;line-height:1.05}
+.kpi .dl{font-size:11.5px;color:var(--ink2);margin-top:4px}
+.pos{color:var(--up)} .neg{color:var(--dn)}
+
+/* ---------- tabs ---------- */
+nav{position:sticky;top:0;z-index:40;background:var(--paper);padding:12px 0 10px;margin-top:18px;
+  border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:0;border:1px solid var(--ink);background:var(--card)}
+.tab{flex:1;padding:8px 4px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  cursor:pointer;border-right:1px solid var(--line);background:none;color:var(--ink2);font-weight:500;
+  border-top:0;border-bottom:0;border-left:0;transition:background .12s}
+.tab:last-child{border-right:0}
+.tab[aria-selected=true]{background:var(--ink);color:#fff}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+
+section.view{display:none;padding-top:18px}
+section.view.on{display:block}
+
+.card{background:var(--card);border:1px solid var(--line);padding:14px}
+.card+.card{margin-top:14px}
+.ctitle{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
+  display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.chint{font-size:11px;color:var(--ink3);letter-spacing:0;text-transform:none;font-family:var(--sans)}
+
+/* ---------- controls ---------- */
+.ctl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 4px}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.seg button{font-family:var(--mono);font-size:10.5px;padding:5px 9px;background:#fff;border:0;
+  border-right:1px solid var(--line);cursor:pointer;color:var(--ink2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+input[type=search]{font-family:var(--sans);font-size:12.5px;padding:6px 9px;border:1px solid var(--line);
+  background:#fff;color:var(--ink);width:150px}
+input[type=search]:focus{outline:2px solid var(--blue);outline-offset:-1px}
+
+/* ---------- rank table ---------- */
+.rank{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.rank th{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);
+  text-align:right;padding:6px 5px;border-bottom:1px solid var(--ink);white-space:nowrap;cursor:pointer;user-select:none}
+.rank th:nth-child(1),.rank th:nth-child(2){text-align:left}
+.rank th:not([data-k]){cursor:default}
+.rank th[data-k]:hover{color:var(--ink2);background:#F4F8FA}
+.rank th[data-k]::after{content:"↕";margin-left:4px;font-size:8.5px;opacity:.3;letter-spacing:0}
+.rank th[data-active=true]{color:var(--ink);font-weight:600}
+.rank th[data-active=true][data-dir=asc]::after{content:"▲";opacity:1;color:var(--blue)}
+.rank th[data-active=true][data-dir=desc]::after{content:"▼";opacity:1;color:var(--blue)}
+.rank th[data-k]:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.rank td{padding:7px 5px;border-bottom:1px solid var(--hair);text-align:right;
+  font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.rank td:nth-child(2){text-align:left;font-family:var(--sans);font-size:13px}
+.rank tr{cursor:pointer}
+.rank tr:hover td{background:#F4F8FA}
+.rk{color:var(--ink3);font-size:11px}
+.rank tr.lsep td{padding:9px 5px 5px;border-bottom:1px solid var(--line);text-align:left;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--ink3);background:#F4F8FA}
+.rank tr.lsep{cursor:default}
+.rank tr.late td{color:var(--ink2)}
+.rank tr.late .nm{font-weight:600;color:var(--ink)}
+.lbadge{margin-left:6px;font-family:var(--mono);font-size:9px;letter-spacing:.05em;color:var(--amber);
+  border:1px solid var(--amber);border-radius:2px;padding:1px 4px;background:#FDF6E6;white-space:nowrap}
+.nm{font-weight:600}
+.gtag{font-family:var(--mono);font-size:9px;color:var(--ink3);letter-spacing:.05em;margin-left:5px}
+.barcell{width:78px;padding-right:0!important}
+.bar{height:7px;background:var(--blue);display:block}
+.spark{display:block}
+.na{color:var(--ink3)}
+
+/* ---------- trend ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.chip{font-family:var(--mono);font-size:11px;padding:4px 8px;border:1px solid var(--line);background:#fff;
+  cursor:pointer;color:var(--ink2);display:inline-flex;align-items:center;gap:5px}
+.chip[aria-pressed=true]{border-color:currentColor;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.chartbox{position:relative;margin-top:10px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-family:var(--mono);
+  font-size:11px;padding:6px 8px;border-radius:2px;opacity:0;transition:opacity .1s;white-space:nowrap;z-index:20;
+  transform:translate(-50%,-115%)}
+.tip b{font-weight:600}
+
+/* ---------- insights ---------- */
+.ins{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.icard{background:var(--card);border:1px solid var(--line);padding:13px 14px;border-left:3px solid var(--blue)}
+.icard.warn{border-left-color:var(--amber)} .icard.good{border-left-color:var(--teal)}
+.icard.bad{border-left-color:var(--mag)}
+.icard h3{margin:0;font-size:13px;font-weight:700;letter-spacing:-.01em}
+.icard .kicker{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+  display:block;margin-bottom:5px}
+.icard p{margin:6px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.55}
+.icard .fig{font-family:var(--mono);font-weight:600;color:var(--ink)}
+
+/* ---------- detail panel ---------- */
+.detail{position:fixed;inset:auto 0 0 0;background:var(--card);border-top:2px solid var(--ink);
+  padding:14px 16px 18px;z-index:60;transform:translateY(101%);transition:transform .22s ease;
+  box-shadow:0 -8px 24px rgba(17,35,58,.13)}
+.detail.on{transform:none}
+.detail{max-height:92vh;overflow-y:auto;overscroll-behavior:contain}
+.dctl{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dnote{font-family:var(--mono);font-size:10px;color:var(--ink3);letter-spacing:.02em}
+.chip .sw{width:10px;height:10px;flex:none;border-radius:2px}
+.chip[aria-pressed=false]{opacity:.4}
+.detail .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.detail h2{margin:0;font-size:18px;font-weight:800;letter-spacing:-.02em}
+.detail .den{font-family:var(--mono);font-size:10.5px;color:var(--ink3);letter-spacing:.08em}
+.close{border:1px solid var(--line);background:#fff;font-family:var(--mono);font-size:11px;padding:5px 9px;cursor:pointer}
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:11px}
+.dgrid div{background:#fff;padding:8px 9px}
+.dgrid .l{font-family:var(--mono);font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+.dgrid .v{font-family:var(--mono);font-size:15px;font-weight:600;margin-top:3px}
+.scrim{position:fixed;inset:0;background:rgba(17,35,58,.28);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+
+footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);line-height:1.6}
+footer code{font-family:var(--mono);background:#fff;border:1px solid var(--line);padding:1px 4px;font-size:10.5px}
+
+@media (max-width:720px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ins{grid-template-columns:1fr}
+  h1{font-size:20px}
+  .kpi .vl{font-size:20px}
+  .rank td,.rank th{padding:6px 3px}
+  .dgrid{grid-template-columns:repeat(2,1fr)}
+  .barcell{display:none}
+  .hide-sm{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Korea Outbound Market Monitor</span>
+  <h1>한국인 아웃바운드 목적지 대시보드
+    <span class="sub" id="periodline"></span></h1>
+  <div class="srcline" id="srcline"></div>
+  <div class="srcline" id="prepline" style="margin-top:2px">PREPARED BY AVIAREPS Korea</div>
+  <div class="flag" id="flagline"></div>
+  <div class="ctl" id="cutctl">
+    <div class="seg" id="cut-seg"></div>
+    <span class="chint" id="cut-note"></span>
+  </div>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<nav>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-v="rank" aria-selected="true">순위</button>
+    <button class="tab" role="tab" data-v="delta" aria-selected="false">증감</button>
+    <button class="tab" role="tab" data-v="yrtrend" aria-selected="false">연도별 추이</button>
+    <button class="tab" role="tab" data-v="mtrend" aria-selected="false">월간 추이</button>
+    <button class="tab" role="tab" data-v="map" aria-selected="false">포지션 맵</button>
+    <button class="tab" role="tab" data-v="cont" aria-selected="false">대륙별</button>
+    <button class="tab" role="tab" data-v="ins" aria-selected="false">인사이트</button>
+  </div>
+</nav>
+
+<section class="view on" id="v-rank">
+  <div class="card">
+    <div class="ctitle"><span>목적지별 순위 · <span id="rk-period"></span></span>
+      <span class="chint">표 제목을 누르면 정렬(다시 누르면 반대 순서) · 행을 누르면 국가별 상세</span></div>
+    <div class="ctl">
+      <div class="seg" id="rk-scope">
+        <button data-s="main" aria-pressed="true">주요 목적지</button>
+        <button data-s="all" aria-pressed="false">전체</button>
+      </div>
+      <input type="search" id="rk-q" placeholder="국가 검색" aria-label="국가 검색">
+    </div>
+    <table class="rank">
+      <thead><tr>
+        <th data-k="rank">#</th>
+        <th data-k="name">목적지</th>
+        <th data-k="ytd" data-active="true">누적 방문객</th>
+        <th class="barcell hide-sm"></th>
+        <th data-k="yoy">전년비</th>
+        <th data-k="rec">'19 대비</th>
+        <th data-k="share" class="hide-sm">비중</th>
+        <th class="hide-sm">최근 24개월</th>
+      </tr></thead>
+      <tbody id="rk-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="view" id="v-delta">
+  <div class="card">
+    <div class="ctitle"><span>전년 동기 대비 증감 인원 · <span id="dl-period"></span></span>
+      <span class="chint">왼쪽은 전년비 · 막대는 전년 동기 대비 증감 인원</span></div>
+    <div class="chartbox"><svg id="dl-svg" viewBox="0 0 900 480"></svg><div class="tip" id="dl-tip"></div></div>
+    <p class="chint" id="dl-note" style="margin:10px 0 0"></p>
+  </div>
+</section>
+
+<section class="view" id="v-yrtrend">
+  <div class="card">
+    <div class="ctitle"><span>연도별 전체 출국자 추이 · <span id="yr-ann-note"></span></span>
+      <span class="chint">막대 위 굵은 숫자는 연간 합계 인원 · 그 아래는 전년비 증감률</span></div>
+    <div class="chartbox"><svg id="yr-svg-ann" viewBox="0 0 900 380"></svg></div>
+  </div>
+</section>
+
+<section class="view" id="v-mtrend">
+  <div class="card">
+    <div class="ctitle"><span>월간 누계 비교 · <span id="yr-ytd-note"></span></span>
+      <span class="chint">막대 위 굵은 숫자는 누계 인원 · 그 아래는 전년비 증감률</span></div>
+    <div class="chartbox"><svg id="yr-svg-ytd" viewBox="0 0 900 380"></svg></div>
+  </div>
+  <div class="card">
+    <div class="ctitle"><span>월별 추이 비교</span><span class="chint" id="tr-hint"></span></div>
+    <div class="ctl">
+      <div class="seg" id="tr-mode">
+        <button data-m="m" aria-pressed="true">월별</button>
+        <button data-m="r12" aria-pressed="false">12개월 누적</button>
+        <button data-m="ytd" aria-pressed="false">연도별 누적</button>
+      </div>
+      <div class="seg" id="tr-span">
+        <button data-r="36" aria-pressed="true">3년</button>
+        <button data-r="84" aria-pressed="false">7년</button>
+        <button data-r="0" aria-pressed="false">전체</button>
+      </div>
+    </div>
+    <div class="chips" id="tr-chips"></div>
+    <div class="chartbox"><svg id="tr-svg" viewBox="0 0 900 400"></svg><div class="tip" id="tr-tip"></div></div>
+  </div>
+</section>
+
+<section class="view" id="v-map">
+  <div class="card">
+    <div class="ctitle"><span>회복 × 성장 포지션 맵</span>
+      <span class="chint">가로 = 2019년 동기 대비 회복률 · 세로 = 전년 동기 대비 증감 · 원 크기 = 방문객 규모</span></div>
+    <div class="chartbox"><svg id="mp-svg" viewBox="0 0 900 520"></svg><div class="tip" id="mp-tip"></div></div>
+  </div>
+</section>
+
+<section class="view" id="v-cont">
+  <div class="card">
+    <div class="ctitle"><span>대륙별 주요 국가 집계 · <span id="ct-period"></span></span>
+      <span class="chint">각 대륙에서 통계가 확보된 목적지만 합산한 값입니다</span></div>
+    <table class="rank">
+      <thead><tr><th>대륙</th><th>집계 국가</th><th>누적 방문객</th><th>비중</th><th>전년비</th><th>증감 인원</th><th class="hide-sm">'19 대비</th></tr></thead>
+      <tbody id="ct-body"></tbody>
+    </table>
+    <p class="chint" id="ct-note" style="margin:10px 0 0"></p>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span>구성 변화</span><span class="chint">3개 연도 모두 집계된 동일 국가 기준</span></div>
+    <div class="chartbox"><svg id="cs-svg" viewBox="0 0 900 210"></svg></div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle"><span>대륙별 회복 궤적</span><span class="chint" id="cl-hint"></span></div>
+    <div class="ctl">
+      <div class="seg" id="cl-mode">
+        <button data-m="idx" aria-pressed="true">2019년=100 지수</button>
+        <button data-m="abs" aria-pressed="false">12개월 누적</button>
+      </div>
+    </div>
+    <div class="chartbox"><svg id="cl-svg" viewBox="0 0 900 380"></svg><div class="tip" id="cl-tip"></div></div>
+  </div>
+</section>
+
+<section class="view" id="v-ins">
+  <div class="ins" id="ins-body"></div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="detail" id="detail" aria-hidden="true">
+  <div class="dhead">
+    <div><h2 id="d-name"></h2><span class="den" id="d-en"></span></div>
+    <button class="close" id="d-close">닫기 ✕</button>
+  </div>
+  <div class="dgrid" id="d-grid"></div>
+  <div class="dctl"><div class="chips" id="d-lgd"></div><span class="dnote">월별 · 연도 겹쳐보기 — 최근 3개 연도 비교 — 칩으로 표시/숨김</span></div>
+  <div class="chartbox"><svg id="d-svg" viewBox="0 0 900 250"></svg><div class="tip" id="d-tip"></div></div>
+</aside>
+
+<script type="text/plain" id="app">
+/* ============================================================
+   DATA BLOCK — 월간 업데이트 시 이 블록만 교체하세요.
+   months 배열 끝에 새 월(YYYY-MM) 추가 → total 배열과 각 국가 v 배열
+   같은 위치에 값 추가(미집계는 null). 모든 지표·순위·인사이트는 자동 재계산됩니다.
+   ============================================================ */
+const DATA = window.__DATA__, META = window.__META__;
+/* ===================== DATA BLOCK 끝 ===================== */
+
+const M = DATA.months, N = M.length, TOT = DATA.total, CS = DATA.c;
+const NAMES = Object.keys(CS);
+const YEARS = [...new Set(M.map(k=>+k.slice(0,4)))];
+const LASTY = YEARS[YEARS.length-1];
+const idx = k => M.indexOf(k);
+const at = (v,y,m) => { const i=idx(y+'-'+String(m).padStart(2,'0')); return i<0?null:v[i]; };
+
+/* --- 비교 기준월(CUT) 자동 판정: 최신연도에서 대부분 국가가 집계된 마지막 월 --- */
+const CUTAUTO = (()=>{
+  const pool = NAMES.filter(n=>at(CS[n].v,LASTY,1)!=null);
+  let best=1;
+  for(let m=1;m<=12;m++){
+    if(at(TOT,LASTY,m)==null) break;
+    const full = pool.filter(n=>{
+      for(let k=1;k<=m;k++) if(at(CS[n].v,LASTY,k)==null) return false;
+      return true;}).length;
+    if(full >= pool.length*0.7) best=m;
+  }
+  return best;
+})();
+const CUTMAX = (()=>{let m=0;for(let k=1;k<=12;k++) if(at(TOT,LASTY,k)!=null) m=k; return m;})();
+const LASTM = M[N-1];
+const PARTIAL = CUTMAX > CUTAUTO;
+/* 기준월이 앞으로 밀려도 직전 리포트에서 쓰던 기준(예: 1–5월)이 갑자기 사라지지 않도록,
+   직전 기준월(CUTAUTO-1)도 선택지로 항상 남겨둡니다. */
+const CUTS = [...new Set([CUTAUTO-1, CUTAUTO, CUTMAX])].filter(m=>m>=1).sort((a,b)=>a-b);
+let CUT = CUTAUTO;
+
+const ytd = (v,y,cut)=>{cut=cut||CUT;let s=0;for(let m=1;m<=cut;m++){const x=at(v,y,m);if(x==null)return null;s+=x;}return s;};
+const T = (y,cut) => ytd(TOT,y,cut);
+const COVER = cut => NAMES.filter(n=>ytd(CS[n].v,LASTY,cut)!=null).length;
+
+/* --- 국가별 지표 (기준월 변경 시 재계산) --- */
+let ROWS=[], BY={}, MAIN=[], LATE=[], PER='';
+/* 1월에만 값이 있는 목적지 = 월별이 아니라 연간 집계만 제공되는 목적지(예: 스페인) */
+const ANN={}; NAMES.forEach(n=>ANN[n]=CS[n].v.every((x,i)=>x==null||M[i].slice(5)==='01'));
+/* 해당 연도 1월부터 k개월 합 (중간 결측이면 null) */
+const sumM=(v,y,k)=>{let s=0;for(let m=1;m<=k;m++){const x=at(v,y,m);if(x==null)return null;s+=x;}return s;};
+function build(){
+  ROWS = NAMES.map(n=>{
+    const c=CS[n], cur=ytd(c.v,LASTY), pr=ytd(c.v,LASTY-1), p19=ytd(c.v,2019);
+    return {n, en:c.e, g:c.g, v:c.v, ytd:cur, prev:pr, p19,
+      yoy: (cur!=null&&pr) ? cur/pr-1 : null,
+      rec: (cur!=null&&p19) ? cur/p19 : null,
+      share: cur!=null ? cur/T(LASTY) : null,
+      shareP: pr!=null ? pr/T(LASTY-1) : null};
+  }).filter(r=>r.ytd!=null).sort((a,b)=>b.ytd-a.ytd);
+  ROWS.forEach((r,i)=>r.rank=i+1);
+  BY = Object.fromEntries(ROWS.map(r=>[r.n,r]));
+  MAIN = ROWS.filter(r=>r.ytd>=20000);
+  /* 현재 기준월 누계가 없는 목적지 — 최신 집계 연도 기준으로 따로 표시(순위·비중에서는 제외) */
+  LATE = NAMES.filter(n=>!BY[n]).map(n=>{
+    const c=CS[n];
+    const yrs=YEARS.filter(y=>{for(let m=1;m<=12;m++) if(at(c.v,y,m)!=null) return true; return false;});
+    const ly=yrs[yrs.length-1]; if(ly==null) return null;
+    let k=0; while(k<12 && at(c.v,ly,k+1)!=null) k++;      /* 1월부터 이어지는 개월 수 */
+    if(!k) return null;
+    const cur=sumM(c.v,ly,k), pv=sumM(c.v,ly-1,k), p19=sumM(c.v,2019,k);
+    return {n, en:c.e, g:c.g, v:c.v, annual:ANN[n], late:1, ly, lk:k,
+      lper: (ANN[n]||k===12) ? `${ly}년 연간` : `${ly}년 1–${k}월`,
+      ytd:null, prev:null, p19:null, yoy:null, rec:null, share:null, shareP:null, rank:null,
+      lytd:cur, lyoy:(cur!=null&&pv)?cur/pv-1:null, lrec:(cur!=null&&p19)?cur/p19:null};
+  }).filter(r=>r&&r.lytd!=null).sort((a,b)=>b.lytd-a.lytd);
+  LATE.forEach(r=>{ if(!BY[r.n]) BY[r.n]=r; });
+  PER = `${LASTY}년 1–${CUT}월 누계`;
+}
+
+/* --- format --- */
+const nf = n => n==null?'—':n.toLocaleString('ko-KR');
+const pf = (x,d=1) => x==null?'—':(x>=0?'+':'')+(x*100).toFixed(d)+'%';
+const rf = x => x==null?'—':(x*100).toFixed(0)+'%';
+const kf = n => n==null?'—' : n>=100000000 ? (n/100000000).toFixed(1)+'억'
+  : n>=10000 ? Math.round(n/10000).toLocaleString('ko-KR')+'만' : n.toLocaleString('ko-KR');
+const mlab = k => k.slice(2,4)+'.'+k.slice(5);
+const sgn = x => x==null?'':(x>=0?'pos':'neg');
+const josa=(w,a,b)=>{const c=w.charCodeAt(w.length-1);const bat=(c>=0xAC00&&c<=0xD7A3)&&((c-0xAC00)%28!==0);return w+(bat?a:b);};
+
+/* --- header --- */
+function renderHeader(){
+  document.getElementById('periodline').textContent =
+    `${PER} · 기준 데이터 ${LASTM.slice(0,4)}년 ${+LASTM.slice(5)}월`;
+  document.getElementById('srcline').textContent = '출처: ' + DATA.meta.src;
+  document.getElementById('flagline').textContent = PARTIAL
+    ? `${CUTMAX}월은 일부 국가만 집계 완료 — 전체 목적지 비교는 1–${CUTAUTO}월 기준`
+    : `전 국가 ${CUT}월까지 집계 완료`;
+  document.getElementById('rk-period').textContent = PER;
+  document.getElementById('cut-note').textContent = CUT===CUTAUTO
+    ? `${COVER(CUTAUTO)}개 목적지 비교 가능`
+    : (CUT===CUTMAX && PARTIAL)
+      ? `${CUTMAX}월까지 집계를 마친 ${COVER(CUTMAX)}개 목적지만 표시 · 순위는 이 범위 안의 순위`
+      : `${COVER(CUT)}개 목적지 비교 가능 · 이전 리포트와 비교용 기준`;
+}
+if(CUTS.length>1){
+  document.getElementById('cut-seg').innerHTML = CUTS.map(c=>{
+    const label = (c===CUTMAX && PARTIAL) ? `1–${c}월 · 집계 완료국`
+      : c===CUTAUTO ? `1–${c}월 · 전체 목적지`
+      : `1–${c}월 · 이전 기준`;
+    return `<button data-c="${c}" aria-pressed="${c===CUT}">${label}</button>`;
+  }).join('');
+} else { document.getElementById('cutctl').style.display='none'; }
+document.getElementById('tr-hint').textContent = `미집계 구간은 선이 끊겨 표시됩니다`;
+
+/* --- KPI --- */
+function renderKPI(){
+  const cur=T(LASTY), pr=T(LASTY-1), p19=T(2019);
+  const top=ROWS[0], top3=ROWS.slice(0,3).reduce((a,r)=>a+r.ytd,0);
+  const k=[
+    ['전체 출국자', nf(cur)+'명', `전년 동기 ${pf(cur/pr-1)}`, cur/pr-1],
+    ['2019년 대비', rf(cur/p19), `팬데믹 이전 동기 ${nf(p19)}명`, cur/p19-1],
+    [`1위 ${top.n}`, kf(top.ytd)+'명', `점유율 ${(top.share*100).toFixed(1)}% · ${pf(top.yoy)}`, top.yoy],
+    ['상위 3개국 집중도', (top3/cur*100).toFixed(1)+'%', ROWS.slice(0,3).map(r=>r.n).join(' · '), null]
+  ];
+  document.getElementById('kpis').innerHTML = k.map(([l,v,d,s])=>
+    `<div class="kpi"><div class="lb">${l}</div><div class="vl ${sgn(s)}">${v}</div><div class="dl">${d}</div></div>`).join('');
+}
+
+/* ============ tabs ============ */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected', x===t));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.v));
+  if(t.dataset.v==='delta') drawDelta();
+  if(t.dataset.v==='cont'){renderCont();drawStack();drawContLine();}
+  if(t.dataset.v==='yrtrend') drawYearBars();
+  if(t.dataset.v==='mtrend'){drawYearBars();drawTrend();}
+  if(t.dataset.v==='map') drawMap();
+});
+
+/* ============ 순위 ============ */
+let rkScope='main', rkSort='ytd', rkDir=-1, rkQ='';   /* rkDir: 1=오름차순, -1=내림차순 */
+const RKEY={rank:r=>r.rank, name:r=>r.n, ytd:r=>r.ytd, yoy:r=>r.yoy, rec:r=>r.rec, share:r=>r.share};
+const RDIR={rank:1, name:1, ytd:-1, yoy:-1, rec:-1, share:-1};   /* 열별 첫 클릭 기본 방향 */
+function sparkPath(v,w,h,months=24){
+  const s=v.slice(Math.max(0,N-months)).map(x=>x==null?null:x);
+  const ok=s.filter(x=>x!=null); if(!ok.length) return '';
+  const mx=Math.max(...ok), mn=0, st=w/(s.length-1);
+  let d='',pen=false;
+  s.forEach((x,i)=>{ if(x==null){pen=false;return;}
+    const px=i*st, py=h-(x-mn)/(mx-mn||1)*h;
+    d+= (pen?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)+' '; pen=true;});
+  return d;
+}
+/* 연간 집계 목적지용 스파크라인 — 연도별 값을 이어 그린다 */
+function annualPath(v,w,h){
+  const s=YEARS.map(y=>at(v,y,1)).filter(x=>x!=null);
+  if(s.length<2) return '';
+  const mx=Math.max(...s), st=w/(s.length-1);
+  return s.map((x,i)=>(i?'L':'M')+(i*st).toFixed(1)+' '+(h-x/(mx||1)*h).toFixed(1)).join(' ');
+}
+function renderRank(){
+  const src = (rkScope==='main'?MAIN:ROWS).filter(r=>!rkQ || r.n.includes(rkQ) || (r.en||'').toLowerCase().includes(rkQ.toLowerCase()));
+  const arr=[...src].sort((a,b)=>{
+    const A=RKEY[rkSort](a), B=RKEY[rkSort](b);
+    if(typeof A==='string'||typeof B==='string') return String(A).localeCompare(String(B),'ko')*rkDir;
+    if(A==null||B==null) return A==null&&B==null?0:(A==null?1:-1);   /* 결측치는 방향과 무관하게 항상 아래로 */
+    return (A-B)*rkDir;});
+  const mx=Math.max(...arr.map(r=>r.ytd));
+  const lateSrc = LATE.filter(r=>(rkScope==='all'||r.lytd>=20000)
+    && (!rkQ || r.n.includes(rkQ) || (r.en||'').toLowerCase().includes(rkQ.toLowerCase())));
+  document.getElementById('rk-body').innerHTML = arr.map(r=>`
+    <tr data-n="${r.n}">
+      <td class="rk">${r.rank}</td>
+      <td><span class="nm">${r.n}</span><span class="gtag">${r.g}</span></td>
+      <td>${nf(r.ytd)}</td>
+      <td class="barcell hide-sm"><span class="bar" style="width:${(r.ytd/mx*100).toFixed(1)}%"></span></td>
+      <td class="${sgn(r.yoy)}">${pf(r.yoy)}</td>
+      <td class="${r.rec==null?'na':(r.rec>=1?'pos':'')}">${rf(r.rec)}</td>
+      <td class="hide-sm">${r.share==null?'—':(r.share*100).toFixed(1)+'%'}</td>
+      <td class="hide-sm"><svg class="spark" width="88" height="22" viewBox="0 0 88 22">
+        <path d="${sparkPath(r.v,88,20)}" fill="none" stroke="${r.yoy>=0?'var(--teal)':'var(--mag)'}" stroke-width="1.4"/></svg></td>
+    </tr>`).join('')
+  + (lateSrc.length ? `<tr class="lsep"><td colspan="8">${LASTY}년 ${CUT}월 누계 미집계 · 아래는 최신 집계 연도 기준</td></tr>`+
+     lateSrc.map(r=>`
+    <tr class="late" data-n="${r.n}">
+      <td class="rk">—</td>
+      <td><span class="nm">${r.n}</span><span class="gtag">${r.g}</span><span class="lbadge">${r.lper}</span></td>
+      <td>${nf(r.lytd)}</td>
+      <td class="barcell hide-sm"></td>
+      <td class="${sgn(r.lyoy)}">${pf(r.lyoy)}</td>
+      <td class="${r.lrec==null?'na':(r.lrec>=1?'pos':'')}">${rf(r.lrec)}</td>
+      <td class="hide-sm na">—</td>
+      <td class="hide-sm"><svg class="spark" width="88" height="22" viewBox="0 0 88 22">
+        <path d="${r.annual?annualPath(r.v,88,20):sparkPath(r.v,88,20,24)}" fill="none" stroke="${r.lyoy>=0?'var(--teal)':'var(--mag)'}" stroke-width="1.4"/></svg></td>
+    </tr>`).join('') : '');
+  document.querySelectorAll('#rk-body tr[data-n]').forEach(tr=>tr.onclick=()=>openDetail(tr.dataset.n));
+  document.querySelectorAll('.rank th[data-k]').forEach(th=>{
+    const on=th.dataset.k===rkSort;
+    th.setAttribute('data-active',on);
+    th.setAttribute('data-dir', on?(rkDir===1?'asc':'desc'):'');
+    th.setAttribute('aria-sort', on?(rkDir===1?'ascending':'descending'):'none');});
+}
+document.querySelectorAll('.rank th[data-k]').forEach(th=>{
+  th.tabIndex=0;
+  const go=()=>{const k=th.dataset.k;
+    if(rkSort===k) rkDir*=-1; else {rkSort=k; rkDir=RDIR[k];}   /* 같은 열 재클릭 → 방향 반전 */
+    renderRank();};
+  th.onclick=go;
+  th.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
+document.querySelectorAll('#rk-scope button').forEach(b=>b.onclick=()=>{
+  rkScope=b.dataset.s; document.querySelectorAll('#rk-scope button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderRank();});
+document.getElementById('rk-q').oninput=e=>{rkQ=e.target.value.trim(); renderRank();};
+
+/* ============ 추이 ============ */
+const PALETTE=['#1F6FB2','#B01B5E','#0D7C6B','#B8790A','#5B4B9E','#0E5A7A'];
+let sel = ROWS.slice(0,3).map(r=>r.n), trMode='m', trSpan=36;
+function renderChips(){
+  document.getElementById('tr-chips').innerHTML = MAIN.slice(0,20).map(r=>{
+    const i=sel.indexOf(r.n), on=i>=0;
+    return `<button class="chip" data-n="${r.n}" aria-pressed="${on}" style="color:${on?PALETTE[i%6]:'var(--ink2)'}">
+      ${on?'<span class="dot"></span>':''}${r.n}</button>`;}).join('');
+  document.querySelectorAll('#tr-chips .chip').forEach(c=>c.onclick=()=>{
+    const n=c.dataset.n, i=sel.indexOf(n);
+    if(i>=0) sel.splice(i,1); else { if(sel.length>=6) sel.shift(); sel.push(n); }
+    renderChips(); drawTrend();});
+}
+document.querySelectorAll('#tr-mode button').forEach(b=>b.onclick=()=>{
+  trMode=b.dataset.m; document.querySelectorAll('#tr-mode button').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawTrend();});
+document.querySelectorAll('#tr-span button').forEach(b=>b.onclick=()=>{
+  trSpan=+b.dataset.r; document.querySelectorAll('#tr-span button').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawTrend();});
+
+function roll12(v){return v.map((_,i)=>{ if(i<11) return null; let s=0;
+  for(let k=i-11;k<=i;k++){ if(v[k]==null) return null; s+=v[k];} return s;});}
+
+function drawTrend(){
+  const svg=document.getElementById('tr-svg'), W=900,H=400,P={l:56,r:14,t:14,b:34};
+  let labels, seriesOf;
+  if(trMode==='ytd'){
+    labels=YEARS.filter(y=>ytd(TOT,y)!=null).map(String);
+    seriesOf=n=>labels.map(y=>ytd(CS[n].v,+y));
+  } else {
+    const st = trSpan? Math.max(0,N-trSpan) : 0;
+    labels=M.slice(st);
+    seriesOf=n=>(trMode==='r12'?roll12(CS[n].v):CS[n].v).slice(st);
+  }
+  const series=sel.map((n,i)=>({n,c:PALETTE[i%6],d:seriesOf(n)}));
+  const all=series.flatMap(s=>s.d).filter(x=>x!=null);
+  const mx=Math.max(...all,1), L=labels.length;
+  const x=i=>P.l+(L<2?0:i*(W-P.l-P.r)/(L-1)), y=v=>H-P.b-(v/mx)*(H-P.t-P.b);
+  const ticks=[0,.25,.5,.75,1].map(t=>t*mx);
+  let g='';
+  ticks.forEach(t=>{g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y(t)}" y2="${y(t)}" stroke="#DEE5EA" stroke-width="1"/>
+    <text x="${P.l-8}" y="${y(t)+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${kf(Math.round(t))}</text>`;});
+  const step=Math.max(1,Math.ceil(L/8));
+  labels.forEach((k,i)=>{ if(i%step&&i!==L-1) return;
+    g+=`<text x="${x(i)}" y="${H-P.b+18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${trMode==='ytd'?k:mlab(k)}</text>`;});
+  series.forEach(s=>{ let d='',pen=false;
+    s.d.forEach((v,i)=>{ if(v==null){pen=false;return;}
+      d+=(pen?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)+' '; pen=true;});
+    g+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2.2" stroke-linejoin="round"/>`;
+    const li=s.d.map((v,i)=>v==null?-1:i).filter(i=>i>=0).pop();
+    if(li>=0) g+=`<circle cx="${x(li)}" cy="${y(s.d[li])}" r="3.4" fill="${s.c}"/>`;});
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${H-P.b}" y2="${H-P.b}" stroke="#CFD8E0"/>`;
+  // hover
+  g+=`<rect id="tr-hit" x="${P.l}" y="${P.t}" width="${W-P.l-P.r}" height="${H-P.t-P.b}" fill="transparent"/>`;
+  g+=`<line id="tr-cur" x1="0" x2="0" y1="${P.t}" y2="${H-P.b}" stroke="#11233A" stroke-width="1" opacity="0"/>`;
+  svg.innerHTML=g;
+  const tip=document.getElementById('tr-tip'), cur=document.getElementById('tr-cur'), box=svg.parentElement;
+  svg.onmousemove=e=>{const r=svg.getBoundingClientRect(); const rx=(e.clientX-r.left)/r.width*W;
+    if(rx<P.l||rx>W-P.r){tip.style.opacity=0;cur.setAttribute('opacity',0);return;}
+    const i=Math.round((rx-P.l)/((W-P.l-P.r)/Math.max(1,L-1)));
+    if(i<0||i>=L) return;
+    cur.setAttribute('x1',x(i));cur.setAttribute('x2',x(i));cur.setAttribute('opacity',.35);
+    tip.style.opacity=1; tip.style.left=(x(i)/W*r.width)+'px'; tip.style.top=(P.t/H*r.height)+'px';
+    tip.innerHTML=`<b>${trMode==='ytd'?labels[i]+'년 1–'+CUT+'월':labels[i]}</b><br>`+
+      series.map(s=>`${s.n} ${s.d[i]==null?'—':nf(s.d[i])}`).join('<br>');};
+  svg.onmouseleave=()=>{tip.style.opacity=0;cur.setAttribute('opacity',0);};
+}
+
+/* ============ 연도별 전체 출국자 비교 ============ */
+const YRBAR_YEARS=[2019,2024,2025,2026];
+const yrbarColor = y => y===2019?BASEC : y===2024?OLDESTC : y===2025?YPAL[1] : y===2026?YPAL[0] : '#7FA9CE';
+/* 공용 연도별 막대 렌더러 — pts:[{y,v,yoy|null,note|null,partial}] */
+function renderYearBarChart(svgId,pts){
+  const svg=document.getElementById(svgId); if(!svg) return;
+  const W=900,H=380,P={l:70,r:26,t:58,b:46};
+  const mx=Math.max(...pts.map(o=>Math.max(o.v,o.est||0)),1)*1.2, L=pts.length||1;
+  const IW=W-P.l-P.r, sw=IW/L, bw=Math.min(160,sw*.52);
+  const cx=i=>P.l+i*sw+sw/2, Y=v=>H-P.b-(v/mx)*(H-P.t-P.b);
+  H_B=H-P.b;
+  let g='';
+  [0,.25,.5,.75,1].forEach(t=>{const yy=Y(t*mx);
+    g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="#DEE5EA"/>`+
+       `<text x="${P.l-10}" y="${yy+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="#8698A8">${kf(Math.round(t*mx))}</text>`;});
+  pts.forEach((o,i)=>{
+    const c=yrbarColor(o.y);
+    if(o.est!=null){
+      /* 연간 추정치(연한 배경 막대, 점선 테두리) 위에 실제 1–N월 누적(같은 폭의 실선 막대)을 겹쳐 그린다 */
+      g+=`<g fill="${c}" opacity="0.16">${topBar(cx(i)-bw/2,Y(o.est),bw,H-P.b-Y(o.est))}</g>`+
+         `<g fill="none" stroke="${c}" stroke-width="1.6" stroke-dasharray="4 3">${topBar(cx(i)-bw/2,Y(o.est),bw,H-P.b-Y(o.est))}</g>`+
+         `<g fill="${c}">${topBar(cx(i)-bw/2,Y(o.v),bw,H-P.b-Y(o.v))}</g>`+
+         `<text x="${cx(i)}" y="${Y(o.est)-33}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="17" font-weight="700" fill="#11233A">${nf(Math.round(o.est))}</text>`+
+         `<text x="${cx(i)}" y="${Y(o.est)-13}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13.5" font-weight="600" fill="${o.estYoy!=null&&o.estYoy>=0?'#0D7C6B':'#B01B5E'}">추정 ${o.estYoy!=null?pf(o.estYoy):''}</text>`+
+         `<text x="${cx(i)}" y="${Y(o.v)-27}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="${c}">${o.note}</text>`+
+         `<text x="${cx(i)}" y="${Y(o.v)-9}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14.5" font-weight="700" fill="#11233A">${nf(o.v)}</text>`;
+    } else {
+      g+=`<g fill="${c}" opacity="${o.partial?.55:1}">${topBar(cx(i)-bw/2,Y(o.v),bw,H-P.b-Y(o.v))}</g>`+
+         (o.partial ? `<g fill="none" stroke="${c}" stroke-width="1.6" stroke-dasharray="4 3">${topBar(cx(i)-bw/2,Y(o.v),bw,H-P.b-Y(o.v))}</g>` : '')+
+         `<text x="${cx(i)}" y="${Y(o.v)-33}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="17" font-weight="700" fill="#11233A">${nf(o.v)}</text>`+
+         (o.yoy!=null ? `<text x="${cx(i)}" y="${Y(o.v)-13}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13.5" font-weight="600" fill="${o.yoy>=0?'#0D7C6B':'#B01B5E'}">${pf(o.yoy)}</text>`
+           : o.note ? `<text x="${cx(i)}" y="${Y(o.v)-13}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="#8698A8">${o.note}</text>` : '');
+    }
+    g+=`<text x="${cx(i)}" y="${H-P.b+25}" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="14.5" font-weight="600" fill="#11233A">${o.y}</text>`;});
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${H-P.b}" y2="${H-P.b}" stroke="#CFD8E0"/>`;
+  svg.innerHTML=g;
+}
+function drawYearBars(){
+  /* (1) 연간 합계 — 2019·2024·2025는 12개월 확정치, 2026은 현재까지 누적 + 연간 추정치를 겹쳐 표시
+     추정치 = 전년 연간 합계 × (1 + 1–N월 누적 전년비) — 1–N월 누적 증감률을 연간에 그대로 적용 */
+  const full2025 = ytd(TOT,2025,12);
+  const annPts = YRBAR_YEARS.map(y=>{
+    const full = ytd(TOT,y,12);
+    if(full!=null){
+      const py = ytd(TOT,y-1,12);
+      return {y, v:full, yoy: py!=null? full/py-1 : null, partial:false};
+    }
+    const cutNow = CUTMAX||CUT, part = ytd(TOT,y,cutNow);
+    if(part==null) return null;
+    const partPrevSame = ytd(TOT,y-1,cutNow);
+    const ytdYoy = partPrevSame!=null ? part/partPrevSame-1 : null;
+    const est = (ytdYoy!=null && full2025!=null) ? full2025*(1+ytdYoy) : null;
+    return {y, v:part, note:`1–${cutNow}월 누적`, partial:true, est, estYoy:ytdYoy};
+  }).filter(Boolean);
+  renderYearBarChart('yr-svg-ann', annPts);
+  const lastAnn = annPts[annPts.length-1];
+  document.getElementById('yr-ann-note').textContent =
+    lastAnn && lastAnn.partial ? `2019·2024·2025(확정) · ${lastAnn.y}(추정 · 실적 겹침)` : `2019·2024·2025·2026(확정)`;
+
+  /* (2) 1–CUT월 누계 비교 — 동일 기준월로 2024·2025·2026 3개년 YoY */
+  const ytdPts = [2024,2025,2026].map(y=>{
+    const v=T(y); if(v==null) return null;
+    const pv=T(y-1);
+    return {y, v, yoy: pv!=null? v/pv-1 : null};
+  }).filter(Boolean);
+  renderYearBarChart('yr-svg-ytd', ytdPts);
+  document.getElementById('yr-ytd-note').textContent = `1–${CUT}월 · 2024–2026`;
+}
+
+/* ============ 증감 인원 ============ */
+function drawDelta(){
+  const svg=document.getElementById('dl-svg');
+  const top=ROWS.filter(r=>r.prev!=null).slice(0,10).map(r=>({n:r.n,d:r.ytd-r.prev,cur:r.ytd,pv:r.prev,yoy:r.yoy}));
+  const tD=T(LASTY)-T(LASTY-1);
+  const list=[{n:'전체 출국자',d:tD,cur:T(LASTY),pv:T(LASTY-1),yoy:T(LASTY)/T(LASTY-1)-1,tot:1}]
+    .concat(top.sort((a,b)=>b.d-a.d));
+  const W=900, L=196, R=18, RH=34, H=list.length*RH+70;
+  /* 0축을 데이터에 맞춰 배치 — 음수 폭이 짧으면 왼쪽 여백을 낭비하지 않아
+     국가명·전년비(왼쪽)와 막대·증감 인원(오른쪽)이 가까이 붙는다 */
+  const negMax=Math.max(0,...list.map(r=>-r.d)), posMax=Math.max(0,...list.map(r=>r.d));
+  const span=Math.max(negMax,posMax)||1;
+  const step=(()=>{const raw=span/3.5, e=Math.pow(10,Math.floor(Math.log10(raw)));
+    return ([1,1.5,2,2.5,3,4,5,7.5,10].find(m=>m*e>=raw)||10)*e;})();
+  const lo=-negMax*1.06, hi=posMax*1.06, dom=(hi-lo)||1;
+  const pw=W-L-R, X=d=>L+(d-lo)/dom*pw, z=X(0);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  let g='';
+  for(let t=Math.ceil(lo/step)*step; t<=hi+1e-6; t+=step){ if(Math.abs(t)<1e-6) continue;
+    const x=X(t);
+    g+=`<line x1="${x}" x2="${x}" y1="26" y2="${H-32}" stroke="#DEE5EA"/>
+        <text x="${x}" y="${H-14}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8698A8">${t>0?'+':'−'}${kf(Math.round(Math.abs(t)))}</text>`;}
+  g+=`<text x="${z}" y="${H-14}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8698A8">0</text>`;
+  g+=`<text x="${L-12}" y="22" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing=".09em" fill="#8698A8">전년비</text>`;
+  const CH=6.9;   /* 모노 11.5px 문자 폭 근사 */
+  list.forEach((r,i)=>{
+    const y=36+i*RH, bh=18, c=r.tot?'#11233A':(r.d>=0?'#0D7C6B':'#B01B5E');
+    const x0=Math.min(z,X(r.d)), w=Math.abs(X(r.d)-z);
+    g+=`<rect x="0" y="${y-8}" width="${W}" height="${RH-3}" fill="#11233A" opacity="${r.tot?.05:(i%2?.022:0)}"/>`;
+    const lab=(r.d>=0?'+':'−')+nf(Math.abs(r.d));
+    const lw=lab.length*CH;
+    /* 막대 끝에 라벨을 붙이되, 밖으로 넘치면 막대 안쪽(흰 글자)으로 넣는다.
+       감소 막대는 절대 0축 오른쪽으로 넘기지 않고, '전년비' 열(L-12에서 끝남)과도
+       겹치지 않도록 최소 여백(SAFEX)을 항상 보장한다. */
+    const SAFEX=(L-12)+6;   /* 전년비 열 오른쪽 끝(L-12) + 여백 6px — 라벨은 이 선을 넘어 왼쪽으로 가지 않음 */
+    const pos = r.d>=0
+      ? (X(r.d)+9+lw<=W-2 ? {x:X(r.d)+9,a:'start',f:c}
+        : (w>lw+20 ? {x:X(r.d)-9,a:'end',f:'#fff'} : {x:W-2,a:'end',f:c}))
+      : (X(r.d)-9-lw>=SAFEX ? {x:X(r.d)-9,a:'end',f:c}
+        : (w>lw+8 ? {x:X(r.d)+9,a:'start',f:'#fff'} : {x:SAFEX+lw,a:'end',f:c}));
+    g+=`<g class="dpt" data-n="${r.n}" style="cursor:${r.tot?'default':'pointer'}">
+      <rect x="0" y="${y-8}" width="${W}" height="${RH-3}" fill="transparent"/>
+      <text x="10" y="${y+13}" font-family="Pretendard, sans-serif" font-size="12.5"
+        font-weight="${r.tot?700:600}" fill="#11233A">${r.n}</text>
+      <text x="${L-12}" y="${y+13}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11.5"
+        font-weight="600" fill="${c}">${pf(r.yoy)}</text>
+      <rect x="${x0}" y="${y}" width="${Math.max(w,1.5)}" height="${bh}" fill="${c}" opacity="${r.tot?.9:.82}"/>
+      <text x="${pos.x}" y="${y+13}" text-anchor="${pos.a}"
+        font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="600" fill="${pos.f}">${lab}</text>
+    </g>`;});
+  g+=`<line x1="${z}" x2="${z}" y1="26" y2="${H-32}" stroke="#11233A" stroke-width="1.3"/>`;
+  svg.innerHTML=g;
+  document.getElementById('dl-period').textContent=PER;
+  const sum=top.reduce((a,r)=>a+r.d,0);
+  document.getElementById('dl-note').innerHTML=
+    `전체 출국자는 전년 동기 대비 <b>${(tD>=0?'+':'−')+nf(Math.abs(tD))}명</b> 변동했고, 상위 10개 목적지의 증감 합계는 <b>${(sum>=0?'+':'−')+nf(Math.abs(sum))}명</b>입니다. `+
+    `막대의 부호가 전체 출국자와 반대인 목적지는 시장 성장과 무관하게 수요를 잃고 있다는 신호입니다.`;
+  const tip=document.getElementById('dl-tip');
+  svg.querySelectorAll('.dpt').forEach(el=>{ if(!BY[el.dataset.n]) return;
+    el.onclick=()=>openDetail(el.dataset.n);});
+}
+
+/* ============ 포지션 맵 ============ */
+function drawMap(){
+  const svg=document.getElementById('mp-svg'), W=900,H=520,P={l:58,r:26,t:22,b:44};
+  const pts=MAIN.filter(r=>r.rec!=null&&r.yoy!=null);
+  const xs=pts.map(p=>p.rec*100), ys=pts.map(p=>p.yoy*100);
+  const x0=Math.min(20,Math.floor(Math.min(...xs)/10)*10), x1=Math.max(160,Math.ceil(Math.max(...xs)/10)*10);
+  const yPad=6, y0=Math.floor((Math.min(...ys)-yPad)/10)*10, y1=Math.ceil((Math.max(...ys)+yPad)/10)*10;
+  const X=v=>P.l+(v-x0)/(x1-x0)*(W-P.l-P.r), Y=v=>H-P.b-(v-y0)/(y1-y0)*(H-P.t-P.b);
+  const rmax=Math.max(...pts.map(p=>p.ytd)), R=v=>7+Math.sqrt(v/rmax)*30;
+  let g='';
+  // quadrant wash
+  g+=`<rect x="${X(100)}" y="${P.t}" width="${W-P.r-X(100)}" height="${Y(0)-P.t}" fill="#0D7C6B" opacity=".05"/>`;
+  g+=`<rect x="${P.l}" y="${Y(0)}" width="${X(100)-P.l}" height="${H-P.b-Y(0)}" fill="#B01B5E" opacity=".05"/>`;
+  for(let v=Math.ceil(x0/20)*20; v<=x1; v+=20)
+    g+=`<line x1="${X(v)}" x2="${X(v)}" y1="${P.t}" y2="${H-P.b}" stroke="#DEE5EA"/>
+        <text x="${X(v)}" y="${H-P.b+18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${v}%</text>`;
+  for(let v=Math.ceil(y0/10)*10; v<=y1; v+=10)
+    g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(v)}" y2="${Y(v)}" stroke="#DEE5EA"/>
+        <text x="${P.l-8}" y="${Y(v)+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${v>0?'+':''}${v}%</text>`;
+  g+=`<line x1="${X(100)}" x2="${X(100)}" y1="${P.t}" y2="${H-P.b}" stroke="#1F6FB2" stroke-width="1.2" stroke-dasharray="5 4"/>`;
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="#11233A" stroke-width="1.2"/>`;
+  g+=`<text x="${W-P.r-6}" y="${P.t+16}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0D7C6B" letter-spacing="1">회복 완료 · 성장</text>`;
+  g+=`<text x="${P.l+6}" y="${H-P.b-8}" font-family="IBM Plex Mono, monospace" font-size="11" fill="#B01B5E" letter-spacing="1">미회복 · 축소</text>`;
+  g+=`<text x="${P.l-8}" y="${P.t-6}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8698A8">전년비</text>`;
+  g+=`<text x="${W-P.r}" y="${H-8}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8698A8">2019년 동기 = 100%</text>`;
+  pts.sort((a,b)=>b.ytd-a.ytd).forEach(p=>{
+    const c=p.yoy>=0?'#0D7C6B':'#B01B5E';
+    g+=`<g class="pt" data-n="${p.n}" style="cursor:pointer"><circle cx="${X(p.rec*100)}" cy="${Y(p.yoy*100)}" r="${R(p.ytd)}"
+      fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="1.6"/>
+      <text x="${X(p.rec*100)}" y="${Y(p.yoy*100)+3.5}" text-anchor="middle" font-family="Pretendard, sans-serif"
+      font-size="${p.ytd>rmax*0.08?11.5:10}" font-weight="600" fill="#11233A">${p.ytd>rmax*0.02?p.n:''}</text></g>`;});
+  svg.innerHTML=g;
+  const tip=document.getElementById('mp-tip');
+  svg.querySelectorAll('.pt').forEach(el=>{
+    const r=BY[el.dataset.n];
+    el.onmouseenter=e=>{const b=svg.getBoundingClientRect();
+      tip.style.opacity=1;
+      tip.style.left=(X(r.rec*100)/W*b.width)+'px'; tip.style.top=(Y(r.yoy*100)/H*b.height-R(r.ytd)/H*b.height)+'px';
+      tip.innerHTML=`<b>${r.n}</b><br>${nf(r.ytd)}명 · ${pf(r.yoy)}<br>2019 대비 ${rf(r.rec)}`;};
+    el.onmouseleave=()=>tip.style.opacity=0;
+    el.onclick=()=>openDetail(el.dataset.n);});
+}
+
+/* ============ 대륙별 주요 국가 ============ */
+const CONTC={'아시아':'#1F6FB2','아메리카':'#B01B5E','유럽':'#0D7C6B','오세아니아':'#B8790A','아프리카':'#5B4B9E'};
+const CONTS=Object.keys(CONTC).filter(k=>NAMES.some(n=>CS[n].g===k));
+const BW0=M.indexOf('2018-01'), BW1=(()=>{const k=`${LASTY}-${String(CUTAUTO).padStart(2,'0')}`;return M.indexOf(k);})();
+const BASKET={}; CONTS.forEach(g=>BASKET[g]=NAMES.filter(n=>{ if(CS[n].g!==g) return false;
+  for(let i=BW0;i<=BW1;i++) if(CS[n].v[i]==null) return false; return true;}));
+const BSIZE=CONTS.reduce((a,g)=>a+BASKET[g].length,0);
+
+function contAgg(){
+  return CONTS.map(g=>{
+    const rs=ROWS.filter(r=>r.g===g);
+    const size=rs.reduce((a,r)=>a+r.ytd,0);
+    const p=rs.filter(r=>r.prev!=null), pc=p.reduce((a,r)=>a+r.ytd,0), pp=p.reduce((a,r)=>a+r.prev,0);
+    const q=rs.filter(r=>r.p19!=null), qc=q.reduce((a,r)=>a+r.ytd,0), qq=q.reduce((a,r)=>a+r.p19,0);
+    return {g,n:rs.length,size,yoy:pp?pc/pp-1:null,delta:pp?pc-pp:null,rec:qq?qc/qq:null,nRec:q.length};
+  }).sort((a,b)=>b.size-a.size);
+}
+function renderCont(){
+  const A=contAgg(), tot=A.reduce((a,r)=>a+r.size,0);
+  document.getElementById('ct-period').textContent=PER;
+  document.getElementById('ct-body').innerHTML=A.map(r=>`
+    <tr><td style="text-align:left"><span class="nm" style="color:${CONTC[r.g]}">■</span> <span class="nm">${r.g}</span></td>
+    <td>${r.n}개국</td><td>${nf(r.size)}</td><td>${(r.size/tot*100).toFixed(1)}%</td>
+    <td class="${sgn(r.yoy)}">${pf(r.yoy)}</td>
+    <td class="${sgn(r.delta)}">${r.delta==null?'—':(r.delta>=0?'+':'−')+nf(Math.abs(r.delta))}</td>
+    <td class="hide-sm ${r.rec>=1?'pos':''}">${rf(r.rec)}</td></tr>`).join('')
+    +`<tr style="background:#F4F8FA"><td style="text-align:left"><span class="nm">합계</span></td>
+      <td>${A.reduce((a,r)=>a+r.n,0)}개국</td><td>${nf(tot)}</td><td>100%</td>
+      <td class="${sgn(A.reduce((a,r)=>a+(r.delta||0),0))}">—</td>
+      <td class="${sgn(A.reduce((a,r)=>a+(r.delta||0),0))}">${(()=>{const d=A.reduce((a,r)=>a+(r.delta||0),0);return (d>=0?'+':'−')+nf(Math.abs(d));})()}</td>
+      <td class="hide-sm">—</td></tr>`;
+  document.getElementById('ct-note').innerHTML=
+    (CUT!==CUTAUTO?`<b style="color:#B8790A">1–${CUT}월 기준에서는 집계를 마친 국가만 남아 대륙별 표본이 크게 줄어듭니다. 대륙 간 비교는 1–${CUTAUTO}월 기준을 권합니다.</b><br>`:``)+
+    `대륙 합계는 각국 관광청이 한국인 입국자를 발표하는 목적지만 더한 값입니다. 특히 유럽은 프랑스·이탈리아·스페인 등 주요 시장이 통계 미제공이라 실제 규모보다 크게 축소되어 있으니, 대륙 간 절대 규모 비교보다 <b>증감률과 회복률</b> 비교에 쓰는 편이 안전합니다.`;
+}
+function drawStack(){
+  const svg=document.getElementById('cs-svg'), W=900,H=210,L=64,R=16;
+  const basis=CONTS.map(g=>{const rs=ROWS.filter(r=>r.g===g&&r.prev!=null&&r.p19!=null);
+    return {g,cur:rs.reduce((a,r)=>a+r.ytd,0),pr:rs.reduce((a,r)=>a+r.prev,0),p19:rs.reduce((a,r)=>a+r.p19,0)};});
+  const rows=[['2019',r=>r.p19],[String(LASTY-1),r=>r.pr],[String(LASTY),r=>r.cur]];
+  let g='';
+  rows.forEach(([lb,f],i)=>{
+    const tot=basis.reduce((a,r)=>a+f(r),0), y=26+i*54, bh=34; let x=L;
+    g+=`<text x="${L-10}" y="${y+21}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11.5" font-weight="600" fill="#11233A">${lb}</text>`;
+    basis.forEach(r=>{ const w=f(r)/tot*(W-L-R); const p=f(r)/tot*100;
+      g+=`<rect x="${x}" y="${y}" width="${w}" height="${bh}" fill="${CONTC[r.g]}" opacity=".85"/>`;
+      if(p>=6) g+=`<text x="${x+w/2}" y="${y+21}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" font-weight="600" fill="#fff">${p.toFixed(1)}%</text>`;
+      x+=w;});
+    g+=`<text x="${W-R}" y="${y-4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#8698A8">${i===0?'1–'+CUT+'월 누계':''}</text>`;});
+  g+=CONTS.map((c,i)=>`<rect x="${L+i*150}" y="${H-22}" width="10" height="10" fill="${CONTC[c]}"/>
+    <text x="${L+i*150+15}" y="${H-13}" font-family="Pretendard, sans-serif" font-size="11.5" fill="#4A5D72">${c}</text>`).join('');
+  svg.innerHTML=g;
+}
+let clMode='idx';
+function contSeries(g){
+  const b=BASKET[g]; if(!b.length) return null;
+  const sum=M.map((_,i)=>b.reduce((a,n)=>a+(CS[n].v[i]??0),0));
+  return sum.map((_,i)=>{ if(i<11||i>BW1) return null; let s=0;
+    for(let k=i-11;k<=i;k++){ if(k<BW0) return null; s+=sum[k];} return s;});
+}
+function drawContLine(){
+  const svg=document.getElementById('cl-svg'), W=900,H=380,P={l:60,r:16,t:16,b:32};
+  const base=M.indexOf('2019-12');
+  const S=CONTS.map(g=>{const r=contSeries(g); if(!r) return null;
+    return {g,c:CONTC[g],d:clMode==='idx'?r.map(v=>v==null||!r[base]?null:v/r[base]*100):r};}).filter(Boolean);
+  const st=M.indexOf('2019-01'), en=BW1;
+  const vals=S.flatMap(s=>s.d.slice(st,en+1)).filter(v=>v!=null);
+  const mx=Math.max(...vals,1), L=en-st+1;
+  const X=i=>P.l+i*(W-P.l-P.r)/(L-1), Y=v=>H-P.b-(v/mx)*(H-P.t-P.b);
+  let g='';
+  [0,.25,.5,.75,1].forEach(t=>{g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(t*mx)}" y2="${Y(t*mx)}" stroke="#DEE5EA"/>
+    <text x="${P.l-8}" y="${Y(t*mx)+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${clMode==='idx'?Math.round(t*mx):kf(Math.round(t*mx))}</text>`;});
+  if(clMode==='idx'&&mx>100) g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(100)}" y2="${Y(100)}" stroke="#11233A" stroke-dasharray="5 4" stroke-width="1.2"/>
+    <text x="${W-P.r-4}" y="${Y(100)-6}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#11233A">2019년 수준</text>`;
+  for(let i=0;i<L;i+=12) g+=`<text x="${X(i)}" y="${H-P.b+18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#8698A8">${M[st+i].slice(0,4)}</text>`;
+  S.forEach(s=>{ let d='',pen=false;
+    s.d.slice(st,en+1).forEach((v,i)=>{ if(v==null){pen=false;return;}
+      d+=(pen?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)+' '; pen=true;});
+    g+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2.2"/>`;
+    const li=s.d.slice(st,en+1).map((v,i)=>v==null?-1:i).filter(i=>i>=0).pop();
+    if(li>=0) g+=`<circle cx="${X(li)}" cy="${Y(s.d[st+li])}" r="3.4" fill="${s.c}"/>
+      <text x="${X(li)-6}" y="${Y(s.d[st+li])-9}" text-anchor="end" font-family="Pretendard, sans-serif" font-size="11.5" font-weight="600" fill="${s.c}">${s.g} ${clMode==='idx'?Math.round(s.d[st+li])+'':kf(Math.round(s.d[st+li]))}</text>`;});
+  svg.innerHTML=g;
+  document.getElementById('cl-hint').textContent=
+    `12개월 누적 기준 · 대륙별 ${CONTS.map(c=>c+' '+BASKET[c].length).join(', ')}개국 고정 표본(총 ${BSIZE}개국)`;
+}
+document.querySelectorAll('#cl-mode button').forEach(b=>b.onclick=()=>{
+  clMode=b.dataset.m; document.querySelectorAll('#cl-mode button').forEach(x=>x.setAttribute('aria-pressed',x===b)); drawContLine();});
+
+/* ============ 인사이트 ============ */
+function renderInsights(){
+  const big=ROWS.filter(r=>r.ytd>=50000&&r.yoy!=null);
+  const gain=[...big].sort((a,b)=>b.yoy-a.yoy).slice(0,3);
+  const lose=[...big].sort((a,b)=>a.yoy-b.yoy).slice(0,3);
+  const lag=ROWS.filter(r=>r.rec!=null&&r.rec<0.75&&r.ytd>=50000).sort((a,b)=>b.ytd-a.ytd).slice(0,4);
+  const overAll=ROWS.filter(r=>r.rec!=null&&r.rec>=1&&r.ytd>=30000).sort((a,b)=>b.rec-a.rec);
+  const over=overAll.slice(0,4);
+  const shareShift=ROWS.filter(r=>r.share&&r.shareP).map(r=>({...r,ds:r.share-r.shareP}))
+    .sort((a,b)=>Math.abs(b.ds)-Math.abs(a.ds)).slice(0,3);
+  const cur=T(LASTY),pr=T(LASTY-1),p19=T(2019);
+  const jp=BY[ROWS[0].n];
+  const sumMain=ROWS.reduce((a,r)=>a+r.ytd,0);
+  const cards=[
+    {k:'시장 총량',t:`전체 출국자 ${nf(cur)}명, 전년 동기 ${pf(cur/pr-1)}`,c:cur/pr>=1?'good':'bad',
+     p:`2019년 동기 <span class="fig">${nf(p19)}</span>명 대비 <span class="fig">${rf(cur/p19)}</span> 수준입니다. 집계 목적지 합계는 <span class="fig">${nf(sumMain)}</span>명으로 전체 출국자의 <span class="fig">${(sumMain/cur*100).toFixed(0)}%</span> 수준입니다. 목적지 수치는 각국 입국 기준이라 복수국 방문·환승이 중복 계상되고, 미집계 국가는 빠져 있어 총량과 직접 비교되지 않습니다.`},
+    {k:'성장 상위',t:gain.map(r=>`${r.n} ${pf(r.yoy)}`).join(' · '),c:'good',
+     p:`5만 명 이상 목적지 중 전년 동기 대비 증가율 상위입니다. ${josa(gain[0].n,'은','는')} ${nf(gain[0].ytd)}명으로 <span class="fig">${nf(gain[0].ytd-gain[0].prev)}</span>명 순증했습니다.`},
+    {k:'감소 상위',t:lose.map(r=>`${r.n} ${pf(r.yoy)}`).join(' · '),c:'bad',
+     p:`감소폭이 가장 큰 목적지입니다. ${lose[0].n}에서만 전년 대비 <span class="fig">${nf(lose[0].prev-lose[0].ytd)}</span>명이 빠졌습니다. 좌석 공급·환율·현지 이슈를 함께 확인할 구간입니다.`},
+    {k:'회복 지연',t:lag.length?lag.map(r=>`${r.n} ${rf(r.rec)}`).join(' · '):'해당 없음',c:'warn',
+     p:lag.length?`2019년 동기의 75%를 아직 밑도는 대형 목적지입니다. 시장 총량은 <span class="fig">${rf(cur/p19)}</span>까지 올라왔으므로, 이들 목적지의 미회복분은 다른 목적지로 이동한 수요로 볼 수 있습니다.`:`5만 명 이상 목적지 모두 2019년의 75%를 넘어섰습니다.`},
+    {k:'2019년 초과',t:over.map(r=>`${r.n} ${rf(r.rec)}`).join(' · '),c:'good',
+     p:`팬데믹 이전 동기 규모를 넘어선 목적지입니다. 총 ${overAll.length}개이며 합계 <span class="fig">${nf(overAll.reduce((a,r)=>a+r.ytd,0))}</span>명입니다. 포지션 맵 오른쪽 위 영역과 같은 그룹입니다.`},
+    {k:'점유율 이동',t:shareShift.map(r=>`${r.n} ${(r.ds*100>=0?'+':'')+(r.ds*100).toFixed(1)}p`).join(' · '),c:'',
+     p:`전체 출국자 대비 비중 변화폭이 가장 큰 목적지입니다. ${jp.n} 비중은 <span class="fig">${(jp.share*100).toFixed(1)}%</span>로, 상위 3개국이 전체의 <span class="fig">${(ROWS.slice(0,3).reduce((a,r)=>a+r.ytd,0)/cur*100).toFixed(1)}%</span>를 차지합니다.`}
+  ];
+  document.getElementById('ins-body').innerHTML = cards.map(c=>
+    `<div class="icard ${c.c}"><span class="kicker">${c.k}</span><h3>${c.t}</h3><p>${c.p}</p></div>`).join('');
+}
+
+/* ============ 기준월 전환 + 초기 렌더 ============ */
+function refresh(){
+  build();
+  sel = sel.filter(n=>BY[n]);
+  if(!sel.length) sel = ROWS.slice(0,3).map(r=>r.n);
+  renderHeader(); renderKPI(); renderInsights(); renderRank(); renderChips();
+  if(document.getElementById('v-cont').classList.contains('on')){renderCont();drawStack();drawContLine();}
+  if(document.getElementById('v-delta').classList.contains('on')) drawDelta();
+  if(document.getElementById('v-yrtrend').classList.contains('on')) drawYearBars();
+  if(document.getElementById('v-mtrend').classList.contains('on')){drawYearBars();drawTrend();}
+  if(document.getElementById('v-map').classList.contains('on')) drawMap();
+}
+document.querySelectorAll('#cut-seg button').forEach(b=>b.onclick=()=>{
+  CUT=+b.dataset.c;
+  document.querySelectorAll('#cut-seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  refresh();});
+refresh();
+
+/* ============ 상세 패널 ============ */
+const detail=document.getElementById('detail'), scrim=document.getElementById('scrim');
+function openDetail(n){
+  const r=BY[n]; if(!r) return;
+  document.getElementById('d-name').textContent=r.n;
+  document.getElementById('d-en').textContent=
+    `${r.en||''} · ${r.g} · ${r.late?`${LASTY}년 미집계 · ${r.annual?'연간 집계만 제공':'최신 집계 '+r.ly+'년'}`:`순위 ${r.rank}위`}`;
+  const last=(()=>{for(let i=N-1;i>=0;i--) if(r.v[i]!=null) return i; return -1;})();
+  const yoyM=(last>=12&&r.v[last-12])? r.v[last]/r.v[last-12]-1 : null;
+  const cells = r.late
+    ? [[r.lper, nf(r.lytd)+'명'],
+       ['전년 대비', pf(r.lyoy)],
+       ['2019년 대비', rf(r.lrec)],
+       ['최신 데이터', r.annual?`${r.ly}년`:`${M[last].slice(2,4)}년 ${+M[last].slice(5)}월`]]
+    : [[PER, nf(r.ytd)+'명'],
+       ['전년 동기비', pf(r.yoy)],
+       ['2019년 대비', rf(r.rec)],
+       [`${M[last].slice(2,4)}년 ${+M[last].slice(5)}월`, nf(r.v[last])+(yoyM!=null?` <span class="${sgn(yoyM)}" style="font-size:11px">${pf(yoyM,0)}</span>`:'')]];
+  document.getElementById('d-grid').innerHTML=cells
+    .map(([l,v])=>`<div><div class="l">${l}</div><div class="v">${v}</div></div>`).join('');
+  dCur=r; renderYLegend(); drawDetailChart();
+  detail.classList.add('on'); scrim.classList.add('on'); detail.setAttribute('aria-hidden','false');
+}
+
+/* ---- 연도별 겹쳐보기: 월(1–12) 공통 x축 · 연도별 막대 ---- */
+/* 최근 3개 연도를 과거 → 최신 순으로 비교(예: 2024·2025·2026).
+   색은 '연도(과거일수록 오렌지, 최신일수록 블루)'에 고정 배치 — 칩을 꺼도 남은 막대의 색은 바뀌지 않음.
+   blue/aqua/orange 조합은 색각이상(CVD)·정상시야 분리 기준을 모두 통과. */
+const YPAL=['#1F6FB2','#0FA07E'];
+const BASEY=2019, BASEC='#B8790A';
+const OLDESTC='#E2711D';
+const YPAL3=[OLDESTC, YPAL[1], YPAL[0]];   // 과거 → 최신 (예: 2024=오렌지, 2025=틸, 2026=블루)
+let dCur=null, dOff=new Set();
+
+function dSeries(r){
+  const has=y=>{for(let m=1;m<=12;m++) if(at(r.v,y,m)!=null) return true; return false;};
+  const recent=YEARS.filter(y=>y>=2021&&has(y)).slice(-3);   // 최근 3개 연도(과거 → 최신)
+  const out=recent.map((y,i)=>({y,c:YPAL3[YPAL3.length-recent.length+i],base:false}));
+  return out.map(s=>Object.assign(s,{d:Array.from({length:12},(_,i)=>at(r.v,s.y,i+1))}));
+}
+
+function renderYLegend(){
+  const box=document.getElementById('d-lgd');
+  /* 연간 집계만 제공되는 목적지는 월별 비교가 불가능해 연도별 막대로 대체 — 칩 없음 */
+  if(dCur.annual){ box.innerHTML=''; return; }
+  box.innerHTML=dSeries(dCur).map(s=>
+    `<button class="chip" data-y="${s.y}" aria-pressed="${!dOff.has(s.y)}">`+
+    `<i class="sw" style="background:${s.c}"></i>${s.y}${s.base?' 기준':''}</button>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    const y=+b.dataset.y;
+    if(dOff.has(y)) dOff.delete(y);
+    else if(dSeries(dCur).filter(s=>!dOff.has(s.y)).length>1) dOff.add(y);
+    renderYLegend(); drawDetailChart();});
+}
+
+/* 막대: 바닥에 붙고 윗머리만 4px 라운드 */
+function topBar(x,y,w,h){ if(h<=0.6) return `<rect x="${x}" y="${H_B-0.6}" width="${w}" height="0.6"/>`;
+  const rr=Math.min(4,w/2,h);
+  return `<path d="M${x.toFixed(1)} ${(y+h).toFixed(1)}V${(y+rr).toFixed(1)}a${rr} ${rr} 0 0 1 ${rr} -${rr}h${(w-2*rr).toFixed(1)}a${rr} ${rr} 0 0 1 ${rr} ${rr}V${(y+h).toFixed(1)}Z"/>`;}
+let H_B=0;
+
+/* 연간 집계만 있는 목적지: 연도별 막대 (월별 겹쳐보기 불가) */
+function drawAnnualChart(){
+  const r=dCur, svg=document.getElementById('d-svg'), W=900,H=250,P={l:58,r:22,t:30,b:32};
+  const pts=YEARS.map(y=>({y,v:at(r.v,y,1)})).filter(o=>o.v!=null);
+  const mx=Math.max(...pts.map(o=>o.v),1), L=pts.length;
+  const IW=W-P.l-P.r, sw=IW/L, bw=Math.min(46,sw*.62);
+  const cx=i=>P.l+i*sw+sw/2, Y=v=>H-P.b-(v/mx)*(H-P.t-P.b);
+  H_B=H-P.b;
+  let g='';
+  [0,.25,.5,.75,1].forEach(t=>{const yy=Y(t*mx);
+    g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="#DEE5EA"/>`+
+       `<text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8698A8">${kf(Math.round(t*mx))}</text>`;});
+  pts.forEach((o,i)=>{ const c=o.y===BASEY?BASEC:(i===L-1?'#1F6FB2':'#7FA9CE');
+    g+=`<g fill="${c}">${topBar(cx(i)-bw/2,Y(o.v),bw,H-P.b-Y(o.v))}</g>`+
+       `<text x="${cx(i)}" y="${Y(o.v)-7}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#4A5D72">${kf(o.v)}</text>`+
+       `<text x="${cx(i)}" y="${H-P.b+17}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="${o.y===BASEY||i===L-1?'#11233A':'#8698A8'}">${String(o.y).slice(2)}</text>`;});
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${H-P.b}" y2="${H-P.b}" stroke="#CFD8E0"/>`;
+  svg.innerHTML=g; svg.onmousemove=null; svg.onmouseleave=null;
+  document.getElementById('d-tip').style.opacity=0;
+  document.querySelector('.dnote').textContent='연간 집계만 제공되는 목적지 — 연도별 총계 (앰버는 2019년 기준)';
+}
+
+function drawDetailChart(){
+  const r=dCur; if(!r) return;
+  if(r.annual) return drawAnnualChart();
+  document.querySelector('.dnote').textContent='월별 · 연도 겹쳐보기 — 최근 3개 연도 비교 — 칩으로 표시/숨김';
+  const svg=document.getElementById('d-svg'), W=900,H=250,P={l:58,r:22,t:18,b:32};
+  const all=dSeries(r), vis=all.filter(s=>!dOff.has(s.y));
+  const bars=vis;
+  const mx=Math.max(...vis.flatMap(s=>s.d).filter(x=>x!=null),1);
+  const IW=W-P.l-P.r, sw=IW/12, gp=sw*.22;
+  const bw=bars.length?Math.max(3,(sw-gp-2*(bars.length-1))/bars.length):0;
+  const gx=m=>P.l+(m-1)*sw+gp/2, gw=sw-gp;
+  const Y=v=>H-P.b-(v/mx)*(H-P.t-P.b);
+  H_B=H-P.b;
+  let g=`<rect id="d-hl" x="0" y="${P.t}" width="${gw+gp*.6}" height="${H-P.b-P.t}" fill="#11233A" opacity="0"/>`;
+  [0,.25,.5,.75,1].forEach(t=>{const yy=Y(t*mx);
+    g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${yy}" y2="${yy}" stroke="#DEE5EA"/>`+
+       `<text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8698A8">${kf(Math.round(t*mx))}</text>`;});
+  for(let m=1;m<=12;m++){
+    bars.forEach((s,j)=>{ const v=s.d[m-1]; if(v==null) return;
+      const x=gx(m)+j*(bw+2), y=Y(v);
+      g+=`<g fill="${s.c}">${topBar(x,y,bw,H-P.b-y)}</g>`;});
+    g+=`<text x="${gx(m)+gw/2}" y="${H-P.b+17}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#8698A8">${m===12?'12월':m}</text>`;}
+  g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${H-P.b}" y2="${H-P.b}" stroke="#CFD8E0"/>`;
+  svg.innerHTML=g;
+  const tip=document.getElementById('d-tip'), hl=document.getElementById('d-hl');
+  svg.onmousemove=e=>{ const bb=svg.getBoundingClientRect(), rx=(e.clientX-bb.left)/bb.width*W;
+    if(rx<P.l||rx>W-P.r){tip.style.opacity=0;hl.setAttribute('opacity',0);return;}
+    const m=Math.min(12,Math.max(1,Math.floor((rx-P.l)/sw)+1));
+    hl.setAttribute('x',gx(m)-gp*.3); hl.setAttribute('opacity',.055);
+    const px=(gx(m)+gw/2)/W*bb.width;
+    tip.style.opacity=1; tip.style.left=px+'px'; tip.style.top=(bb.height*.55)+'px';
+    tip.style.transform = px<110?'translate(0,-100%)':(px>bb.width-110?'translate(-100%,-100%)':'translate(-50%,-100%)');
+    tip.innerHTML=`<b>${m}월</b><br>`+vis.map(s=>{
+      const v=s.d[m-1], pv=at(r.v,s.y-1,m);
+      /* 팬데믹 연도(2020–22) 대비 증감은 의미가 없어 직전 연도가 2023년 이상일 때만 표기 */
+      const yy=(v!=null&&pv&&s.y-1>=2023)? ` <span style="opacity:.72">${pf(v/pv-1,0)}</span>`:'';
+      return `${s.y}${s.base?' 기준':''} ${v==null?'—':nf(v)}${yy}`;}).join('<br>');};
+  svg.onmouseleave=()=>{tip.style.opacity=0;hl.setAttribute('opacity',0);};
+}
+function closeDetail(){detail.classList.remove('on');scrim.classList.remove('on');detail.setAttribute('aria-hidden','true');}
+document.getElementById('d-close').onclick=closeDetail; scrim.onclick=closeDetail;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail();});
+
+/* footer */
+document.getElementById('foot').innerHTML=
+ `출처: ${DATA.meta.src}. 각국 관광청·통계기관이 발표하는 한국인 입국자 기준이며, 국내 출국 통계(법무부·한국관광공사)와 집계 방식이 다릅니다.<br>
+  기준월 ${META.as_of} · 원자료 게시 ${META.source_posted||'-'} · 갱신 ${META.updated_at} · <a href="${META.source_post||META.source_url}">원자료</a> · <a href="../">← 전체 대시보드</a>`;
+
+window.addEventListener('resize',()=>{
+  if(document.getElementById('v-cont').classList.contains('on')){drawStack();drawContLine();}
+  if(document.getElementById('v-delta').classList.contains('on')) drawDelta();
+  if(document.getElementById('v-yrtrend').classList.contains('on')) drawYearBars();
+  if(document.getElementById('v-mtrend').classList.contains('on')){drawYearBars();drawTrend();}
+  if(document.getElementById('v-map').classList.contains('on')) drawMap();
+  if(detail.classList.contains('on')) drawDetailChart();});
+</script>
+
+
+<script>
+fetch('../data/korea-outbound.json',{cache:'no-cache'})
+ .then(r=>{if(!r.ok) throw new Error('HTTP '+r.status); return r.json();})
+ .then(j=>{window.__DATA__=j.data; window.__META__=j.meta;
+   const s=document.createElement('script'); s.textContent=document.getElementById('app').textContent; document.body.appendChild(s);})
+ .catch(e=>{document.body.insertAdjacentHTML('afterbegin','<p style="padding:16px;color:#B01B5E">데이터를 불러오지 못했습니다 ('+e.message+')</p>');});
+</script>
+</body></html>
