@@ -22,7 +22,7 @@ SITE = os.path.dirname(HERE)
 DATASETS = [
     # id, script, data files (site 기준), 이름
     ("korea-outbound", "kto_outbound.py", ["data/korea-outbound.json"], "한국인 아웃바운드 목적지"),
-    ("airline-departures", "airportal_airline.py", ["data/airline-departures.json"], "국제선 출발 여객 (항공사별)"),
+    ("airline-passengers", "airportal_airline.py", ["data/airline-passengers.json"], "국제선 출발·도착 여객 (항공사별)"),
     ("airport-routes", "airportal_routes.py", ["data/airport-routes.json", "data/airport-routes-raw.json"], "주요 공항별 노선 분석"),
     ("region-country", "airportal_region.py", ["data/region-country.json", "data/region-country-raw.json"], "출발편 항공 통계 (국가·도시별)"),
 ]

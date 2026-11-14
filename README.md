@@ -6,7 +6,7 @@
 | 대시보드 | 페이지 | 데이터 | 갱신 스크립트 | 원자료 |
 |---|---|---|---|---|
 | 한국인 아웃바운드 목적지 | `outbound/` | `data/korea-outbound.json` | `scripts/kto_outbound.py` | 한국관광공사 데이터랩 「국민 해외관광객 주요 목적지별 통계」 |
-| 국제선 출발 여객 (항공사별) | `airline/` | `data/airline-departures.json` | `scripts/airportal_airline.py` | 항공정보포털 항공통계 |
+| 국제선 출발·도착 여객 (항공사별) | `airline/` | `data/airline-passengers.json` | `scripts/airportal_airline.py` | 항공정보포털 항공통계 |
 | 주요 공항별 노선 분석 | `routes/` | `data/airport-routes.json` | `scripts/airportal_routes.py` | 항공정보포털 항공통계 |
 | 출발편 항공 통계 (국가·도시별) | `region/` | `data/region-country.json` | `scripts/airportal_region.py` | 항공정보포털 항공통계 |
 

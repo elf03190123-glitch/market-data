@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
-"""국제선 출발 여객 (항공사별) — airportal.go.kr 월간 자동 수집/갱신 스크립트.
+"""국제선 출발·도착 여객 (항공사별) — airportal.go.kr 월간 자동 수집/갱신 스크립트.
 
 데이터 원천
   항공정보포털 > 항공통계 > 상세조회 > 시계열 탭 (chartDetail5.do)
-  상세구분=항공사, 여객, 노선=국제선(di_gubun=I), 출발(arvl_type=D)
+  상세구분=항공사, 여객, 노선=국제선(di_gubun=I), 출발(arvl_type=D) / 도착(arvl_type=A)
   → 페이지 JS(searchFn)가 호출하는 XHR:
      POST /stats/transport/getDetailedAirTransportStats1Time.do
      body(JSON): {"last_yearmonth":"YYYYMM","this_yearmonth":"YYYYMM",
-                  "di_gubun":"I","arvl_type":"D","airline_gubun":"total"}
+                  "di_gubun":"I","arvl_type":"D"|"A","airline_gubun":"total"}
      응답 content[] 의 airline_name = "<항공사명>(<코드>) YYYY년 MM월", pass = 유임+환승 여객.
      행 순서: 전체 합계 → 국적사 계 → 국적사들 → 외항사 계 → 외항사들.
+
+데이터 파일: ../data/airline-passengers.json
+  {"meta":{...,"as_of":"YYYY-MM"},
+   "data":{"months":[...],
+           "dep":{"summary":{"total","domestic","foreign"},"airlines":[{full,name,code,category,values,total}]},
+           "arr":{...같은 구조...}}}
+  방향별로 항공사 목록이 따로 있다(없는 달은 0).
 
 사용법
   python airportal_airline.py --check
   python airportal_airline.py --update [--month YYYY-MM] [--force]
-  python airportal_airline.py --verify-month YYYY-MM
+  python airportal_airline.py --verify-month YYYY-MM [--dir dep|arr|both]
 
 종료 코드
-  --check        : 0 다음 달 데이터 있음 / 1 아직 없음 / 2 네트워크·파싱 오류
+  --check        : 0 다음 달 출발·도착 모두 있음 / 1 아직 없음(또는 미완) / 2 네트워크·파싱 오류
   --update       : 0 기록함 / 1 거부(검증 실패·월 순서 위반 등) / 2 네트워크·파싱 오류
   --verify-month : 0 차이 없음 / 1 차이 있음 / 2 네트워크·파싱 오류
 
-표준 라이브러리만 사용 (openpyxl 불필요).
+표준 라이브러리만 사용.
 """
 import argparse
 import datetime as dt
@@ -37,7 +44,7 @@ import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-DATA_PATH = HERE.parent / "data" / "airline-departures.json"
+DATA_PATH = HERE.parent / "data" / "airline-passengers.json"
 
 BASE = "https://www.airportal.go.kr"
 PAGE_URL = BASE + "/stats/transport/chartDetail5.do"
@@ -46,6 +53,10 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36")
 TIMEOUT = 60
 RETRIES = 3
+
+DIRS = ("dep", "arr")
+ARVL_TYPE = {"dep": "D", "arr": "A"}
+DIR_LABEL = {"dep": "출발", "arr": "도착"}
 
 ROW_RE = re.compile(r"^(.*\S)\s+(\d{4})년\s*(\d{2})월$")
 AIRLINE_RE = re.compile(r"^(.*)\(([A-Z0-9]+)\)$")
@@ -86,6 +97,10 @@ def pct(a, b):
     return round((a - b) / b * 100, 2)
 
 
+def empty_block():
+    return {"summary": {"total": [], "domestic": [], "foreign": []}, "airlines": []}
+
+
 # --------------------------------------------------------------------------
 # JSON 입출력 (사람이 diff 보기 좋게: 항공사 1개당 1줄)
 # --------------------------------------------------------------------------
@@ -99,30 +114,35 @@ def dumps_doc(doc):
     d = doc["data"]
     lines = ["{", '  "meta": ' + json.dumps(doc["meta"], ensure_ascii=False, indent=2).replace("\n", "\n  ") + ",",
              '  "data": {',
-             '    "months": ' + j(d["months"]) + ",",
-             '    "summary": {',
-             '      "total": ' + j(d["summary"]["total"]) + ",",
-             '      "domestic": ' + j(d["summary"]["domestic"]) + ",",
-             '      "foreign": ' + j(d["summary"]["foreign"]),
-             "    },",
-             '    "airlines": [']
-    al = d["airlines"]
-    for i, a in enumerate(al):
-        lines.append("      " + j(a) + ("," if i < len(al) - 1 else ""))
-    lines += ["    ]", "  }", "}"]
+             '    "months": ' + j(d["months"]) + ","]
+    for di, key in enumerate(DIRS):
+        b = d[key]
+        lines += ['    "%s": {' % key,
+                  '      "summary": {',
+                  '        "total": ' + j(b["summary"]["total"]) + ",",
+                  '        "domestic": ' + j(b["summary"]["domestic"]) + ",",
+                  '        "foreign": ' + j(b["summary"]["foreign"]),
+                  "      },",
+                  '      "airlines": [']
+        al = b["airlines"]
+        for i, a in enumerate(al):
+            lines.append("        " + j(a) + ("," if i < len(al) - 1 else ""))
+        lines += ["      ]", "    }" + ("," if di < len(DIRS) - 1 else "")]
+    lines += ["  }", "}"]
     text = "\n".join(lines) + "\n"
     assert json.loads(text) == doc  # 직렬화 무결성
     return text
 
 
-def save_doc(doc):
+def save_doc(doc, path=None):
+    path = Path(path or DATA_PATH)
     text = dumps_doc(doc)
-    DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(prefix=".airline-", suffix=".json", dir=str(DATA_PATH.parent))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=".airline-", suffix=".json", dir=str(path.parent))
     try:
         with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
             f.write(text)
-        os.replace(tmp, DATA_PATH)
+        os.replace(tmp, path)
     except BaseException:
         if os.path.exists(tmp):
             os.unlink(tmp)
@@ -181,15 +201,18 @@ class Client:
             raise FetchError("resultCode=%r" % res.get("resultCode"))
         return res
 
-    def fetch_month(self, ym):
-        """한 달치 항공사별 국제선 출발 여객. 데이터 없으면 rows=[]."""
+    def fetch_month(self, ym, direction):
+        """한 달치 항공사별 국제선 출발(dep)/도착(arr) 여객. 데이터 없으면 airlines=[]."""
         yyyymm = ym.replace("-", "")
         res = self.post(API_URL, {"last_yearmonth": yyyymm, "this_yearmonth": yyyymm,
-                                  "di_gubun": "I", "arvl_type": "D", "airline_gubun": "total"})
+                                  "di_gubun": "I", "arvl_type": ARVL_TYPE[direction],
+                                  "airline_gubun": "total"})
         content = res.get("content") or []
         if not isinstance(content, list):
             raise FetchError("content 형식 오류")
-        return parse_rows(ym, content)
+        rec = parse_rows(ym, content)
+        rec["dir"] = direction
+        return rec
 
 
 def to_int(v):
@@ -263,29 +286,28 @@ def reconcile(rec):
 # --------------------------------------------------------------------------
 # 데이터 반영 / 검증
 # --------------------------------------------------------------------------
-def apply_month(data, rec, allow_rename):
-    """rec(한 달치)을 data에 반영. 새 달이면 append, 기존 달이면 그 자리 교체.
-    반환: (new_airlines, renamed, category_conflicts)"""
+def extend_month(data, ym):
+    """새 달을 months 끝에 추가하고 모든 방향의 배열을 0으로 늘린다."""
     months = data["months"]
-    ym = rec["month"]
-    if ym in months:
-        idx = months.index(ym)
-    else:
-        if months and ym != month_add(months[-1], 1):
-            raise Refused("연속되지 않는 월 append: %s (마지막 %s)" % (ym, months[-1]))
-        months.append(ym)
-        idx = len(months) - 1
-        for key in ("total", "domestic", "foreign"):
-            data["summary"][key].append(0)
-        for a in data["airlines"]:
+    if months and ym != month_add(months[-1], 1):
+        raise Refused("연속되지 않는 월 append: %s (마지막 %s)" % (ym, months[-1]))
+    months.append(ym)
+    for key in DIRS:
+        b = data[key]
+        for k in ("total", "domestic", "foreign"):
+            b["summary"][k].append(0)
+        for a in b["airlines"]:
             a["values"].append(0)
-    n = len(months)
+    return len(months) - 1
 
-    by_code = {a["code"]: a for a in data["airlines"]}
+
+def apply_rec(block, rec, idx, n, allow_rename):
+    """한 방향 블록의 idx 번째 달에 rec 반영. 반환: (new_airlines, renamed, category_conflicts)"""
+    by_code = {a["code"]: a for a in block["airlines"]}
     api = {a["code"]: a for a in rec["airlines"]}
     new_airlines, renamed, conflicts = [], [], []
 
-    for a in data["airlines"]:
+    for a in block["airlines"]:
         r = api.get(a["code"])
         a["values"][idx] = r["value"] if r else 0  # 표에 없으면 0
         if r:
@@ -300,64 +322,77 @@ def apply_month(data, rec, allow_rename):
             continue
         vals = [0] * n
         vals[idx] = r["value"]
-        na = {"full": "%s(%s)" % (r["name"], r["code"]), "name": r["name"], "code": r["code"],
-              "category": r["category"], "values": vals, "total": 0}
-        data["airlines"].append(na)
+        block["airlines"].append({"full": "%s(%s)" % (r["name"], r["code"]), "name": r["name"],
+                                  "code": r["code"], "category": r["category"], "values": vals, "total": 0})
         new_airlines.append({"code": r["code"], "name": r["name"], "category": r["category"], "value": r["value"]})
 
-    for a in data["airlines"]:
+    for a in block["airlines"]:
         a["total"] = sum(a["values"])
-    data["summary"]["total"][idx] = rec["total"]
-    data["summary"]["domestic"][idx] = rec["domestic"]
-    data["summary"]["foreign"][idx] = rec["foreign"]
-    return idx, new_airlines, renamed, conflicts
+    for k in ("total", "domestic", "foreign"):
+        block["summary"][k][idx] = rec[k]
+
+    A = block["airlines"]
+    chk = (sum(a["values"][idx] for a in A),
+           sum(a["values"][idx] for a in A if a["category"] == "domestic"),
+           sum(a["values"][idx] for a in A if a["category"] == "foreign"))
+    if not conflicts and chk != (rec["total"], rec["domestic"], rec["foreign"]):
+        raise Refused("%s %s 반영 후 합계 불일치: %s vs %s" % (
+            rec["month"], rec.get("dir"), chk, (rec["total"], rec["domestic"], rec["foreign"])))
+    return new_airlines, renamed, conflicts
 
 
 def validate(data):
-    """전체 구조 + 모든 달의 합계 정합성 (0 오차). 문제 목록 반환."""
+    """전체 구조 + 모든 방향·모든 달의 합계 정합성 (0 오차). 문제 목록 반환."""
     probs = []
-    months, S, A = data["months"], data["summary"], data["airlines"]
+    months = data["months"]
     n = len(months)
     if months != sorted(months) or len(set(months)) != n:
         probs.append("months 정렬/중복 오류")
     for i in range(1, n):
         if months[i] != month_add(months[i - 1], 1):
             probs.append("months 불연속: %s → %s" % (months[i - 1], months[i]))
-    for k in ("total", "domestic", "foreign"):
-        if len(S[k]) != n:
-            probs.append("summary.%s 길이 %d != %d" % (k, len(S[k]), n))
-    codes = [a["code"] for a in A]
-    if len(codes) != len(set(codes)):
-        probs.append("airlines 코드 중복")
-    for a in A:
-        if len(a["values"]) != n:
-            probs.append("%s values 길이 오류" % a["code"])
-        if a["total"] != sum(a["values"]):
-            probs.append("%s total 오류" % a["code"])
-        if a["category"] not in ("domestic", "foreign"):
-            probs.append("%s category 오류" % a["code"])
-    if probs:
-        return probs
-    for i, ym in enumerate(months):
-        s = sum(a["values"][i] for a in A)
-        sd = sum(a["values"][i] for a in A if a["category"] == "domestic")
-        sf = sum(a["values"][i] for a in A if a["category"] == "foreign")
-        if s != S["total"][i]:
-            probs.append("%s 항공사 합 %d != 전체 합계 %d" % (ym, s, S["total"][i]))
-        if sd != S["domestic"][i]:
-            probs.append("%s 국적사 합 %d != 국적사 계 %d" % (ym, sd, S["domestic"][i]))
-        if sf != S["foreign"][i]:
-            probs.append("%s 외항사 합 %d != 외항사 계 %d" % (ym, sf, S["foreign"][i]))
+    for key in DIRS:
+        if key not in data:
+            probs.append("%s 블록 없음" % key)
+            continue
+        S, A = data[key]["summary"], data[key]["airlines"]
+        bp = []
+        for k in ("total", "domestic", "foreign"):
+            if len(S[k]) != n:
+                bp.append("%s.summary.%s 길이 %d != %d" % (key, k, len(S[k]), n))
+        codes = [a["code"] for a in A]
+        if len(codes) != len(set(codes)):
+            bp.append("%s airlines 코드 중복" % key)
+        for a in A:
+            if len(a["values"]) != n:
+                bp.append("%s %s values 길이 오류" % (key, a["code"]))
+            elif a["total"] != sum(a["values"]):
+                bp.append("%s %s total 오류" % (key, a["code"]))
+            if a["category"] not in ("domestic", "foreign"):
+                bp.append("%s %s category 오류" % (key, a["code"]))
+        if bp:
+            probs += bp
+            continue
+        for i, ym in enumerate(months):
+            s = sum(a["values"][i] for a in A)
+            sd = sum(a["values"][i] for a in A if a["category"] == "domestic")
+            sf = sum(a["values"][i] for a in A if a["category"] == "foreign")
+            if s != S["total"][i]:
+                probs.append("%s %s 항공사 합 %d != 전체 합계 %d" % (key, ym, s, S["total"][i]))
+            if sd != S["domestic"][i]:
+                probs.append("%s %s 국적사 합 %d != 국적사 계 %d" % (key, ym, sd, S["domestic"][i]))
+            if sf != S["foreign"][i]:
+                probs.append("%s %s 외항사 합 %d != 외항사 계 %d" % (key, ym, sf, S["foreign"][i]))
+            if sd + sf != s:
+                probs.append("%s %s 국적사+외항사 != 전체" % (key, ym))
     return probs
 
 
-def month_summary(data, idx):
-    months, S, A = data["months"], data["summary"], data["airlines"]
-    ym = months[idx]
+def month_summary(data, key, idx):
+    months, S, A = data["months"], data[key]["summary"], data[key]["airlines"]
     py = idx - 12 if idx >= 12 else None
     top = sorted((a for a in A if a["values"][idx] > 0), key=lambda a: -a["values"][idx])[:10]
     return {
-        "month": ym,
         "total": S["total"][idx], "domestic": S["domestic"][idx], "foreign": S["foreign"][idx],
         "domestic_share_pct": round(S["domestic"][idx] / S["total"][idx] * 100, 2) if S["total"][idx] else None,
         "yoy_base_month": months[py] if py is not None else None,
@@ -373,6 +408,26 @@ def month_summary(data, idx):
     }
 
 
+def apply_month_both(data, recs, allow_rename):
+    """recs = {"dep": rec, "arr": rec} 를 data에 반영 (메모리상). 새 달이면 append."""
+    ym = recs["dep"]["month"]
+    if ym in data["months"]:
+        idx = data["months"].index(ym)
+    else:
+        idx = extend_month(data, ym)
+    n = len(data["months"])
+    res = {"month": ym}
+    for key in DIRS:
+        new_airlines, renamed, conflicts = apply_rec(data[key], recs[key], idx, n, allow_rename)
+        if conflicts:
+            raise Refused("%s %s 국적사/외항사 구분이 바뀐 항공사: %s" % (ym, key, conflicts))
+        s = month_summary(data, key, idx)
+        s["new_airlines"] = new_airlines
+        s["renamed_airlines"] = renamed
+        res[key] = s
+    return res
+
+
 # --------------------------------------------------------------------------
 # 명령
 # --------------------------------------------------------------------------
@@ -380,12 +435,17 @@ def cmd_check(args):
     doc = load_doc()
     as_of = doc["meta"]["as_of"]
     target = month_add(as_of, 1)
-    rec = Client().fetch_month(target)
-    probs = reconcile(rec)
-    ok = not probs
-    out({"command": "check", "as_of": as_of, "month": target,
-         "available": ok, "total": rec["total"], "domestic": rec["domestic"], "foreign": rec["foreign"],
-         "rows": len(rec["airlines"]), "problems": probs})
+    client = Client()
+    res = {"command": "check", "as_of": as_of, "month": target}
+    ok = True
+    for key in DIRS:
+        rec = client.fetch_month(target, key)
+        probs = reconcile(rec)
+        ok = ok and not probs
+        res[key] = {"available": not probs, "total": rec["total"], "domestic": rec["domestic"],
+                    "foreign": rec["foreign"], "rows": len(rec["airlines"]), "problems": probs}
+    res["available"] = ok
+    out(res)
     return 0 if ok else 1
 
 
@@ -395,6 +455,9 @@ def cmd_update(args):
     as_of = doc["meta"]["as_of"]
     if as_of != data["months"][-1]:
         raise Refused("meta.as_of(%s) != 마지막 month(%s)" % (as_of, data["months"][-1]))
+    pre = validate(data)
+    if pre:
+        raise Refused("기존 JSON 검증 실패: %s" % "; ".join(pre[:10]))
     nxt = month_add(as_of, 1)
     target = args.month or nxt
 
@@ -411,36 +474,32 @@ def cmd_update(args):
     else:
         todo = [target]  # 기존 달 교체(재수집)
 
-    if target > nxt and len(todo) > 12:
+    if len(todo) > 12:
         raise Refused("한 번에 12개월 넘게 채울 수 없습니다")
 
+    # 1) 전부 수집·검증 (아직 data 변경 없음)
     client = Client()
-    results = []
+    fetched = []
     for ym in todo:
-        rec = client.fetch_month(ym)
-        probs = reconcile(rec)
-        if probs:
-            raise Refused("%s airportal 데이터 미완/불일치: %s" % (ym, "; ".join(probs)))
-        if ym not in data["months"] and not args.force:
-            prev = data["summary"]["total"][-1]
-            if prev and rec["total"] < prev * MIN_RATIO_VS_PREV:
-                raise Refused("%s 전체 합계 %d 가 전월 %d 의 %.0f%% 미만 — 부분 게시 의심 (--force로 무시)"
-                              % (ym, rec["total"], prev, MIN_RATIO_VS_PREV * 100))
-        is_latest = ym >= data["months"][-1]
-        idx, new_airlines, renamed, conflicts = apply_month(data, rec, allow_rename=is_latest)
-        if conflicts:
-            raise Refused("%s 국적사/외항사 구분이 바뀐 항공사: %s" % (ym, conflicts))
-        # 이번 달 반영값 == API 값 확인 (0 오차)
-        A = data["airlines"]
-        chk = (sum(a["values"][idx] for a in A),
-               sum(a["values"][idx] for a in A if a["category"] == "domestic"),
-               sum(a["values"][idx] for a in A if a["category"] == "foreign"))
-        if chk != (rec["total"], rec["domestic"], rec["foreign"]):
-            raise Refused("%s 반영 후 합계 불일치: %s vs %s" % (ym, chk, (rec["total"], rec["domestic"], rec["foreign"])))
-        s = month_summary(data, idx)
-        s["new_airlines"] = new_airlines
-        s["renamed_airlines"] = renamed
-        results.append(s)
+        recs = {}
+        for key in DIRS:
+            rec = client.fetch_month(ym, key)
+            probs = reconcile(rec)
+            if probs:
+                raise Refused("%s %s airportal 데이터 미완/불일치: %s" % (ym, DIR_LABEL[key], "; ".join(probs)))
+            if ym not in data["months"] and not args.force:
+                prev = data[key]["summary"]["total"][-1]
+                if prev and rec["total"] < prev * MIN_RATIO_VS_PREV:
+                    raise Refused("%s %s 전체 합계 %d 가 전월 %d 의 %.0f%% 미만 — 부분 게시 의심 (--force로 무시)"
+                                  % (ym, DIR_LABEL[key], rec["total"], prev, MIN_RATIO_VS_PREV * 100))
+            recs[key] = rec
+        fetched.append(recs)
+
+    # 2) 메모리상 반영 → 전체 검증 → 한 번에 기록 (all or nothing)
+    results = []
+    for recs in fetched:
+        ym = recs["dep"]["month"]
+        results.append(apply_month_both(data, recs, allow_rename=(ym >= data["months"][-1])))
 
     probs = validate(data)
     if probs:
@@ -450,9 +509,33 @@ def cmd_update(args):
     doc["meta"]["updated_at"] = dt.date.today().isoformat()
     save_doc(doc)
     out({"command": "update", "written": True, "path": str(DATA_PATH), "as_of": doc["meta"]["as_of"],
-         "months_count": len(data["months"]), "airline_count": len(data["airlines"]),
+         "months_count": len(data["months"]),
+         "airline_count": {k: len(data[k]["airlines"]) for k in DIRS},
          "results": results})
     return 0
+
+
+def diff_block(data, key, idx, rec):
+    block = data[key]
+    diffs, notes = [], []
+    for k in ("total", "domestic", "foreign"):
+        if block["summary"][k][idx] != rec[k]:
+            diffs.append({"dir": key, "field": "summary." + k, "json": block["summary"][k][idx], "airportal": rec[k]})
+    api = {a["code"]: a for a in rec["airlines"]}
+    for a in block["airlines"]:
+        r = api.get(a["code"])
+        v = r["value"] if r else 0
+        if a["values"][idx] != v:
+            diffs.append({"dir": key, "code": a["code"], "name": a["name"], "json": a["values"][idx], "airportal": v})
+        if r and r["name"] != a["name"]:
+            notes.append({"dir": key, "code": a["code"], "json_name": a["name"], "airportal_name": r["name"]})
+        if r and r["value"] > 0 and r["category"] != a["category"]:
+            diffs.append({"dir": key, "code": a["code"], "field": "category", "json": a["category"], "airportal": r["category"]})
+    known = {a["code"] for a in block["airlines"]}
+    for r in rec["airlines"]:
+        if r["code"] not in known and r["value"] > 0:
+            diffs.append({"dir": key, "code": r["code"], "name": r["name"], "json": None, "airportal": r["value"]})
+    return diffs, notes
 
 
 def cmd_verify(args):
@@ -462,29 +545,20 @@ def cmd_verify(args):
     if ym not in data["months"]:
         raise Refused("%s 는 JSON에 없는 달입니다" % ym)
     idx = data["months"].index(ym)
-    rec = Client().fetch_month(ym)
-    diffs, notes = [], []
-    for k in ("total", "domestic", "foreign"):
-        if data["summary"][k][idx] != rec[k]:
-            diffs.append({"field": "summary." + k, "json": data["summary"][k][idx], "airportal": rec[k]})
-    api = {a["code"]: a for a in rec["airlines"]}
-    for a in data["airlines"]:
-        r = api.get(a["code"])
-        v = r["value"] if r else 0
-        if a["values"][idx] != v:
-            diffs.append({"code": a["code"], "name": a["name"], "json": a["values"][idx], "airportal": v})
-        if r and r["name"] != a["name"]:
-            notes.append({"code": a["code"], "json_name": a["name"], "airportal_name": r["name"]})
-        if r and r["value"] > 0 and r["category"] != a["category"]:
-            diffs.append({"code": a["code"], "field": "category", "json": a["category"], "airportal": r["category"]})
-    known = {a["code"] for a in data["airlines"]}
-    for r in rec["airlines"]:
-        if r["code"] not in known and r["value"] > 0:
-            diffs.append({"code": r["code"], "name": r["name"], "json": None, "airportal": r["value"]})
-    out({"command": "verify-month", "month": ym, "diff_count": len(diffs), "diffs": diffs,
-         "name_notes": notes, "airportal_problems": reconcile(rec),
-         "airportal_rows": len(rec["airlines"]), "json_airlines": len(data["airlines"])})
-    return 0 if not diffs else 1
+    dirs = DIRS if args.dir == "both" else (args.dir,)
+    client = Client()
+    res = {"command": "verify-month", "month": ym, "dirs": list(dirs)}
+    all_diffs = []
+    for key in dirs:
+        rec = client.fetch_month(ym, key)
+        diffs, notes = diff_block(data, key, idx, rec)
+        all_diffs += diffs
+        res[key] = {"diff_count": len(diffs), "diffs": diffs, "name_notes": notes,
+                    "airportal_problems": reconcile(rec), "airportal_rows": len(rec["airlines"]),
+                    "json_airlines": len(data[key]["airlines"])}
+    res["diff_count"] = len(all_diffs)
+    out(res)
+    return 0 if not all_diffs else 1
 
 
 def main(argv=None):
@@ -493,12 +567,13 @@ def main(argv=None):
         sys.stderr.reconfigure(encoding="utf-8")
     except Exception:
         pass
-    p = argparse.ArgumentParser(description="airportal 국제선 출발 여객(항공사별) 자동 갱신")
+    p = argparse.ArgumentParser(description="airportal 국제선 출발·도착 여객(항공사별) 자동 갱신")
     g = p.add_mutually_exclusive_group(required=True)
-    g.add_argument("--check", action="store_true", help="as_of 다음 달 데이터 게시 여부 확인")
-    g.add_argument("--update", action="store_true", help="새 달 수집·검증·JSON 기록")
+    g.add_argument("--check", action="store_true", help="as_of 다음 달 데이터(출발·도착) 게시 여부 확인")
+    g.add_argument("--update", action="store_true", help="새 달 수집·검증·JSON 기록 (출발·도착 함께)")
     g.add_argument("--verify-month", type=valid_month, metavar="YYYY-MM", help="기존 달을 재수집해 JSON과 비교")
     p.add_argument("--month", type=valid_month, metavar="YYYY-MM", help="--update 대상 월 (기본: as_of+1)")
+    p.add_argument("--dir", choices=("dep", "arr", "both"), default="both", help="--verify-month 방향 (기본 both)")
     p.add_argument("--force", action="store_true", help="as_of+1 이외 월 허용 / 부분 게시 의심 검사 무시")
     args = p.parse_args(argv)
     cmd = "check" if args.check else "update" if args.update else "verify-month"
