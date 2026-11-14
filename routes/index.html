@@ -1,0 +1,2390 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>한국 주요 공항별 노선 분석</title><meta name="description" content="인천·김해·김포·청주·대구 출발 국제선 노선·항공사 월별 분석 (국토교통부 항공정보포털 일자별 통계)"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f5f7f8; --card:#ffffff; --card-2:#fafbfc;
+  --ink:#0f1419; --ink-2:#4a5561; --ink-3:#79838f;
+  --rule:#e3e7ea; --rule-2:#eef1f3;
+  --accent:#2a78d6; --accent-soft:#eaf2fc;
+  --up:#1c62b8; --down:#b3312f;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#4a3aa7;
+  --grid:#edf0f2;
+  --y1:#eda100; --y2:#1baf7a; --y3:#e34948; --y4:#2a78d6;
+  --y3-soft:#f2dedf;
+  --shadow:0 1px 2px rgba(15,20,25,.05),0 8px 24px -16px rgba(15,20,25,.28);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0e1216; --card:#181d23; --card-2:#1d232a;
+    --ink:#eef1f4; --ink-2:#a9b3bd; --ink-3:#78838e;
+    --rule:#272e36; --rule-2:#20262d;
+    --accent:#3987e5; --accent-soft:#16273c;
+    --up:#5aa0f0; --down:#e66767;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9;
+    --grid:#232a31;
+    --y1:#a87000; --y2:#199e70; --y3:#e66767; --y4:#3987e5;
+    --y3-soft:#3a2226;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0e1216; --card:#181d23; --card-2:#1d232a;
+  --ink:#eef1f4; --ink-2:#a9b3bd; --ink-3:#78838e;
+  --rule:#272e36; --rule-2:#20262d;
+  --accent:#3987e5; --accent-soft:#16273c;
+  --up:#5aa0f0; --down:#e66767;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9;
+  --grid:#232a31;
+  --y1:#a87000; --y2:#199e70; --y3:#e66767; --y4:#3987e5;
+  --y3-soft:#3a2226;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+.num{font-family:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;font-variant-numeric:tabular-nums;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px 96px;}
+
+/* header */
+header.top{border-bottom:1px solid var(--rule);background:var(--card);}
+.top-in{max-width:1120px;margin:0 auto;padding:44px 24px 30px;}
+.eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
+h1{font-size:clamp(28px,4.2vw,42px);line-height:1.18;font-weight:600;letter-spacing:-.022em;margin:12px 0 10px;text-wrap:balance;}
+.lede{color:var(--ink-2);margin:0;font-size:15.5px;}
+.spec{display:flex;flex-wrap:wrap;gap:0;margin-top:24px;border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+.spec div{flex:1 1 150px;padding:10px 14px;border-right:1px solid var(--rule);background:var(--card-2);}
+.spec div:last-child{border-right:0}
+.spec dt{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0;}
+.spec dd{margin:3px 0 0;font-size:13px;color:var(--ink);font-weight:500;}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;margin-top:34px;overflow:hidden;}
+.kpi{background:var(--card);padding:18px 20px 16px;}
+.kpi .lab{font-size:11.5px;color:var(--ink-3);font-weight:600;letter-spacing:.04em;}
+.kpi .val{font-size:30px;font-weight:500;letter-spacing:-.02em;margin-top:6px;line-height:1.1;}
+.kpi .val small{font-size:15px;color:var(--ink-2);margin-left:3px;font-weight:400;}
+.kpi .sub{font-size:12.5px;color:var(--ink-2);margin-top:7px;display:flex;align-items:center;gap:6px;}
+.chip{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;padding:1px 7px 1px 5px;border-radius:2px;font-family:"IBM Plex Mono",monospace;}
+.chip.up{color:var(--up);background:color-mix(in srgb,var(--up) 12%,transparent);}
+.up-c{color:var(--up)} .down-c{color:var(--down)}
+.chip.down{color:var(--down);background:color-mix(in srgb,var(--down) 12%,transparent);}
+
+/* sections */
+section{margin-top:56px;scroll-margin-top:20px;}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:6px;}
+.sec-n{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.05em;}
+h2{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0;}
+.sec-note{color:var(--ink-2);font-size:14px;margin:14px 0 20px;}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:20px 20px 14px;box-shadow:var(--shadow);}
+.card + .card{margin-top:16px}
+.card-title{font-size:14px;font-weight:600;margin:0 0 2px;}
+.card-n{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.02em;margin-right:7px;}
+.card-sub{font-size:12.5px;color:var(--ink-3);margin:0 0 14px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+/* chart */
+.chart-box{position:relative;width:100%;}
+svg{display:block;width:100%;height:auto;overflow:visible;}
+.gridline{stroke:var(--grid);stroke-width:1;}
+.axis-t{font-size:10.5px;fill:var(--ink-3);font-family:"IBM Plex Mono",monospace;}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:8px 10px;font-size:12px;box-shadow:var(--shadow);opacity:0;transition:opacity .12s;z-index:5;min-width:150px;}
+.tip .t-h{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-bottom:5px;letter-spacing:.03em;}
+.tip .t-r{display:flex;align-items:center;gap:7px;justify-content:space-between;line-height:1.5;}
+.tip .t-r b{font-family:"IBM Plex Mono",monospace;font-weight:500;}
+.sw{width:9px;height:9px;border-radius:1px;flex:none;}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:12px 0 2px;font-size:12.5px;color:var(--ink-2);}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--rule-2);}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;border-bottom:1px solid var(--rule);white-space:nowrap;}
+td:first-child,th:first-child{text-align:left;}
+tbody tr:hover{background:var(--card-2);}
+.tbl-wrap{overflow-x:auto;}
+.bar-cell{position:relative;min-width:120px;}
+.bar-cell i{position:absolute;left:10px;top:50%;transform:translateY(-50%);height:9px;border-radius:0 2px 2px 0;background:var(--accent);opacity:.85;}
+.toggle{background:none;border:1px solid var(--rule);color:var(--ink-2);font:inherit;font-size:12px;padding:3px 10px;border-radius:2px;cursor:pointer;font-family:"IBM Plex Mono",monospace;}
+.toggle:hover{border-color:var(--accent);color:var(--accent);}
+.toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.row-between{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.hidden{display:none}
+
+/* findings */
+.finds{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+.find{background:var(--card);padding:16px 20px;display:grid;grid-template-columns:88px 1fr;gap:18px;align-items:start;}
+.find .k{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:500;letter-spacing:-.02em;line-height:1.3;}
+.find .k em{display:block;font-style:normal;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-top:2px;}
+.find p{margin:0;font-size:13.5px;color:var(--ink-2);}
+.find p b{color:var(--ink);font-weight:600;}
+@media(max-width:600px){.find{grid-template-columns:1fr;gap:6px}}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3);}
+footer a{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<style>
+/* 유형별 구성 막대 */
+.split{display:flex;height:26px;border-radius:3px;overflow:hidden;border:1px solid var(--rule);}
+.split div{display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;font-weight:600;color:#fff;min-width:0;overflow:hidden;white-space:nowrap;}
+.split-lab{display:flex;justify-content:space-between;gap:12px;margin-top:6px;font-size:12px;color:var(--ink-2);}
+.split-lab span{display:inline-flex;align-items:center;gap:6px;}
+/* 상단 필터 카드 + 조건 요약 바 */
+.filterbox{margin-top:26px;background:var(--card-2);border:1px solid var(--rule-2);border-radius:10px;
+  padding:14px 18px;display:grid;gap:10px;}
+.fb-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.fb-lab{flex:0 0 62px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
+.fb-hint{font-size:12px;color:var(--ink-3);line-height:1.45;}
+.fb-row .seg{background:var(--card);}
+.metabar{display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;
+  margin-top:2px;padding-top:11px;border-top:1px solid var(--rule-2);font-size:12px;color:var(--ink-3);}
+.metabar span{display:inline-flex;align-items:center;gap:5px;}
+.metabar span + span::before{content:"";width:1px;height:11px;background:var(--rule);margin-right:14px;}
+.metabar b{color:var(--ink-2);font-weight:600;}
+@media(max-width:640px){
+  .fb-lab{flex-basis:100%}
+  .metabar span + span::before{display:none}
+  .metabar{gap:4px 14px}
+}
+.ap-name{font-weight:600;color:var(--ink);}
+/* 상단 고정 바 + 섹션 내비 */
+.stickybar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--ground) 92%,transparent);
+  backdrop-filter:saturate(180%) blur(8px);-webkit-backdrop-filter:saturate(180%) blur(8px);
+  border-bottom:1px solid var(--rule);padding:9px 0;margin-bottom:-1px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.sb-now{font-size:12.5px;color:var(--ink-2);white-space:nowrap;}
+.sb-now b{color:var(--ink);font-weight:600;}
+.sb-nav{display:flex;gap:2px;}
+.sb-nav a{display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:3px;
+  font-size:12.5px;color:var(--ink-3);text-decoration:none;border-bottom:2px solid transparent;}
+.sb-nav a em{font-family:"IBM Plex Mono",monospace;font-style:normal;font-size:10px;letter-spacing:.06em;opacity:.75;}
+.sb-nav a:hover{color:var(--accent);background:var(--card-2);}
+.sb-nav a.active{color:var(--ink);font-weight:600;border-bottom-color:var(--accent);}
+.sb-nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+section{scroll-margin-top:58px;}
+@media(max-width:860px){.sb-nav{display:none}}
+@media(max-width:560px){.sb-now{white-space:normal;flex:1 1 100%}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+/* 견인 요인 주석 */
+.drv{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule);display:grid;gap:7px;}
+.drv-r{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:baseline;font-size:12.5px;color:var(--ink-2);}
+.drv-r b{color:var(--ink);font-weight:600;}
+.drv-r .rg{font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:6px;}
+.drv-h{font-size:12px;color:var(--ink-3);margin:0 0 3px;}
+@media(max-width:600px){.drv-r{grid-template-columns:1fr;gap:2px}}
+/* 노선 선택 드롭다운 */
+.rt-pick{display:inline-flex;align-items:center;gap:9px;}
+.rt-pick span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);}
+.rt-pick select{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:var(--card-2);
+  border:1px solid var(--rule);border-radius:3px;padding:6px 30px 6px 11px;cursor:pointer;
+  appearance:none;-webkit-appearance:none;min-width:170px;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 16px) calc(50% + 1px),calc(100% - 11px) calc(50% + 1px);
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+.rt-pick select:hover{border-color:var(--accent);}
+.rt-pick select:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+td.share-cell{position:relative;min-width:110px;}
+td.share-cell i{position:absolute;left:10px;top:50%;transform:translateY(-50%);height:9px;border-radius:0 2px 2px 0;opacity:.85;}
+/* 기준 전환 */
+.basis{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:26px;}
+.basis-lab{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--card-2);}
+.seg button{font:inherit;font-size:13px;font-weight:500;padding:7px 16px;border:0;background:transparent;color:var(--ink-2);cursor:pointer;border-right:1px solid var(--rule);}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;}
+.seg button:hover:not([aria-pressed="true"]){color:var(--accent);}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+.basis-hint{font-size:12.5px;color:var(--ink-3);}
+.delta{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);}
+td.hl{background:var(--accent-soft);}
+.sticky-basis{position:sticky;top:0;z-index:20;background:var(--ground);border-bottom:1px solid var(--rule);padding:9px 0;margin-bottom:-1px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.sticky-basis .now{font-size:12.5px;color:var(--ink-2);}
+.sticky-basis .now b{color:var(--ink);font-weight:600;}
+.seg.sm button{padding:4px 12px;font-size:12px;}
+#ra-showall,#at-showall,#kpi-showall,#apcmp-showall{font:inherit;font-size:12px;font-weight:500;padding:4px 12px;border-radius:3px;cursor:pointer;
+  border:1px solid var(--rule);background:var(--card-2);color:var(--ink-2);}
+#ra-showall:hover,#at-showall:hover,#kpi-showall:hover,#apcmp-showall:hover{border-color:var(--accent);color:var(--accent);}
+#ra-showall[aria-pressed="true"],#at-showall[aria-pressed="true"],#kpi-showall[aria-pressed="true"],#apcmp-showall[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;}
+#ra-showall:focus-visible,#at-showall:focus-visible,#kpi-showall:focus-visible,#apcmp-showall:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.kpi-grp-h{grid-column:1/-1;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-2);background:var(--card-2);padding:9px 20px;}
+.ra-all-block{margin-bottom:22px;}
+.ra-all-block:last-child{margin-bottom:0;}
+.ra-all-h{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;letter-spacing:.04em;
+  color:var(--ink-2);text-transform:uppercase;margin:0 0 8px;padding-top:14px;border-top:1px solid var(--rule-2);}
+.ra-all-block:first-child .ra-all-h{padding-top:0;border-top:0;}
+
+/* 작성자 byline */
+.masthead{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+.byline{display:flex;align-items:baseline;gap:9px;line-height:1.5;padding-left:18px;border-left:1px solid var(--rule);white-space:nowrap;}
+.byline .by-lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);}
+.byline .by-name{font-size:13.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em;}
+.byline .by-role{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px;}
+.byline .by-mail{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;}
+.byline .by-mail:hover{border-bottom-color:var(--accent);}
+.byline .by-mail:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media(max-width:640px){
+  .byline{padding-left:0;border-left:0;border-top:1px solid var(--rule);padding-top:12px;width:100%;white-space:normal;flex-wrap:wrap;}
+}
+.colophon{margin-top:22px;padding-top:14px;border-top:1px solid var(--rule);font-size:12px;color:var(--ink-3);display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.colophon .co-lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);}
+.colophon a{color:var(--accent);text-decoration:none;font-family:"IBM Plex Mono",monospace;}
+.colophon a:hover{text-decoration:underline;}
+.colophon .dot{color:var(--ink-3);opacity:.5;}
+
+.csplit{margin-top:20px;padding-top:16px;border-top:1px solid var(--rule)}
+.csplit h4{margin:0 0 4px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.csplit .cs-sub{margin:0 0 12px;font-size:12.5px;color:var(--ink-3)}
+.cs-g{margin-bottom:14px}
+.cs-g:last-child{margin-bottom:0}
+.cs-city{font-size:12.5px;font-weight:600;color:var(--ink-2);margin:0 0 6px}
+.cs-ap{display:grid;grid-template-columns:132px 1fr auto;gap:12px;align-items:baseline;
+  padding:7px 0;border-top:1px solid var(--rule-2);font-size:13px}
+.cs-code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--accent);font-weight:600}
+.cs-code b{display:block;font-family:inherit;font-weight:400;font-size:10.5px;color:var(--ink-3);margin-top:1px}
+.cs-air{color:var(--ink-2);min-width:0}
+.cs-num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.cs-ap{grid-template-columns:1fr;gap:2px}}
+
+.cs-tblwrap{overflow-x:auto;margin:2px 0 10px}
+.cs-tblwrap table{width:100%;border-collapse:collapse;font-size:13px}
+.cs-tblwrap th{text-align:right;font-weight:500;color:var(--ink-3);font-size:11.5px;
+  padding:6px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.cs-tblwrap th:first-child,.cs-tblwrap td:first-child{text-align:left}
+.cs-tblwrap td{padding:7px 10px;border-bottom:1px solid var(--rule-2);text-align:right}
+.cs-tblwrap tr:last-child td{border-bottom:0;background:var(--card-2)}
+.cs-tot{font-weight:400;color:var(--ink-3);font-size:12px;margin-left:6px}
+.cs-tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--accent)}
+.cs-new{font-size:11px;color:var(--ink-3)}
+.cs-aps{margin-top:4px}
+
+.cs-chip{display:inline-flex;align-items:center;gap:6px;margin:0 14px 4px 0;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.cs-chip i{width:9px;height:9px;border-radius:2px;flex:none}
+.cs-chip b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.cs-air{display:flex;flex-wrap:wrap;align-items:baseline}
+
+.etc-box{margin-top:10px;padding:11px 14px;background:var(--card-2);border:1px solid var(--rule-2);border-radius:4px}
+.etc-p{margin:0 0 6px;font-size:12.5px;line-height:1.9;color:var(--ink-2)}
+.etc-p:last-child{margin-bottom:0}
+.etc-h{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.etc-i b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.etc-d{margin:0 7px;color:var(--rule)}
+
+.etc-cap{margin:0 0 9px;font-size:11.5px;color:var(--ink-3);line-height:1.6}
+.etc-i em{font-style:normal;color:var(--ink-3);font-size:11.5px;margin-left:2px}
+
+/* ================= 문서 만들기 ================= */
+.docbtn{font-family:"IBM Plex Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:13px;font-weight:600;letter-spacing:0;padding:7px 14px;border-radius:6px;cursor:pointer;border:1px solid transparent;background:var(--y3-soft);color:var(--y3);white-space:nowrap;}
+.docbtn:hover{border-color:var(--y3);}
+.docbtn .car{display:inline-block;margin-left:5px;font-size:9px;}
+.doccard{background:var(--card);border:1px solid var(--rule);border-radius:3px;margin-bottom:20px;padding:20px 22px;box-shadow:var(--shadow);}
+.doccard[hidden]{display:none}
+.doccard h2{font-size:16px;font-weight:600;margin:0 0 4px;}
+.doccard .lead{font-size:12.5px;color:var(--ink-2);margin:0 0 14px;line-height:1.55;}
+.doc-row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 0;border-top:1px solid var(--rule-2);}
+.doc-lab{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);min-width:56px;}
+.doc-sum{font:inherit;font-size:13px;font-weight:600;color:var(--ink);background:var(--card-2);border:1px solid var(--rule);border-radius:3px;padding:6px 12px;cursor:pointer;}
+.doc-sum:hover{border-color:var(--ink-3);}
+.doc-sum .car{font-size:9px;margin-left:6px;color:var(--ink-3);display:inline-block;}
+.doc-pickwrap[hidden]{display:none}
+.doc-pick2{display:flex;flex-direction:column;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:8px;border-radius:3px;overflow:hidden;max-height:420px;overflow-y:auto;}
+.doc-sec-blk{background:var(--card);}
+.doc-sec-row{display:flex;align-items:center;gap:8px;padding:9px 12px;font-size:12.5px;font-weight:600;cursor:pointer;border-bottom:1px solid var(--rule-2);background:var(--card-2);position:sticky;top:0;z-index:1;}
+.doc-item-row{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 32px;font-size:12.5px;font-weight:500;cursor:pointer;}
+.doc-item-row:hover{background:var(--card-2);}
+.doc-item-row .pn{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--accent);font-weight:600;}
+.doc-item-tag{font-family:"IBM Plex Mono",monospace;font-size:8.5px;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:1px 5px;margin-left:auto;letter-spacing:.04em;}
+.doc-lnk{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--accent);background:none;border:0;cursor:pointer;padding:4px 4px;}
+.doc-lnk:hover{text-decoration:underline;}
+.doc-lnk2{font-family:inherit;font-size:13px;color:var(--accent);background:none;border:0;cursor:pointer;padding:6px 4px;text-decoration:underline;text-underline-offset:3px;}
+.doc-lnk2:hover{color:var(--ink);}
+.doc-lnk2:disabled{opacity:.4;cursor:not-allowed;text-decoration:none;}
+.doc-go{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--rule-2);}
+.doc-grp{display:flex;align-items:center;gap:8px;padding-right:16px;border-right:1px solid var(--rule);margin-right:8px;}
+.doc-grp:last-of-type{border-right:0}
+.doc-grp-l{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);}
+.doc-btn{font:inherit;font-size:13px;font-weight:600;padding:8px 15px;border-radius:3px;cursor:pointer;border:1px solid var(--ink);}
+.doc-btn.p{background:var(--ink);color:var(--card);}
+.doc-btn.s{background:transparent;color:var(--ink);}
+.doc-btn:disabled{opacity:.35;cursor:not-allowed;}
+.doc-note{font-size:11.5px;color:var(--ink-3);margin-top:8px;}
+.doc-msg{font-size:12.5px;margin-top:10px;padding:9px 12px;border-radius:3px;line-height:1.6;}
+.doc-msg[hidden]{display:none}
+.doc-msg.ok{background:var(--accent-soft);color:var(--accent);border-left:2px solid var(--accent);}
+.doc-msg.err{background:color-mix(in srgb, var(--down) 12%, transparent);color:var(--down);border-left:2px solid var(--down);}
+#docpv{margin-bottom:20px;background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:26px 28px;box-shadow:var(--shadow);}
+#docpv[hidden]{display:none}
+.docpv-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--rule);}
+.docpv-bar .t{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-right:auto;}
+/* 내보내기 문서 자체 스타일 — 뷰어 테마와 무관하게 항상 라이트 고정 */
+.fdoc{max-width:900px;margin:0 auto;font-family:Aptos,"Malgun Gothic","Apple SD Gothic Neo","IBM Plex Sans KR",sans-serif;font-size:12px;line-height:1.62;color:#0f1419;}
+.fdoc .fh{border-bottom:2px solid #0f1419;padding-bottom:10px;margin-bottom:14px;}
+.fdoc .fh-b{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#2a78d6;font-weight:700;}
+.fdoc .fh h1{font-size:20px;margin:6px 0 4px;letter-spacing:-.01em;}
+.fdoc .fh-m{font-size:10px;color:#5a6a76;letter-spacing:.02em;}
+.fdoc .fs{margin-top:16px;}
+.fdoc .fs-h{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid #0f1419;padding-bottom:3px;margin-bottom:8px;}
+.fdoc .fs-h b{font-size:13.5px;}
+.fdoc p.fnote{margin:0 0 10px;font-size:10.5px;color:#5a6a76;}
+.fdoc .ftbl-block{margin-bottom:14px;}
+.fdoc .ftbl-block:last-child{margin-bottom:0;}
+.fdoc .ftbl-h{font-weight:600;font-size:10.5px;color:#0f1419;margin:0 0 4px;letter-spacing:.02em;}
+.fdoc table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:8px;}
+.fdoc th,.fdoc td{padding:5px 8px;text-align:right;border-bottom:1px solid #e9edf0;}
+.fdoc th{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:#5a6a76;font-weight:600;border-bottom:1px solid #0f1419;white-space:nowrap;}
+.fdoc td:first-child,.fdoc th:first-child{text-align:left;}
+.fdoc .fchart{margin:10px 0 16px;text-align:center;}
+.fdoc .fchart-warn{font-size:9.5px;color:#b23b3b;margin:0;text-align:left;}
+.fdoc .fchart img{max-width:100%;border:1px solid #e3e7ea;border-radius:2px;}
+.fdoc .ffoot{margin-top:14px;padding-top:8px;border-top:1px solid #0f1419;font-size:9px;color:#8494a0;line-height:1.6;}
+</style>
+<header class="top">
+  <div class="top-in">
+    <div class="masthead">
+      <div class="eyebrow">항공정보포털시스템 · 항공통계 일자별 통계 · 노선</div>
+      <div class="byline">
+        <span class="by-lab">Prepared by</span><span class="by-mail">AVIAREPS Korea</span>
+      </div>
+    </div>
+    <h1>주요 공항 출발 국제선 노선 분석<br><span id="h1-period">&nbsp;</span></h1>
+    <p class="lede">항공정보포털 <strong>일자별 통계</strong>에서 인천·김해·김포·청주·대구 5개 공항의 출발 국제선을 공항별로 월 단위로 조회해 재집계했습니다<span id="lede-add"></span>. 아래 수치는 모두 해당 공항을 <strong>출발한</strong> 편·여객·화물입니다.</p>
+    <div class="filterbox">
+      <div class="fb-row">
+        <span class="fb-lab">공항</span>
+        <div class="seg" role="group" aria-label="출발 공항">
+          <button type="button" data-ap="ALL" aria-pressed="true">전체</button>
+          <button type="button" data-ap="ICN" aria-pressed="false">인천</button>
+          <button type="button" data-ap="PUS" aria-pressed="false">김해</button>
+          <button type="button" data-ap="GMP" aria-pressed="false">김포</button>
+          <button type="button" data-ap="CJJ" aria-pressed="false">청주</button>
+          <button type="button" data-ap="TAE" aria-pressed="false">대구</button>
+        </div>
+        <span class="fb-hint" id="ap-hint"></span>
+        <button type="button" class="docbtn" id="docbtn" aria-expanded="false" aria-controls="docpanel" style="margin-left:auto">문서 만들기<span class="car" id="doccar">▾</span></button>
+      </div>
+      <div class="metabar">
+        <span>구분 <b>국제선</b></span>
+        <span>값 <b>출발 (dep)</b></span>
+        <span>조회 단위 <b>월 1일 ~ 말일</b></span>
+        <span>기간 <b id="mb-months"></b></span>
+        <span>추출일 <b id="mb-date"></b></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="doccard" id="docpanel" hidden aria-label="문서 만들기"></section>
+  <div id="docpv" hidden></div>
+
+  <div class="stickybar">
+    <span class="sb-now" id="sb-now"></span>
+    <nav class="sb-nav" id="sb-nav">
+      <a href="#s1" data-sec="s1"><em>01</em> 총량</a>
+      <a href="#s2" data-sec="s2"><em>02</em> 노선</a>
+      <a href="#s3" data-sec="s3"><em>03</em> 항공사</a>
+      <a href="#s4" data-sec="s4"><em>04</em> 정리</a>
+    </nav>
+    <div class="seg sm" role="group" aria-label="출발 공항">
+      <button type="button" data-ap="ALL" aria-pressed="true">전체</button>
+      <button type="button" data-ap="ICN" aria-pressed="false">인천</button>
+      <button type="button" data-ap="PUS" aria-pressed="false">김해</button>
+      <button type="button" data-ap="GMP" aria-pressed="false">김포</button>
+      <button type="button" data-ap="CJJ" aria-pressed="false">청주</button>
+          <button type="button" data-ap="TAE" aria-pressed="false">대구</button>
+    </div>
+  </div>
+
+  <div class="basis" id="kpi-basis" style="margin-top:26px">
+    <span class="basis-lab">집계 기간</span>
+    <div class="seg sm" role="group" aria-label="집계 기간">
+      <button type="button" data-kpi="yb" aria-pressed="false" data-plbl="yb"></button>
+      <button type="button" data-kpi="yp" aria-pressed="false" data-plbl="yp"></button>
+      <button type="button" data-kpi="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+    </div>
+    <button type="button" id="kpi-showall" aria-pressed="false">전체 보기</button>
+    <span class="basis-hint" id="kpi-basis-hint"></span>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section id="s1">
+    <div class="sec-head"><span class="sec-n">01</span><h2 id="h-s1">출발 총량</h2></div>
+    <p class="sec-note" id="note1"></p>
+    <div class="card">
+      <p class="card-title"><span class="card-n">1.1</span>공항별 비교</p>
+      <p class="card-sub" id="s-apcmp">이 표만은 위 공항 선택과 무관하게 5개 공항을 항상 함께 보여줍니다</p>
+      <div class="basis" id="apcmp-basis" style="margin-top:12px">
+        <span class="basis-lab">집계 기간</span>
+        <div class="seg sm" role="group" aria-label="공항별 비교 집계 기간">
+          <button type="button" data-apcmp="yb" aria-pressed="false" data-plbl="yb"></button>
+          <button type="button" data-apcmp="yp" aria-pressed="false" data-plbl="yp"></button>
+          <button type="button" data-apcmp="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+        </div>
+        <button type="button" id="apcmp-showall" aria-pressed="false">전체 보기</button>
+        <span class="basis-hint" id="apcmp-basis-hint"></span>
+      </div>
+      <div class="tbl-wrap" id="tbl-ap" style="margin-top:14px"></div>
+    </div>
+    <div class="card">
+      <div class="row-between">
+        <div><p class="card-title"><span class="card-n">1.2</span>월별 여객</p><p class="card-sub" id="s-pax"></p></div>
+        <div class="seg sm" role="group" aria-label="보기 방식">
+          <button type="button" data-view="year" aria-pressed="true">연도별 겹쳐보기</button>
+          <button type="button" data-view="cont" aria-pressed="false">전체 기간</button>
+        </div>
+      </div>
+      <div class="chart-box" id="c-pax"></div>
+      <div class="legend" id="l-pax"></div>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card"><p class="card-title"><span class="card-n">1.3</span>월별 운항</p><p class="card-sub">단위: 편</p><div class="chart-box" id="c-flt"></div><div class="legend" id="l-flt"></div></div>
+      <div class="card"><p class="card-title"><span class="card-n">1.4</span>월별 화물</p><p class="card-sub">단위: 톤</p><div class="chart-box" id="c-crg"></div><div class="legend" id="l-crg"></div></div>
+    </div>
+    <div class="card">
+      <p class="card-title"><span class="card-n">1.5</span>편당 여객</p><p class="card-sub">여객 ÷ 운항편 · 기재 대형화와 탑승률을 함께 반영합니다</p>
+      <div class="chart-box" id="c-ppf"></div><div class="legend" id="l-ppf"></div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="sec-head"><span class="sec-n">02</span><h2>노선</h2></div>
+    <p class="sec-note" id="note2"></p>
+    <div class="card">
+      <p class="card-title"><span class="card-n">2.1</span>노선 TOP 30</p>
+      <p class="card-sub" id="s-route">단위: 명 · 우측 칩은 전년 동기 대비</p>
+      <div class="basis" id="route-basis" style="margin-top:2px;margin-bottom:14px">
+        <span class="basis-lab">집계 기간</span>
+        <div class="seg sm" role="group" aria-label="노선 TOP 30 집계 기간">
+          <button type="button" data-rtp="yb" aria-pressed="false" data-plbl="yb"></button>
+          <button type="button" data-rtp="yp" aria-pressed="false" data-plbl="yp"></button>
+          <button type="button" data-rtp="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+        </div>
+        <span class="basis-hint" id="route-basis-hint"></span>
+      </div>
+      <div class="chart-box" id="c-route"></div>
+    </div>
+    <div class="card">
+      <p class="card-title"><span class="card-n">2.2</span>상위 6개 노선 월별 궤적</p><p class="card-sub">단위: 명</p>
+      <div class="chart-box" id="c-routeline"></div><div class="legend" id="l-routeline"></div>
+    </div>
+    <div class="card">
+      <div class="row-between">
+        <div><p class="card-title"><span class="card-n">2.3</span>노선별 취항 항공사 비교</p><p class="card-sub" id="s-rtair"></p>
+        <p class="card-sub" id="s-rtair2" style="margin-top:2px"></p></div>
+        <label class="rt-pick"><span>노선</span><select id="rt-sel" aria-label="노선 선택"></select></label>
+      </div>
+      <div class="basis" id="ra-basis" style="margin-top:10px">
+        <span class="basis-lab">기준</span>
+        <div class="seg sm" role="group" aria-label="노선별 항공사 비교 기준">
+          <button type="button" data-ra="yb" aria-pressed="false" data-plbl="yb"></button>
+          <button type="button" data-ra="yp" aria-pressed="false" data-plbl="yp"></button>
+          <button type="button" data-ra="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+        </div>
+        <button type="button" id="ra-showall" aria-pressed="false">전체 보기</button>
+        <span class="basis-hint" id="ra-basis-hint"></span>
+      </div>
+      <div class="tbl-wrap" id="tbl-rtair"></div>
+      <div class="chart-box" id="c-rtair" style="margin-top:18px"></div>
+      <div class="legend" id="l-rtair"></div>
+      <div id="etc-note"></div>
+      <div id="city-split"></div>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="card"><p class="card-title"><span class="card-n">2.4</span><span id="t-new"></span></p><p class="card-sub" id="s-new"></p><div class="tbl-wrap" id="tbl-new"></div><p class="card-sub" style="margin:10px 0 0">여객 0은 화물기 또는 부정기 운항입니다.</p></div>
+      <div class="card"><p class="card-title"><span class="card-n">2.5</span><span id="t-gone"></span></p><p class="card-sub" id="s-gone"></p><div class="tbl-wrap" id="tbl-gone"></div></div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="sec-head"><span class="sec-n">03</span><h2>항공사</h2></div>
+    <p class="sec-note" id="note3"></p>
+    <div class="card">
+      <p class="card-title"><span class="card-n">3.1</span>국적사 여객 점유율</p><p class="card-sub">국적 항공사 15개사 합계 ÷ 선택 공항 전체 · 단위: %</p>
+      <div class="chart-box" id="c-kr"></div><div class="legend" id="l-kr"></div>
+    </div>
+    <div class="card">
+      <p class="card-title"><span class="card-n">3.2</span>항공사 유형별 점유율</p>
+      <p class="card-sub" id="s-atype"></p>
+      <div class="basis" id="at-basis" style="margin-top:2px">
+        <span class="basis-lab">기준</span>
+        <div class="seg sm" role="group" aria-label="항공사 유형별 점유율 기준">
+          <button type="button" data-at="yb" aria-pressed="false" data-plbl="yb"></button>
+          <button type="button" data-at="yp" aria-pressed="false" data-plbl="yp"></button>
+          <button type="button" data-at="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+        </div>
+        <button type="button" id="at-showall" aria-pressed="false">전체 보기</button>
+        <span class="basis-hint" id="at-basis-hint"></span>
+      </div>
+      <div class="tbl-wrap" id="tbl-atype" style="margin-top:14px"></div>
+      <div class="grid2" style="margin-top:18px">
+        <div><p class="card-sub" id="split-kr-lab" style="margin:0 0 7px">국적사 내부 구성</p><div id="split-kr"></div></div>
+        <div><p class="card-sub" id="split-fr-lab" style="margin:0 0 7px">외항사 내부 구성</p><div id="split-fr"></div></div>
+      </div>
+      <div class="chart-box" id="c-atype" style="margin-top:20px"></div>
+      <div class="legend" id="l-atype"></div>
+      <p class="card-sub" style="margin:10px 0 0">국적 FSC는 대한항공·아시아나, 국적 LCC는 나머지 국적사입니다. 에어프레미아는 하이브리드로 분류가 갈리지만 여기서는 국적 LCC에 넣었습니다. 외항사는 저비용사 50곳을 명시 매핑하고 나머지는 FSC로 처리했습니다.</p>
+    </div>
+    <div class="card">
+      <p class="card-title"><span class="card-n">3.3</span>항공사 TOP 15</p>
+      <p class="card-sub" id="s-air">단위: 명 · 우측 칩은 전년 동기 대비</p>
+      <div class="basis" id="air-basis" style="margin-top:2px;margin-bottom:14px">
+        <span class="basis-lab">집계 기간</span>
+        <div class="seg sm" role="group" aria-label="항공사 TOP 15 집계 기간">
+          <button type="button" data-atp="yb" aria-pressed="false" data-plbl="yb"></button>
+          <button type="button" data-atp="yp" aria-pressed="false" data-plbl="yp"></button>
+          <button type="button" data-atp="ytdc" aria-pressed="true" data-plbl="ytdc"></button>
+        </div>
+        <span class="basis-hint" id="air-basis-hint"></span>
+      </div>
+      <div class="chart-box" id="c-air"></div>
+    </div>
+    <div class="card">
+      <p class="card-title"><span class="card-n">3.4</span>상위 6개 항공사 월별 궤적</p><p class="card-sub">단위: 명</p>
+      <div class="chart-box" id="c-airline"></div><div class="legend" id="l-airline"></div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="sec-head"><span class="sec-n">04</span><h2>정리</h2></div>
+    <div class="finds" id="finds"></div>
+  </section>
+
+  <div class="colophon">
+    <span class="co-lab">Prepared by</span><span>AVIAREPS Korea</span><span class="dot">·</span><span id="colo-upd"></span>
+  </div>
+  <footer>
+    <div>출처: 국토교통부 <a href="https://www.airportal.go.kr/stats/transport/dailyRoute.do" target="_blank" rel="noopener">항공정보포털(airportal.go.kr)</a> 항공통계 &gt; 일자별 통계 &gt; 노선 · 기준월 <b id="foot-asof"></b> · 데이터 갱신 <span id="foot-upd"></span> · <a href="../">← 전체 대시보드</a></div>
+    <div id="foot-chk"></div>
+    <div>이 자료는 운항 실적 기반의 <b>일자별 통계</b>로, 유임·환승 구분이 있는 <b>항공수송통계</b>와는 여객 정의가 달라 수치가 일치하지 않습니다. 두 자료를 섞어 비교하지 마세요.</div>
+  </footer>
+</div>
+
+<script type="text/plain" id="app-main">
+const DATA = window.__ROUTES.data, META = window.__ROUTES.meta;
+/* 기간 상수 — 모두 데이터에서 계산 (연도·월이 바뀌어도 코드 수정 불필요) */
+const PER = DATA.period, CY = PER.cy, PY = PER.py, BY = PER.by, NM = PER.n;
+const MON_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const RG = NM===1 ? '1월' : '1~'+NM+'월';                 /* 당해 누적 범위 (예: 1~9월) */
+const RG_EN = NM===1 ? 'Jan' : 'Jan–'+MON_EN[NM-1];
+const YS = y => String(y).slice(2);                          /* '2024' → '24' */
+const PRE_BY = String(+BY-1);                                /* 데이터에 없는 기준연도 직전 해 */
+const CUR_FROM = CY+'01', CUR_TO = PER.last, PRV_FROM = PY+'01', PRV_TO = PY+PER.last.slice(4);
+const ymDot = m => m.slice(0,4)+'.'+m.slice(4);
+const PERIOD_RANGE = ymDot(PER.first)+' – '+ymDot(PER.last);
+const LBL = {yb: BY+'년 전체', yp: PY+'년 전체', ytdc: CY+' '+RG+' 누적'};
+const PKEYS = ['yb','yp','ytdc'];
+const okP = v => PKEYS.includes(v) ? v : 'ytdc';
+const LS = 'apr-routes-';                                    /* 같은 사이트의 다른 대시보드와 겹치지 않는 저장 키 */
+const LBLS = DATA.labels || {};
+let ap = 'ALL';
+try { const v = localStorage.getItem(LS+'ap'); if (v && DATA[v]) ap = v; } catch(e) {}
+let D = DATA[ap];
+let kpiPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'kpiperiod'); if (v) kpiPeriod = okP(v); } catch(e) {}
+let kpiShowAll = false;
+try { kpiShowAll = localStorage.getItem(LS+'kpishowall') === '1'; } catch(e) {}
+let apCmpPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'apcmpperiod'); if (v) apCmpPeriod = okP(v); } catch(e) {}
+let apCmpShowAll = false;
+try { apCmpShowAll = localStorage.getItem(LS+'apcmpshowall') === '1'; } catch(e) {}
+let routeTopPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'routetopperiod'); if (v) routeTopPeriod = okP(v); } catch(e) {}
+let airTopPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'airtopperiod'); if (v) airTopPeriod = okP(v); } catch(e) {}
+let raPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'raperiod'); if (v) raPeriod = okP(v); } catch(e) {}
+let raShowAll = false;
+try { raShowAll = localStorage.getItem(LS+'rashowall') === '1'; } catch(e) {}
+let atPeriod = 'ytdc';
+try { const v = localStorage.getItem(LS+'atperiod'); if (v) atPeriod = okP(v); } catch(e) {}
+let atShowAll = false;
+try { atShowAll = localStorage.getItem(LS+'atshowall') === '1'; } catch(e) {}
+function fullYearSum(arr, year){
+  let s=0, has=false;
+  D.months.forEach((m,i)=>{ if(m.slice(0,4)===year){ s+=arr[i]; has=true; } });
+  return has ? s : null;
+}
+/* D(현재 선택 공항)에 의존하지 않는 버전 — 1.1 공항별 비교 표는 항상 5개 공항 원본 데이터를 직접 참조 */
+function fullYearSumArr(arr, year){
+  let s=0, has=false;
+  DATA.ALL.months.forEach((m,i)=>{ if(m.slice(0,4)===year){ s+=arr[i]; has=true; } });
+  return has ? s : null;
+}
+/* 2.3 노선별 취항 항공사 비교 — 기간별(2026 1~9월 누적/2025년 전체/2024년 전체) 집계 */
+function raPeriodVal(arr, period){
+  if(!arr) return 0;
+  if(period==='yb') return fullYearSum(arr,BY) || 0;
+  if(period==='yp') return fullYearSum(arr,PY) || 0;
+  let s=0; D.months.forEach((m,i)=>{ if(m>=CUR_FROM&&m<=CUR_TO) s+=arr[i]; });
+  return s;
+}
+function raPeriodPrior(arr, period){
+  if(!arr) return null;
+  if(period==='yb') return null;
+  if(period==='yp') return fullYearSum(arr,BY);
+  let s=0, has=false;
+  D.months.forEach((m,i)=>{ if(m>=PRV_FROM&&m<=PRV_TO){ s+=arr[i]; has=true; } });
+  return has ? s : null;
+}
+function raStats(o, period){
+  const rows = (o.rows||[]).map(r=>{
+    const arr = o.series && o.series[r.name];
+    return {name:r.name, v: raPeriodVal(arr, period), p: raPeriodPrior(arr, period)};
+  });
+  const total = rows.reduce((s,r)=>s+r.v,0);
+  const priorTotal = period==='yb' ? null : rows.reduce((s,r)=>s+(r.p||0),0);
+  return {rows, total, priorTotal};
+}
+function raPeriodLabel(period){
+  return period==='yb' ? BY+'년 전체' : period==='yp' ? PY+'년 전체' : CY+'년 '+RG;
+}
+/* 문서 만들기(내보내기) 캡처 중에만 영어/병기로 바뀌는 버전 — DOCCAP이 꺼져 있으면(기본, 라이브 페이지)
+   항상 raPeriodLabel()의 한글 그대로 반환한다(2번째 <script>의 LB()는 DOCCAP이 켜졌을 때만 호출됨) */
+function raPeriodLabelDoc(period){
+  const ko = raPeriodLabel(period);
+  if(!DOCCAP) return ko;
+  const en = period==='yb' ? 'Full Year '+BY : period==='yp' ? 'Full Year '+PY : RG_EN+' '+CY;
+  return LB(ko, en);
+}
+function raTableHtml(o, period){
+  const RS = raStats(o, period);
+  const curColLbl = period==='yb'?BY+'년 전체':period==='yp'?PY+'년 전체':CY+' '+RG;
+  const priorColLbl = period==='yb'?'':period==='yp'?BY+'년 전체':PY+' '+RG;
+  return '<table><thead><tr><th>항공사</th><th>'+curColLbl+'</th><th>점유율</th><th></th>'+(priorColLbl?'<th>'+priorColLbl+'</th><th>전년비</th>':'')+'</tr></thead><tbody>'+
+    RS.rows.map((r,i)=>{
+      const sh=RS.total? r.v/RS.total*100 : 0;
+      const nm = r.name==='기타' ? `기타 ${o.rows[i].n?`(${o.rows[i].n}개사)`:''}` : r.name;
+      return `<tr><td><span style="display:inline-flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(SER[i%SER.length])}"></i><b>${nm}</b></span></td>
+        <td class="num">${fmt(r.v)}</td><td class="num">${sh.toFixed(1)}%</td>
+        <td class="share-cell"><i style="width:${sh.toFixed(1)}%;max-width:calc(100% - 20px);background:${cvar(SER[i%SER.length])}"></i></td>`+
+        (priorColLbl ? `<td class="num">${fmt(r.p||0)}</td><td>${r.p?chip(pct(r.v,r.p)):'<span class="delta">신규</span>'}</td>` : '')+
+        `</tr>`;
+    }).join('')+
+    `<tr><td><b>합계</b></td><td class="num"><b>${fmt(RS.total)}</b></td><td class="num"><b>100.0%</b></td><td></td>`+
+    (priorColLbl ? `<td class="num"><b>${fmt(RS.priorTotal||0)}</b></td><td><b>${RS.priorTotal?chip(pct(RS.total,RS.priorTotal)):'—'}</b></td>` : '')+
+    `</tr></tbody></table>`;
+}
+const apLabel = c => (DATA.airports.find(x => x.code === c) || {label: c}).label;
+const AP_FULL = {ALL:'인천·김해·김포·청주·대구 전체', ICN:'인천공항', PUS:'김해공항', GMP:'김포공항', CJJ:'청주공항', TAE:'대구공항'};
+const apName = c => `<span class="ap-name">${AP_FULL[c] || apLabel(c)}</span>`;
+const AP_COL = {ICN:'--s1', PUS:'--s2', GMP:'--s3', CJJ:'--s4', TAE:'--s5'};
+const fmt = n => n.toLocaleString('ko-KR');
+const pct = (a,b) => b ? (a/b-1)*100 : 0;
+const pctS = v => (v>=0?'+':'') + v.toFixed(1) + '%';
+const chip = v => `<span class="chip ${v>=0?'up':'down'}">${v>=0?'▲':'▼'} ${Math.abs(v).toFixed(1)}%</span>`;
+const cvar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const SER = ['--s1','--s2','--s3','--s4','--s5','--s6','--s7'];
+/* ---------- generic helpers ---------- */
+function svgEl(box,h){
+  const w=box.clientWidth||760;
+  const s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  s.setAttribute('viewBox',`0 0 ${w} ${h}`); s.setAttribute('width',w); s.setAttribute('height',h);
+  box.innerHTML=''; box.appendChild(s);
+  const tip=document.createElement('div'); tip.className='tip'; box.appendChild(tip);
+  return {s,w,h,tip};
+}
+function ns(t,at){const e=document.createElementNS('http://www.w3.org/2000/svg',t);for(const k in at)e.setAttribute(k,at[k]);return e;}
+function niceMax(v){const p=Math.pow(10,Math.floor(Math.log10(v)));const r=v/p;return (r<=1.2?1.2:r<=1.5?1.5:r<=2?2:r<=2.5?2.5:r<=3?3:r<=4?4:r<=5?5:r<=8?8:10)*p;}
+function shortN(v){return v>=1e6?(v/1e6).toFixed(v>=1e7?0:1)+'M':v>=1e3?Math.round(v/1e3)+'k':String(v);}
+
+function lineChart(id,series,opts){
+  const box=document.getElementById(id); if(!box) return;
+  const H=opts.h||220, {s,w,tip}=svgEl(box,H);
+  const P={t:14,r:opts.r||14,b:26,l:opts.l||46};
+  const iw=w-P.l-P.r, ih=H-P.t-P.b, M=opts.months||D.months;
+  let lo=opts.lo!==undefined?opts.lo:0, hi=opts.hi!==undefined?opts.hi:niceMax(Math.max(...series.flatMap(x=>x.v)));
+  const X=i=>M.length>1 ? P.l+(iw*i)/(M.length-1) : P.l+iw/2, Y=v=>P.t+ih-((v-lo)/(hi-lo))*ih;
+  const ticks=opts.ticks||5;
+  for(let i=0;i<=ticks;i++){const v=lo+(hi-lo)*i/ticks;const y=Y(v);
+    s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,class:'gridline'}));
+    const t=ns('text',{x:P.l-8,y:y+3.5,class:'axis-t','text-anchor':'end'});t.textContent=opts.fy?opts.fy(v):shortN(v);s.appendChild(t);}
+  {let lastX=-1e9;
+   M.forEach((m,i)=>{ const isLast=i===M.length-1; if(m.slice(4)!=='01' && !isLast) return;
+    const x=X(i); if(isLast && x-lastX<70) return; lastX=x;
+    const t=ns('text',{x,y:H-8,class:'axis-t','text-anchor':isLast?'end':'middle'});t.textContent=m.slice(0,4)+'.'+m.slice(4);s.appendChild(t);});}
+  if(opts.zero){const y=Y(0);s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,stroke:cvar('--ink-3'),'stroke-width':1}));}
+  const LAB=[];
+  series.forEach((sr,si)=>{
+    const col=cvar(sr.color||SER[si]);
+    let d='',started=false;
+    sr.v.forEach((v,i)=>{ if(v===null||v===undefined){started=false;return;} d+=(started?'L':'M')+X(i)+' '+Y(v)+' '; started=true; });
+    if(sr.fill){
+      const g=ns('linearGradient',{id:id+'-g'+si,x1:0,y1:0,x2:0,y2:1});
+      g.appendChild(ns('stop',{offset:'0%','stop-color':col,'stop-opacity':.22}));
+      g.appendChild(ns('stop',{offset:'100%','stop-color':col,'stop-opacity':0}));
+      const df=ns('defs',{});df.appendChild(g);s.appendChild(df);
+      const fi=sr.v.findIndex(v=>v!==null&&v!==undefined);
+      s.appendChild(ns('path',{d:d+`L${X(sr.v.length-1)} ${Y(lo)} L${X(fi)} ${Y(lo)} Z`,fill:`url(#${id}-g${si})`}));
+    }
+    s.appendChild(ns('path',{d,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    const li=sr.v.length-1;
+    if(sr.v[li]!==null&&sr.v[li]!==undefined) s.appendChild(ns('circle',{cx:X(li),cy:Y(sr.v[li]),r:4,fill:col,stroke:cvar('--card'),'stroke-width':2}));
+    if(sr.label&&sr.v[li]!=null) LAB.push({t:sr.label,y:Y(sr.v[li]),c:col});
+  });
+  if(LAB.length){
+    LAB.sort((a,b)=>b.y-a.y); let prev=1e9;
+    LAB.forEach(o=>{o.ly=Math.min(o.y,prev-15);prev=o.ly;});
+    const sh=Math.max(0,P.t+6-Math.min(...LAB.map(o=>o.ly)));
+    LAB.forEach(o=>{const y=o.ly+sh;
+      s.appendChild(ns('line',{x1:X(M.length-1)+4,x2:w-P.r+4,y1:o.y,y2:y,stroke:o.c,'stroke-width':1,opacity:.5}));
+      const t=ns('text',{x:w-P.r+8,y:y+3.5,class:'axis-t','font-size':11,style:'fill:'+cvar('--ink-2')});t.textContent=o.t;s.appendChild(t);});
+  }
+  const cross=ns('line',{x1:0,x2:0,y1:P.t,y2:P.t+ih,stroke:cvar('--ink-3'),'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});s.appendChild(cross);
+  const dots=series.map((sr,si)=>{const c=ns('circle',{r:4.5,fill:cvar(sr.color||SER[si]),stroke:cvar('--card'),'stroke-width':2,opacity:0});s.appendChild(c);return c;});
+  const hit=ns('rect',{x:P.l,y:P.t,width:iw,height:ih,fill:'transparent'});s.appendChild(hit);
+  function move(ev){
+    const r=s.getBoundingClientRect();
+    const px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*(w/r.width);
+    let i=Math.round(((px-P.l)/iw)*(M.length-1)); i=Math.max(0,Math.min(M.length-1,i));
+    cross.setAttribute('x1',X(i));cross.setAttribute('x2',X(i));cross.setAttribute('opacity',1);
+    dots.forEach((c,si)=>{const vv=series[si].v[i];if(vv===null||vv===undefined){c.setAttribute('opacity',0);return;}c.setAttribute('cx',X(i));c.setAttribute('cy',Y(vv));c.setAttribute('opacity',1);});
+    tip.innerHTML=`<div class="t-h">${M[i].slice(0,4)}년 ${M[i].slice(4)}월</div>`+
+      series.map((sr,si)=>`<div class="t-r"><span style="display:flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(sr.color||SER[si])}"></i>${sr.name}</span><b>${sr.v[i]===null||sr.v[i]===undefined?'—':(opts.ft?opts.ft(sr.v[i]):fmt(sr.v[i]))}</b></div>`).join('');
+    tip.style.opacity=1;
+    const bw=box.clientWidth, tw=tip.offsetWidth, lx=X(i)*(r.width/w);
+    tip.style.left=Math.max(4,Math.min(bw-tw-4,lx-tw/2))+'px';
+    tip.style.top='4px';
+  }
+  hit.addEventListener('mousemove',move); hit.addEventListener('touchmove',e=>{move(e);e.preventDefault();},{passive:false});
+  hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;cross.setAttribute('opacity',0);dots.forEach(c=>c.setAttribute('opacity',0));});
+}
+
+
+/* ---------- 연도별 겹쳐보기 차트 ---------- */
+const YEARS = [PRE_BY].concat(PER.years);               /* 최신 연도가 항상 --y4, 그 앞이 --y3 … */
+const YCOL  = {}; YEARS.forEach((y,i)=>{ YCOL[y] = ['--y4','--y3','--y2','--y1'][Math.min(3, YEARS.length-1-i)]; });
+const MLAB_KO = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const MLAB_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+/* 문서 만들기(내보내기) 캡처 중에만 true — 차트 이미지 캡처 시 영어/병기 텍스트로 잠깐 다시 그렸다가 원상복구할 때 사용.
+   페이지 자체는 항상 한국어로 표시되며, 이 플래그가 꺼져 있으면(false) 아래 tr*() 함수들은 항상 원래 한글을 그대로 반환한다. */
+let DOCCAP = false;
+function trMonth(i){ return DOCCAP ? LB(MLAB_KO[i], MLAB_EN[i]) : MLAB_KO[i]; }
+function trAirline(n){ if(!DOCCAP) return n; const en=AIRLINE_EN[n]; return en?LB(n,en):n; }
+function trRoute(n){ if(!DOCCAP) return n; const en=ROUTE_EN[n]; return en?LB(n,en):n; }
+function trType(n){ if(!DOCCAP) return n; const en=TYPE_EN[n]; return en?LB(n,en):n; }
+
+function byYear(vals){
+  const out={}; YEARS.forEach(y=>out[y]=new Array(12).fill(null));
+  D.months.forEach((m,i)=>{ const y=m.slice(0,4), mo=+m.slice(4)-1; if(out[y]) out[y][mo]=vals[i]; });
+  return out;
+}
+
+function yearChart(id, vals, opts){
+  opts=opts||{};
+  const box=document.getElementById(id); if(!box) return;
+  const H=opts.h||240, {s,w,tip}=svgEl(box,H);
+  const series = opts.series || (()=>{ const g=byYear(vals); return YEARS.filter(y=>g[y].some(v=>v!==null)).map(y=>({y,v:g[y]})); })();
+  const P={t:16,r:opts.r||46,b:26,l:opts.l||48};
+  const iw=w-P.l-P.r, ih=H-P.t-P.b;
+  const flat=series.flatMap(o=>o.v).filter(v=>v!==null);
+  const mn=Math.min(...flat), mx=Math.max(...flat);
+  let hi, lo;
+  if(opts.hi!==undefined || opts.lo!==undefined){
+    hi = opts.hi!==undefined?opts.hi:niceMax(mx);
+    lo = opts.lo!==undefined?opts.lo:0;
+  } else {
+    // 선 그래프는 0 기준을 강제하지 않는다 — 폭이 좁으면 축을 조여 증감을 읽히게 한다
+    const span=mx-mn||mx||1;
+    const step=Math.pow(10,Math.floor(Math.log10(span)));
+    lo = Math.max(0, Math.floor((mn-span*0.25)/step)*step);
+    hi = Math.ceil((mx+span*0.12)/step)*step;
+    if(hi<=lo) hi=lo+step;
+  }
+  const X=i=>P.l+iw*i/11, Y=v=>P.t+ih-((v-lo)/(hi-lo))*ih;
+  const ticks=opts.ticks||5;
+  for(let i=0;i<=ticks;i++){const v=lo+(hi-lo)*i/ticks,y=Y(v);
+    s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,class:'gridline'}));
+    const t=ns('text',{x:P.l-8,y:y+3.5,class:'axis-t','text-anchor':'end'});t.textContent=opts.fy?opts.fy(v):shortN(v);s.appendChild(t);}
+  const every = iw/12 < 34 ? 2 : 1;
+  MLAB_KO.forEach((m,i)=>{ if(i%every!==0 && i!==11) return;
+    const t=ns('text',{x:X(i),y:H-8,class:'axis-t','text-anchor':'middle'});t.textContent=trMonth(i);s.appendChild(t);});
+  if(opts.zero){const y=Y(0);s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,stroke:cvar('--ink-3'),'stroke-width':1}));}
+
+  const LAB=[];
+  series.forEach(o=>{
+    const col=cvar(YCOL[o.y]);
+    let d='',started=false, lastI=-1;
+    o.v.forEach((v,i)=>{ if(v===null){started=false;return;} d+=(started?'L':'M')+X(i)+' '+Y(v)+' '; started=true; lastI=i; });
+    s.appendChild(ns('path',{d,fill:'none',stroke:col,'stroke-width':o.y===CY?2.5:2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    if(lastI>=0){
+      s.appendChild(ns('circle',{cx:X(lastI),cy:Y(o.v[lastI]),r:o.y===CY?4.5:3.5,fill:col,stroke:cvar('--card'),'stroke-width':2}));
+      LAB.push({t:o.y,y:Y(o.v[lastI]),x:X(lastI),c:col});
+    }
+  });
+  LAB.sort((a,b)=>b.y-a.y); let prev=1e9;
+  LAB.forEach(o=>{o.ly=Math.min(o.y,prev-14);prev=o.ly;});
+  const sh=Math.max(0,P.t+6-Math.min(...LAB.map(o=>o.ly)));
+  LAB.forEach(o=>{const y=o.ly+sh;
+    s.appendChild(ns('line',{x1:o.x+4,x2:w-P.r+4,y1:o.y,y2:y,stroke:o.c,'stroke-width':1,opacity:.45}));
+    const t=ns('text',{x:w-P.r+8,y:y+3.5,class:'axis-t','font-size':11,style:'fill:'+cvar('--ink-2')});t.textContent=o.t;s.appendChild(t);});
+
+  const cross=ns('line',{x1:0,x2:0,y1:P.t,y2:P.t+ih,stroke:cvar('--ink-3'),'stroke-width':1,'stroke-dasharray':'3 3',opacity:0});s.appendChild(cross);
+  const dots=series.map(o=>{const c=ns('circle',{r:4.5,fill:cvar(YCOL[o.y]),stroke:cvar('--card'),'stroke-width':2,opacity:0});s.appendChild(c);return c;});
+  const hit=ns('rect',{x:P.l,y:P.t,width:iw,height:ih,fill:'transparent'});s.appendChild(hit);
+  function move(ev){
+    const r=s.getBoundingClientRect();
+    const px=((ev.touches?ev.touches[0].clientX:ev.clientX)-r.left)*(w/r.width);
+    let i=Math.round(((px-P.l)/iw)*11); i=Math.max(0,Math.min(11,i));
+    cross.setAttribute('x1',X(i));cross.setAttribute('x2',X(i));cross.setAttribute('opacity',1);
+    dots.forEach((c,si)=>{const v=series[si].v[i];
+      if(v===null){c.setAttribute('opacity',0);return;}
+      c.setAttribute('cx',X(i));c.setAttribute('cy',Y(v));c.setAttribute('opacity',1);});
+    let rows=series.map((o,si)=>{
+      const v=o.v[i]; if(v===null) return '';
+      const prevY=String(+o.y-1), po=series.find(x=>x.y===prevY);
+      const dv=(po && po.v[i]!==null && po.v[i]!==0 && !opts.noDelta) ? ` <span class="delta">${pctS((v/po.v[i]-1)*100)}</span>` : '';
+      return `<div class="t-r"><span style="display:flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(YCOL[o.y])}"></i>${o.y}</span><b>${opts.ft?opts.ft(v):fmt(v)}${dv}</b></div>`;
+    }).join('');
+    tip.innerHTML=`<div class="t-h">${MLAB_KO[i]}</div>`+rows;
+    tip.style.opacity=1;
+    const bw=box.clientWidth, tw=tip.offsetWidth, lx=X(i)*(r.width/w);
+    tip.style.left=Math.max(4,Math.min(bw-tw-4,lx-tw/2))+'px';
+    tip.style.top='4px';
+  }
+  hit.addEventListener('mousemove',move);
+  hit.addEventListener('touchmove',e=>{move(e);e.preventDefault();},{passive:false});
+  hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;cross.setAttribute('opacity',0);dots.forEach(c=>c.setAttribute('opacity',0));});
+  return series.map(o=>o.y);
+}
+
+function yearLegend(elId, years){
+  const el=document.getElementById(elId); if(!el) return;
+  el.innerHTML=(years||[]).map(y=>`<span><i class="sw" style="background:${cvar(YCOL[y])}"></i>${y}</span>`).join('');
+}
+
+/* 공항 비교 표 — 필터와 무관하게 항상 5개 공항. 집계 기간(2024/2025 전체, 2026 1~9월 누적)별로 전환 가능 */
+const AP_CODES = ['ICN','PUS','GMP','CJJ','TAE'];
+function apCmpPeriodLabel(period){
+  return LBL[period] || LBL.ytdc;
+}
+/* 2026 1~9월 누적은 기존 DATA.apCompare(전년비·24년비·노선수 포함)를 그대로 쓰고,
+   2024/2025 전체는 각 공항의 월별 원자료를 연도 합산해 새로 만든다(노선수는 연간 집계가 없어 생략) */
+function apCmpRows(period){
+  if(period==='ytdc') return DATA.apCompare.map(x=>({...x}));
+  const year = period==='yb' ? BY : PY;
+  const rows = AP_CODES.map(code=>{
+    const T = DATA[code].total, label = DATA.apCompare.find(x=>x.code===code).label;
+    const v = fullYearSumArr(T.pax, year), f = fullYearSumArr(T.flight, year), c = fullYearSumArr(T.cargo, year);
+    const p = period==='yp' ? fullYearSumArr(T.pax, BY) : null;
+    return {code, label, v, f, c, p};
+  });
+  const tv = rows.reduce((s,x)=>s+x.v,0);
+  rows.forEach(x=>{ x.share = tv ? x.v/tv*100 : 0; });
+  return rows;
+}
+function apCompareTableHtml(period){
+  const rows = apCmpRows(period), withPrior = period!=='yb', withYtdCols = period==='ytdc';
+  const tv=rows.reduce((s,x)=>s+x.v,0), tf=rows.reduce((s,x)=>s+x.f,0), tc=rows.reduce((s,x)=>s+x.c,0);
+  const tp = withPrior ? rows.reduce((s,x)=>s+(x.p||0),0) : 0;
+  const paxLbl = period==='yb'?BY+'년 전체 여객':period==='yp'?PY+'년 전체 여객':CY+' '+RG+' 여객';
+  return '<table><thead><tr><th>공항</th><th>'+paxLbl+'</th><th>점유율</th><th></th>'
+    +(withPrior?'<th>전년비</th>':'')+(withYtdCols?'<th>'+YS(BY)+'년비</th>':'')
+    +'<th>운항(편)</th><th>화물(톤)</th>'+(withYtdCols?'<th>노선수</th>':'')+'</tr></thead><tbody>'
+    +rows.map(x=>`<tr${x.code===ap?' style="background:var(--accent-soft)"':''}>
+      <td><span style="display:inline-flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(AP_COL[x.code])}"></i><b>${x.label}</b></span></td>
+      <td class="num">${fmt(x.v)}</td><td class="num">${x.share.toFixed(1)}%</td>
+      <td class="share-cell"><i style="width:${x.share.toFixed(1)}%;max-width:calc(100% - 20px);background:${cvar(AP_COL[x.code])}"></i></td>
+      ${withPrior?`<td>${chip(pct(x.v,x.p))}</td>`:''}${withYtdCols?`<td class="num">${pctS(pct(x.v,x.pb))}</td>`:''}
+      <td class="num">${fmt(x.f)}</td><td class="num">${fmt(x.c)}</td>${withYtdCols?`<td class="num">${x.n}</td>`:''}</tr>`).join('')
+    +`<tr><td><b>합계</b></td><td class="num"><b>${fmt(tv)}</b></td><td class="num"><b>100.0%</b></td><td></td>
+     ${withPrior?`<td><b>${chip(pct(tv,tp))}</b></td>`:''}${withYtdCols?'<td class="num"></td>':''}
+     <td class="num"><b>${fmt(tf)}</b></td><td class="num"><b>${fmt(tc)}</b></td>${withYtdCols?'<td class="num"></td>':''}</tr></tbody></table>`;
+}
+function renderApCompare(){
+  const el=document.getElementById('tbl-ap'); if(!el) return;
+  document.querySelectorAll('.seg button[data-apcmp]').forEach(b=>b.setAttribute('aria-pressed',String(!apCmpShowAll && b.dataset.apcmp===apCmpPeriod)));
+  const showAllBtn=document.getElementById('apcmp-showall');
+  if(showAllBtn) showAllBtn.setAttribute('aria-pressed', String(apCmpShowAll));
+  const hint=document.getElementById('apcmp-basis-hint'), cap=document.getElementById('s-apcmp');
+  const base='이 표만은 위 공항 선택과 무관하게 5개 공항을 항상 함께 보여줍니다';
+  if(apCmpShowAll){
+    if(cap) cap.textContent=base+' · '+BY+'년 전체 · '+PY+'년 전체 · '+CY+'년 '+RG+' 누적을 한 번에 비교합니다';
+    if(hint) hint.textContent='노선수는 '+CY+'년 '+RG+' 누적 기준으로만 제공됩니다';
+    el.innerHTML=['yb','yp','ytdc'].map(p=>`<div class="ra-all-block"><p class="ra-all-h">${apCmpPeriodLabel(p)}</p>${apCompareTableHtml(p)}</div>`).join('');
+  } else {
+    if(cap) cap.textContent=base;
+    if(hint) hint.textContent = apCmpPeriod==='yb'
+      ? '이전 연도('+PRE_BY+') 데이터가 없어 전년비는 표시하지 않으며, 노선수는 '+CY+'년 '+RG+' 누적 기준으로만 제공됩니다'
+      : apCmpPeriod==='yp'
+      ? '전년비는 '+BY+'년 전체 대비 · 노선수는 '+CY+'년 '+RG+' 누적 기준으로만 제공됩니다'
+      : '';
+    el.innerHTML=apCompareTableHtml(apCmpPeriod);
+  }
+}
+
+/* KPI + 문구 */
+/* 집계 기간별 KPI 카드 4개 생성 — 단독 표시와 '전체 보기' 비교 표시 모두에서 재사용 */
+function kpiCardsFor(period){
+  if(period==='yb'){
+    const f=fullYearSum(D.total.flight,BY), pv=fullYearSum(D.total.pax,BY), c=fullYearSum(D.total.cargo,BY);
+    return [
+      ['출발 여객','명',pv], ['출발 운항','편',f], ['출발 화물','톤',c], ['편당 여객','명',Math.round(pv/f)],
+    ].map(([l,u,v])=>`<div class="kpi"><div class="lab">${l} · ${YS(BY)}년 전체</div>
+      <div class="val num">${fmt(v)}<small>${u}</small></div>
+      <div class="sub">${BY}년 1~12월 합계</div></div>`);
+  }
+  if(period==='yp'){
+    const f=fullYearSum(D.total.flight,PY), pv=fullYearSum(D.total.pax,PY), c=fullYearSum(D.total.cargo,PY);
+    const f24=fullYearSum(D.total.flight,BY), pv24=fullYearSum(D.total.pax,BY), c24=fullYearSum(D.total.cargo,BY);
+    return [
+      ['출발 여객','명',pv,pv24], ['출발 운항','편',f,f24], ['출발 화물','톤',c,c24],
+      ['편당 여객','명',Math.round(pv/f),Math.round(pv24/f24)],
+    ].map(([l,u,v,bv])=>`<div class="kpi"><div class="lab">${l} · ${YS(PY)}년 전체</div>
+      <div class="val num">${fmt(v)}<small>${u}</small></div>
+      <div class="sub">${chip(pct(v,bv))} 전년비(${YS(BY)}년 전체)</div></div>`);
+  }
+  const y=D.ytd, a=y[CY], p=y[PY], b=y[BY];
+  return [
+    ['출발 여객','명',a.pax,p.pax,b.pax],
+    ['출발 운항','편',a.flight,p.flight,b.flight],
+    ['출발 화물','톤',a.cargo,p.cargo,b.cargo],
+    ['편당 여객','명',Math.round(a.pax/a.flight),Math.round(p.pax/p.flight),Math.round(b.pax/b.flight)],
+  ].map(([l,u,v,pv,bv])=>`<div class="kpi"><div class="lab">${l} · ${YS(CY)}년 ${RG}</div>
+    <div class="val num">${fmt(v)}<small>${u}</small></div>
+    <div class="sub">${chip(pct(v,pv))} 전년 동기 · <span class="num">${pctS(pct(v,bv))}</span> vs ${YS(BY)}년</div></div>`);
+}
+
+function renderKpi(){
+  const y=D.ytd, a=y[CY], p=y[PY], b=y[BY];
+  const L=apLabel(ap), isAll=ap==='ALL';
+  document.getElementById('h-s1').textContent=(isAll?'5개 공항':L)+' 출발 총량';
+  document.getElementById('ap-hint').textContent=isAll
+    ? '인천 · 김해 · 김포 · 청주 · 대구 합계'
+    : L+' 공항 출발 국제선만';
+  document.getElementById('note1').innerHTML=
+    `${CY}년 ${RG} ${isAll?'5개 공항':L} 출발 국제선은 <b>${fmt(a.pax)}</b>명으로 전년 동기 대비 <b>${pctS(pct(a.pax,p.pax))}</b> 늘었습니다. `+
+    (pct(a.pax,p.pax)>pct(a.flight,p.flight)
+      ? `운항 증가율(<b>${pctS(pct(a.flight,p.flight))}</b>)보다 여객 증가율이 높아, <b>같은 편수로 더 많은 사람을 실어 나르고 있습니다.</b>`
+      : `운항은 <b>${pctS(pct(a.flight,p.flight))}</b> 늘어, 편당 여객은 ${fmt(Math.round(a.pax/a.flight))}명입니다.`);
+  document.querySelectorAll('.seg button[data-ap]').forEach(b2=>b2.setAttribute('aria-pressed',String(b2.dataset.ap===ap)));
+  document.getElementById('sb-now').innerHTML=
+    `${apName(ap)} <span class="dot">·</span> <b>${fmt(a.pax)}</b>명 <span class="dot">·</span> 전년비 <b>${pctS(pct(a.pax,p.pax))}</b>`;
+
+  document.querySelectorAll('.seg button[data-kpi]').forEach(b2=>b2.setAttribute('aria-pressed',String(!kpiShowAll && b2.dataset.kpi===kpiPeriod)));
+  const kpiShowAllBtn=document.getElementById('kpi-showall');
+  if(kpiShowAllBtn) kpiShowAllBtn.setAttribute('aria-pressed', String(kpiShowAll));
+  const basisHint=document.getElementById('kpi-basis-hint');
+  let kpiCards;
+  if(kpiShowAll){
+    if(basisHint) basisHint.textContent=BY+'년 전체 · '+PY+'년 전체 · '+CY+'년 '+RG+' 누적을 한 번에 비교합니다';
+    kpiCards=[
+      '<div class="kpi-grp-h">'+BY+'년 전체</div>', ...kpiCardsFor('yb'),
+      '<div class="kpi-grp-h">'+PY+'년 전체</div>', ...kpiCardsFor('yp'),
+      '<div class="kpi-grp-h">'+CY+'년 '+RG+' 누적</div>', ...kpiCardsFor('ytdc'),
+    ];
+  } else if(kpiPeriod==='yb'){
+    if(basisHint) basisHint.textContent=BY+'년 1~12월 전체 · 이전 연도('+PRE_BY+') 데이터가 없어 전년비는 표시하지 않습니다';
+    kpiCards=kpiCardsFor('yb');
+  } else if(kpiPeriod==='yp'){
+    if(basisHint) basisHint.textContent=PY+'년 1~12월 전체 · 전년비는 '+BY+'년 전체 대비';
+    kpiCards=kpiCardsFor('yp');
+  } else {
+    if(basisHint) basisHint.textContent='';
+    kpiCards=kpiCardsFor('ytdc');
+  }
+  document.getElementById('kpis').innerHTML=kpiCards.join('');
+  const t30=D.topRoutes.reduce((s,r)=>s+r.v,0);
+  document.getElementById('note2').innerHTML=
+    `${CY}년 ${RG} 기준 ${apName(ap)} 출발 노선은 <b>${a.routes}</b>개입니다. `+
+    `상위 30개가 ${isAll?'5개 공항':L} 여객의 <b>${(t30/a.pax*100).toFixed(1)}%</b>를 담당합니다.`;
+  document.getElementById('note3').innerHTML=
+    `${apName(ap)}에 취항한 항공사는 ${CY}년 ${RG} 기준 <b>${a.airlines}</b>개입니다. `+
+    `국적사 점유율과 유형별 구성은 공항에 따라 크게 달라집니다.`;
+}
+
+/* 01 */
+let view01='year';
+function renderSec1(){
+  document.querySelectorAll('.seg button[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view01)));
+  if(view01==='year'){
+    document.getElementById('s-pax').textContent='단위: 명 · 같은 달끼리 연도를 겹쳐 비교';
+    yearLegend('l-pax', yearChart('c-pax', D.total.pax, {h:260}));
+    yearLegend('l-flt', yearChart('c-flt', D.total.flight, {h:200,l:44,r:40}));
+    yearLegend('l-crg', yearChart('c-crg', D.total.cargo, {h:200,l:44,r:40}));
+    yearLegend('l-ppf', yearChart('c-ppf', D.ppf, {h:200,ft:v=>fmt(v)+'명'}));
+  } else {
+    document.getElementById('s-pax').textContent='단위: 명 · '+D.months.length+'개월 연속';
+    lineChart('c-pax',[{name:'여객',v:D.total.pax,fill:true}],{h:250});
+    lineChart('c-flt',[{name:'운항',v:D.total.flight,fill:true,color:'--s1'}],{h:190,l:42});
+    lineChart('c-crg',[{name:'화물',v:D.total.cargo,fill:true,color:'--s2'}],{h:190,l:42});
+    lineChart('c-ppf',[{name:'편당 여객',v:D.ppf,fill:true,color:'--s3'}],{h:190,ft:v=>fmt(v)+'명'});
+    ['l-pax','l-flt','l-crg','l-ppf'].forEach(i=>document.getElementById(i).innerHTML='');
+  }
+}
+document.querySelectorAll('.seg button[data-view]').forEach(b=>{
+  b.addEventListener('click',()=>{ if(b.dataset.view===view01) return; view01=b.dataset.view; renderSec1(); });
+});
+
+/* 가로 막대 */
+function barChart(id, items, opts){
+  const box=document.getElementById(id); const N=items;
+  const tipTitle=(opts&&opts.tipTitle)||RG+' 누계 여객';
+  const yrLabels=(opts&&opts.yrLabels)||[CY,PY,BY];
+  const pbLabel=(opts&&opts.pbLabel)||YS(BY)+'년 대비';
+  const rowH=opts&&opts.rowH||28, H=N.length*rowH+30;
+  if(opts&&opts.scrollCap){
+    box.style.maxHeight=(opts.scrollCap*rowH+30)+'px';
+    box.style.overflowY=N.length>opts.scrollCap?'auto':'visible';
+  } else {
+    box.style.maxHeight=''; box.style.overflowY='';
+  }
+  const {s,w,tip}=svgEl(box,H);
+  const L=Math.min(140,Math.max(88,w*0.18)), R=152, iw=w-L-R;
+  const hi=Math.max(...N.map(n=>n.v));
+  const CHIP=w-58;                      // 증감 칩이 시작되는 고정 열
+  N.forEach((n,i)=>{
+    const y=i*rowH+10, bw=Math.max(2,iw*n.v/hi), end=L+bw;
+    if(i%2===1) s.appendChild(ns('rect',{x:0,y:y-1,width:w,height:rowH-2,fill:cvar('--card-2')}));  // 얼룩 배경
+    const t=ns('text',{x:L-10,y:y+13,class:'axis-t','text-anchor':'end','font-size':12,style:'fill:'+cvar('--ink')+';font-family:"IBM Plex Sans KR",sans-serif'});t.textContent=n.name;s.appendChild(t);
+    const r=ns('rect',{x:L,y:y+2,width:bw,height:16,rx:2,fill:cvar('--s1'),'fill-opacity':.9});s.appendChild(r);
+    // 수치는 막대 끝을 따라간다 — 자리가 없으면 막대 안쪽에 흰 글씨로
+    const label=fmt(n.v), vw=label.length*6.7;
+    const inside = end+8+vw > CHIP-10 && bw > vw+18;
+    const v=ns('text',{y:y+15,class:'axis-t','font-size':11,
+      x: inside ? end-8 : Math.min(end+8, CHIP-10-vw),
+      'text-anchor': inside ? 'end' : 'start',
+      style:'fill:'+(inside?'#fff':cvar('--ink-2'))+(inside?';font-weight:600':'')});
+    v.textContent=label; s.appendChild(v);
+    // 점선 리더: 수치 끝 → 증감 칩 열 (전기 대비 데이터가 없으면 칩 자체를 생략)
+    const hasChip = n.p!=null;
+    const lx = inside ? end+6 : Math.min(end+8,CHIP-10-vw)+vw+6;
+    if(hasChip && CHIP-8-lx > 12) s.appendChild(ns('line',{x1:lx,x2:CHIP-8,y1:y+10,y2:y+10,
+      stroke:cvar('--ink-3'),'stroke-width':1,'stroke-dasharray':'1 3',opacity:.45}));
+    if(hasChip){
+      const g=pct(n.v,n.p);
+      const c=ns('text',{x:w-4,y:y+15,class:'axis-t','text-anchor':'end','font-size':11,style:'fill:'+cvar(g>=0?'--up':'--down')+';font-weight:600'});
+      c.textContent=(g>=0?'▲ ':'▼ ')+Math.abs(g).toFixed(1)+'%'; s.appendChild(c);
+    }
+    const hit=ns('rect',{x:0,y:y,width:w,height:rowH-2,fill:'transparent'});s.appendChild(hit);
+    hit.addEventListener('mouseenter',()=>{
+      r.setAttribute('fill-opacity',1);
+      tip.innerHTML=`<div class="t-h">${n.name} · ${tipTitle}</div>
+        <div class="t-r"><span>${yrLabels[0]}</span><b>${fmt(n.v)}</b></div>`
+        +(n.p!=null?`<div class="t-r"><span>${yrLabels[1]}</span><b>${fmt(n.p)}</b></div>`:'')
+        +(n.pb!=null?`<div class="t-r"><span>${yrLabels[2]}</span><b>${fmt(n.pb)}</b></div>
+        <div class="t-r"><span>${pbLabel}</span><b>${n.pb?pctS(pct(n.v,n.pb)):'—'}</b></div>`:'');
+      tip.style.opacity=1; tip.style.top=Math.min(H-110,y)+'px';
+      tip.style.left=Math.min(box.clientWidth-tip.offsetWidth-4,L+20)+'px';
+    });
+    hit.addEventListener('mouseenter',()=>r.setAttribute('fill-opacity',1));
+    hit.addEventListener('mouseleave',()=>{r.setAttribute('fill-opacity',.9);tip.style.opacity=0;});
+  });
+}
+
+/* 노선별 취항 항공사 비교 */
+let curRoute = null;
+
+/* ---------- 같은 도시 · 다른 공항 구분 (일본·중국 제외) ---------- */
+const CITY_SPLIT = LBLS.city_split || [];
+
+/* 문서 만들기(영어/병기) 내보내기용 — 항공사·노선·항공사 유형 한→영 번역 사전. 문서(표/이미지 캡처)에서만 쓰이며, 페이지 자체의 한국어 표시에는 영향 없음. */
+const AIRLINE_EN = LBLS.airline_en || {};
+const ROUTE_EN = LBLS.route_en || {};
+const TYPE_EN = LBLS.type_en || {"국적 FSC":"Domestic FSC","국적 LCC":"Domestic LCC","외항 FSC":"Foreign FSC","외항 LCC":"Foreign LCC"};
+
+function cityAggOf(route){
+  const RA = D.routeAirline || {};
+  const g = CITY_SPLIT.find(g => g.aps.some(a=>a.route===route));
+  if(!g) return null;
+  const aps = g.aps.filter(a=>RA[a.route] && RA[a.route].rows && RA[a.route].rows.length);
+  if(aps.length < 2) return null;
+  const agg = {}, ser = {};
+  aps.forEach(a=>{
+    const o = RA[a.route];
+    o.rows.forEach(r=>{
+      if(!agg[r.name]) agg[r.name] = {name:r.name, v:0, p:0, by:{}};
+      agg[r.name].v += r.v; agg[r.name].p += r.p;
+      agg[r.name].by[a.code] = (agg[r.name].by[a.code]||0) + r.v;
+    });
+    Object.keys(o.series||{}).forEach(n=>{
+      if(!ser[n]) ser[n] = new Array(D.months.length).fill(0);
+      o.series[n].forEach((v,i)=>{ ser[n][i] += v; });
+    });
+  });
+  const rows = Object.values(agg).filter(r=>r.v>0||r.p>0).sort((x,z)=>z.v-x.v);
+  return {city:g.city, aps, rows, series:ser,
+    totalCur: rows.reduce((s,r)=>s+r.v,0), totalPrev: rows.reduce((s,r)=>s+r.p,0)};
+}
+
+function renderCitySplit(){
+  const host = document.getElementById('city-split');
+  if(!host) return;
+  const CA = cityAggOf(curRoute);
+  if(!CA){ host.innerHTML=''; return; }
+  const RA = D.routeAirline;
+  const COL = {}; CA.rows.forEach((r,i)=>{ COL[r.name] = cvar(SER[i%SER.length]); });
+  const periodLbl = raPeriodLabel(raPeriod);
+  const aplines = CA.aps.map(a=>{
+    const o = RA[a.route];
+    const RS = raStats(o, raPeriod);
+    const air = RS.rows.filter(r=>r.v>0).sort((x,z)=>z.v-x.v).map(r=>
+      '<span class="cs-chip"><i style="background:'+(COL[r.name]||cvar('--ink-3'))+'"></i>'+
+      r.name+' <b>'+fmt(r.v)+'</b>명</span>').join('');
+    return '<div class="cs-ap"><span class="cs-code">'+a.code+'<b>'+a.name+'</b></span>'+
+           '<span class="cs-air">'+(air||'<span class="cs-new">'+periodLbl+' 실적 없음</span>')+'</span>'+
+           '<span class="cs-num">'+fmt(RS.total)+'명</span></div>';
+  }).join('');
+  host.innerHTML = '<div class="csplit"><h4>공항별 취항 현황</h4>'+
+    '<p class="cs-sub">항공정보포털은 노선을 도착 공항 단위로 집계합니다. 위 표와 그래프는 '+CA.city+
+    ' 도시권 전체를 합산한 수치이며, 아래는 공항별 내역입니다('+periodLbl+' 기준). 색은 위와 같습니다.</p>'+
+    '<div class="cs-aps">'+aplines+'</div></div>';
+}
+
+/* 노선별 취항 항공사 비교 — '전체 보기'(연도별) 막대그래프: 항공사별로 2024년 전체/2025년 전체/2026년 1~9월 누적 3개 막대를 그룹으로 표시 */
+function raYearBarChart(id, items){
+  const box=document.getElementById(id); if(!box) return;
+  const H=260, {s,w,tip}=svgEl(box,H);
+  const P={t:14,r:14,b:36,l:48};
+  const iw=w-P.l-P.r, ih=H-P.t-P.b, n=Math.max(1,items.length);
+  const hi=niceMax(Math.max(1,...items.flatMap(x=>[x.yb,x.yp,x.ytdc])));
+  const Y=v=>P.t+ih-(v/hi)*ih;
+  const ticks=5;
+  for(let i=0;i<=ticks;i++){const v=hi*i/ticks,y=Y(v);
+    s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,class:'gridline'}));
+    const t=ns('text',{x:P.l-8,y:y+3.5,class:'axis-t','text-anchor':'end'});t.textContent=shortN(v);s.appendChild(t);}
+  const groupW=iw/n;
+  const barGap=3, barW=Math.max(5,(groupW-14-barGap*2)/3);
+  const YRS=[[BY,x=>x.yb],[PY,x=>x.yp],[CY,x=>x.ytdc]];
+  items.forEach((it,gi)=>{
+    const gx=P.l+gi*groupW, nm=trAirline(it.name);
+    const t=ns('text',{x:gx+groupW/2,y:H-P.b+16,class:'axis-t','text-anchor':'middle','font-size':10.5});
+    t.textContent=nm.length>9?nm.slice(0,8)+'…':nm; s.appendChild(t);
+    const totalBarsW=barW*3+barGap*2, bx0=gx+(groupW-totalBarsW)/2;
+    YRS.forEach(([yr,fn],bi)=>{
+      const v=fn(it)||0, y=Y(v), bx=bx0+bi*(barW+barGap);
+      s.appendChild(ns('rect',{x:bx,y,width:barW,height:Math.max(0,P.t+ih-y),rx:1.5,fill:cvar(YCOL[yr])}));
+    });
+    const hit=ns('rect',{x:gx,y:P.t,width:groupW,height:ih,fill:'transparent'});s.appendChild(hit);
+    hit.addEventListener('mouseenter',()=>{
+      tip.innerHTML=`<div class="t-h">${nm}</div>`+
+        YRS.map(([yr,fn])=>`<div class="t-r"><span style="display:flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(YCOL[yr])}"></i>${yr}</span><b>${fmt(fn(it)||0)}</b></div>`).join('');
+      tip.style.opacity=1;
+      const bw=box.clientWidth, tw=tip.offsetWidth||140;
+      tip.style.left=Math.max(4,Math.min(bw-tw-4,gx+groupW/2-tw/2))+'px';
+      tip.style.top='4px';
+    });
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  });
+}
+function renderRouteAirline(){
+  const RA = D.routeAirline || {};
+  const rt = curRoute && RA[curRoute] ? curRoute : Object.keys(RA)[0];
+  if(!rt) return;
+  curRoute = rt;
+  document.querySelectorAll('#ra-basis button[data-ra]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.ra===raPeriod)));
+  const raHint=document.getElementById('ra-basis-hint');
+  if(raHint) raHint.textContent = raPeriod==='yb' ? '이전 연도('+PRE_BY+') 데이터가 없어 전년비는 표시하지 않습니다'
+    : raPeriod==='yp' ? '전년비는 '+BY+'년 전체 대비' : '전년비는 '+PY+'년 '+RG+' 대비';
+  const CA = cityAggOf(rt);
+  const o = CA || RA[rt], names = o.rows.map(r=>r.name);
+  const hasEtc = names.includes('기타');
+  const nAir = hasEtc ? (o.rows.length - 1) + (o.rows[o.rows.length-1].n || 0) : o.rows.length;
+  const ttl = CA ? `${CA.city} 도시권 (${CA.aps.map(a=>a.code).join(' + ')})` : rt;
+  const RS = raStats(o, raPeriod);
+  const periodLbl = raPeriodLabel(raPeriod);
+  document.getElementById('s-rtair').textContent =
+    `${ttl} · ${periodLbl} ${fmt(RS.total)}명 · 취항 ${nAir}개사` + (hasEtc ? ' (상위 6개사 개별 표시, 나머지는 기타)' : '');
+  const s2=document.getElementById('s-rtair2');
+  if(s2 && !s2.textContent){
+    const n=(D.routeGroups||[]).reduce((s,g)=>s+g.routes.length,0);
+    s2.textContent = D.routeGroupsRule==='all'
+      ? `선택 가능 노선 ${n}개 — ${CY}년 ${RG} 여객이 있는 전 노선`
+      : `선택 가능 노선 ${n}개 — TOP 30 · 미국 전 노선 · 유럽 전 노선 · 그 밖에 ${CY}년 ${RG} 여객 5만 명 이상`;
+  }
+  const showAllBtn=document.getElementById('ra-showall');
+  if(showAllBtn) showAllBtn.setAttribute('aria-pressed', String(raShowAll));
+  document.getElementById('tbl-rtair').innerHTML = raShowAll
+    ? ['yb','yp','ytdc'].map(p=>`<div class="ra-all-block"><p class="ra-all-h">${raPeriodLabel(p)}</p>${raTableHtml(o,p)}</div>`).join('')
+    : raTableHtml(o, raPeriod);
+  if(raShowAll){
+    const items = names.map(n=>({name:n, yb:raPeriodVal(o.series[n],'yb'), yp:raPeriodVal(o.series[n],'yp'), ytdc:raPeriodVal(o.series[n],'ytdc')}));
+    raYearBarChart('c-rtair', items);
+    document.getElementById('l-rtair').innerHTML =
+      [['yb',BY],['yp',PY],['ytdc',CY]].map(([p,yc])=>
+        `<span><i class="sw" style="background:${cvar(YCOL[yc])}"></i>${raPeriodLabelDoc(p)}</span>`).join('');
+  } else {
+    lineChart('c-rtair', names.map((n,i)=>({name:n,v:o.series[n],color:SER[i%SER.length]})),{h:250,l:48});
+    document.getElementById('l-rtair').innerHTML =
+      names.map((n,i)=>`<span><i class="sw" style="background:${cvar(SER[i%SER.length])}"></i>${trAirline(n)}</span>`).join('');
+  }
+  (function(){
+    const host=document.getElementById('etc-note'); if(!host) return;
+    if(raPeriod!=='ytdc'){
+      host.innerHTML = '<p class="card-sub" style="margin-top:10px">기타 항공사 개별 내역은 '+CY+'년 '+RG+' 누적 기준으로만 제공됩니다.</p>';
+      return;
+    }
+    const srcRoutes = CA ? CA.aps.map(a=>a.route) : [rt];
+    const parts = srcRoutes.map(r=>{
+      const src = RA[r]; if(!src || !src.etc || !src.etc.length) return '';
+      const base = src.totalCur || 0;
+      const tot = src.etc.reduce((s,x)=>s+x.v,0);
+      const shT = base ? (tot/base*100).toFixed(1) : '0.0';
+      const lab = (CA ? ((CITY_SPLIT.find(g=>g.aps.some(a=>a.route===r))||{aps:[]}).aps.filter(a=>a.route===r).map(a=>a.code)[0]+' · ') : '')
+                  + r + ' 기타 ' + src.etc.length + '개사 · ' + fmt(tot) + '명 · 노선 내 ' + shT + '%';
+      return '<p class="etc-p"><span class="etc-h">'+lab+'</span>'+
+        src.etc.map(x=>{
+          const sh = base ? (x.v/base*100).toFixed(1) : '0.0';
+          return '<span class="etc-i">'+x.name+' <b>'+fmt(x.v)+'</b>명 <em>'+sh+'%</em></span>';
+        }).join('<span class="etc-d">·</span>')+'</p>';
+    }).filter(Boolean);
+    host.innerHTML = parts.length ? '<div class="etc-box"><p class="etc-cap">그래프의 &lsquo;기타&rsquo;에 묶인 항공사 — '+CY+'년 '+RG+' 여객, 괄호 없는 %는 해당 노선 내 점유율</p>'+parts.join('')+'</div>' : '';
+  })();
+  renderCitySplit();
+}
+(function(){
+  const sel=document.getElementById('rt-sel'); if(!sel) return;
+  sel.addEventListener('change',()=>{ curRoute=sel.value; renderRouteAirline(); });
+})();
+(function(){
+  const seg=document.getElementById('ra-basis'); if(!seg) return;
+  seg.querySelectorAll('button[data-ra]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      if(b.dataset.ra===raPeriod && !raShowAll) return;
+      raPeriod=b.dataset.ra;
+      raShowAll=false;
+      try{ localStorage.setItem(LS+'raperiod', raPeriod); localStorage.setItem(LS+'rashowall','0'); }catch(e){}
+      renderRouteAirline();
+    });
+  });
+  const showAllBtn=document.getElementById('ra-showall');
+  if(showAllBtn) showAllBtn.addEventListener('click',()=>{
+    raShowAll=!raShowAll;
+    try{ localStorage.setItem(LS+'rashowall', raShowAll?'1':'0'); }catch(e){}
+    renderRouteAirline();
+  });
+})();
+(function(){
+  const seg=document.getElementById('at-basis'); if(!seg) return;
+  seg.querySelectorAll('button[data-at]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      if(b.dataset.at===atPeriod && !atShowAll) return;
+      atPeriod=b.dataset.at;
+      atShowAll=false;
+      try{ localStorage.setItem(LS+'atperiod', atPeriod); localStorage.setItem(LS+'atshowall','0'); }catch(e){}
+      renderAirType();
+    });
+  });
+  const showAllBtn=document.getElementById('at-showall');
+  if(showAllBtn) showAllBtn.addEventListener('click',()=>{
+    atShowAll=!atShowAll;
+    try{ localStorage.setItem(LS+'atshowall', atShowAll?'1':'0'); }catch(e){}
+    renderAirType();
+  });
+})();
+/* 공항 전환 */
+document.querySelectorAll('.seg button[data-ap]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(!b.dataset.ap || b.dataset.ap===ap) return;
+    ap=b.dataset.ap; D=DATA[ap];
+    try{ localStorage.setItem(LS+'ap',ap); }catch(e){}
+    renderAll();
+
+  });
+});
+/* 집계 기간(2024년 전체 / 2025년 전체 / 2026 1~9월 누적) 전환 — KPI 카드만 갱신 */
+document.querySelectorAll('.seg button[data-kpi]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(!b.dataset.kpi || (b.dataset.kpi===kpiPeriod && !kpiShowAll)) return;
+    kpiPeriod=b.dataset.kpi;
+    kpiShowAll=false;
+    try{ localStorage.setItem(LS+'kpiperiod',kpiPeriod); localStorage.setItem(LS+'kpishowall','0'); }catch(e){}
+    renderKpi();
+  });
+});
+(function(){
+  const btn=document.getElementById('kpi-showall');
+  if(!btn) return;
+  btn.addEventListener('click',()=>{
+    kpiShowAll=!kpiShowAll;
+    try{ localStorage.setItem(LS+'kpishowall', kpiShowAll?'1':'0'); }catch(e){}
+    renderKpi();
+  });
+})();
+/* 1.1 공항별 비교 표 집계 기간 전환 */
+document.querySelectorAll('.seg button[data-apcmp]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(!b.dataset.apcmp || (b.dataset.apcmp===apCmpPeriod && !apCmpShowAll)) return;
+    apCmpPeriod=b.dataset.apcmp;
+    apCmpShowAll=false;
+    try{ localStorage.setItem(LS+'apcmpperiod',apCmpPeriod); localStorage.setItem(LS+'apcmpshowall','0'); }catch(e){}
+    renderApCompare();
+  });
+});
+(function(){
+  const btn=document.getElementById('apcmp-showall');
+  if(!btn) return;
+  btn.addEventListener('click',()=>{
+    apCmpShowAll=!apCmpShowAll;
+    try{ localStorage.setItem(LS+'apcmpshowall', apCmpShowAll?'1':'0'); }catch(e){}
+    renderApCompare();
+  });
+})();
+/* 2.1 노선 TOP 30 집계 기간 전환 */
+document.querySelectorAll('.seg button[data-rtp]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(!b.dataset.rtp || b.dataset.rtp===routeTopPeriod) return;
+    routeTopPeriod=b.dataset.rtp;
+    try{ localStorage.setItem(LS+'routetopperiod',routeTopPeriod); }catch(e){}
+    renderRouteTop30();
+  });
+});
+/* 3.3 항공사 TOP 15 집계 기간 전환 */
+document.querySelectorAll('.seg button[data-atp]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    if(!b.dataset.atp || b.dataset.atp===airTopPeriod) return;
+    airTopPeriod=b.dataset.atp;
+    try{ localStorage.setItem(LS+'airtopperiod',airTopPeriod); }catch(e){}
+    renderAirTop15();
+  });
+});
+
+/* 항공사 유형별 점유율 (국적/외항 × FSC/LCC) */
+const ATCOL={'국적 FSC':'--y4','국적 LCC':'--y2','외항 FSC':'--y3','외항 LCC':'--y1'};
+/* 선택된 기간(yb/yp/ytdc)에 해당하는 D.months 인덱스만 추려 월별 추이를 그 기간만으로 좁힌다 */
+function atPeriodMonths(period){
+  return D.months.map((m,i)=>({m,i})).filter(x=>{
+    if(period==='yb') return x.m.slice(0,4)===BY;
+    if(period==='yp') return x.m.slice(0,4)===PY;
+    return x.m>=CUR_FROM && x.m<=CUR_TO;
+  });
+}
+function atStats(T, A, period){
+  const rows = T.map(t=>({name:t, v: raPeriodVal(A.monthly[t], period), p: raPeriodPrior(A.monthly[t], period)}));
+  const total = rows.reduce((s,r)=>s+r.v,0);
+  const priorTotal = period==='yb' ? null : rows.reduce((s,r)=>s+(r.p||0),0);
+  return {rows, total, priorTotal};
+}
+function atTableHtml(T, A, period){
+  const RS = atStats(T, A, period);
+  const curColLbl = period==='yb'?BY+'년 전체':period==='yp'?PY+'년 전체':CY+' '+RG;
+  const priorColLbl = period==='yb'?'':period==='yp'?BY+'년 전체':PY+' '+RG;
+  return '<table><thead><tr><th>유형</th><th>'+curColLbl+'</th><th>점유율</th><th></th>'+(priorColLbl?'<th>'+priorColLbl+'</th><th>전년비</th>':'')+'</tr></thead><tbody>'+
+    RS.rows.map(r=>{
+      const sh=RS.total? r.v/RS.total*100 : 0;
+      return `<tr><td><span style="display:inline-flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(ATCOL[r.name])}"></i><b>${r.name}</b></span></td>
+      <td class="num">${fmt(r.v)}</td><td class="num">${sh.toFixed(1)}%</td>
+      <td class="share-cell"><i style="width:${sh.toFixed(1)}%;max-width:calc(100% - 20px);background:${cvar(ATCOL[r.name])}"></i></td>`+
+      (priorColLbl ? `<td class="num">${fmt(r.p||0)}</td><td>${r.p?chip(pct(r.v,r.p)):'<span class="delta">신규</span>'}</td>` : '')+
+      `</tr>`;}).join('')+
+    `<tr><td><b>합계</b></td><td class="num"><b>${fmt(RS.total)}</b></td><td class="num"><b>100.0%</b></td><td></td>`+
+    (priorColLbl ? `<td class="num"><b>${fmt(RS.priorTotal||0)}</b></td><td><b>${RS.priorTotal?chip(pct(RS.total,RS.priorTotal)):'—'}</b></td>` : '')+
+    `</tr></tbody></table>`;
+}
+/* 3.2 항공사 유형별 점유율 — '전체 보기' 막대그래프: 유형별로 2024년 전체/2025년 전체/2026년 1~9월 누적 3개 막대를 그룹으로 표시 */
+function atYearBarChart(id, items){
+  const box=document.getElementById(id); if(!box) return;
+  const H=260, {s,w,tip}=svgEl(box,H);
+  const P={t:14,r:14,b:36,l:48};
+  const iw=w-P.l-P.r, ih=H-P.t-P.b, n=Math.max(1,items.length);
+  const hi=niceMax(Math.max(1,...items.flatMap(x=>[x.yb,x.yp,x.ytdc])));
+  const Y=v=>P.t+ih-(v/hi)*ih;
+  const ticks=5;
+  for(let i=0;i<=ticks;i++){const v=hi*i/ticks,y=Y(v);
+    s.appendChild(ns('line',{x1:P.l,x2:w-P.r,y1:y,y2:y,class:'gridline'}));
+    const t=ns('text',{x:P.l-8,y:y+3.5,class:'axis-t','text-anchor':'end'});t.textContent=shortN(v);s.appendChild(t);}
+  const groupW=iw/n;
+  const barGap=3, barW=Math.max(5,(groupW-14-barGap*2)/3);
+  const YRS=[[BY,x=>x.yb],[PY,x=>x.yp],[CY,x=>x.ytdc]];
+  items.forEach((it,gi)=>{
+    const gx=P.l+gi*groupW, nm=trType(it.name);
+    const t=ns('text',{x:gx+groupW/2,y:H-P.b+16,class:'axis-t','text-anchor':'middle','font-size':10.5});
+    t.textContent=nm; s.appendChild(t);
+    const totalBarsW=barW*3+barGap*2, bx0=gx+(groupW-totalBarsW)/2;
+    YRS.forEach(([yr,fn],bi)=>{
+      const v=fn(it)||0, y=Y(v), bx=bx0+bi*(barW+barGap);
+      s.appendChild(ns('rect',{x:bx,y,width:barW,height:Math.max(0,P.t+ih-y),rx:1.5,fill:cvar(YCOL[yr])}));
+    });
+    const hit=ns('rect',{x:gx,y:P.t,width:groupW,height:ih,fill:'transparent'});s.appendChild(hit);
+    hit.addEventListener('mouseenter',()=>{
+      tip.innerHTML=`<div class="t-h">${nm}</div>`+
+        YRS.map(([yr,fn])=>`<div class="t-r"><span style="display:flex;align-items:center;gap:7px"><i class="sw" style="background:${cvar(YCOL[yr])}"></i>${yr}</span><b>${fmt(fn(it)||0)}</b></div>`).join('');
+      tip.style.opacity=1;
+      const bw=box.clientWidth, tw=tip.offsetWidth||140;
+      tip.style.left=Math.max(4,Math.min(bw-tw-4,gx+groupW/2-tw/2))+'px';
+      tip.style.top='4px';
+    });
+    hit.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  });
+}
+function renderAirType(){
+  const A=D.airType; if(!A) return;
+  const T=A.types;
+  document.querySelectorAll('#at-basis button[data-at]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.at===atPeriod)));
+  const atHint=document.getElementById('at-basis-hint');
+  if(atHint) atHint.textContent = atPeriod==='yb' ? '이전 연도('+PRE_BY+') 데이터가 없어 전년비는 표시하지 않습니다'
+    : atPeriod==='yp' ? '전년비는 '+BY+'년 전체 대비' : '전년비는 '+PY+'년 '+RG+' 대비';
+  const showAllBtn=document.getElementById('at-showall');
+  if(showAllBtn) showAllBtn.setAttribute('aria-pressed', String(atShowAll));
+
+  const RS = atStats(T, A, atPeriod);
+  document.getElementById('s-atype').textContent=
+    `${raPeriodLabel(atPeriod)} ${fmt(RS.total)}명 기준 · 국적 FSC ${A.counts['국적 FSC']}개사, 국적 LCC ${A.counts['국적 LCC']}개사, 외항 FSC ${A.counts['외항 FSC']}개사, 외항 LCC ${A.counts['외항 LCC']}개사`;
+
+  document.getElementById('tbl-atype').innerHTML = atShowAll
+    ? ['yb','yp','ytdc'].map(p=>`<div class="ra-all-block"><p class="ra-all-h">${raPeriodLabel(p)}</p>${atTableHtml(T,A,p)}</div>`).join('')
+    : atTableHtml(T, A, atPeriod);
+
+  const split=(el,labEl,prefix,a,b)=>{
+    const va=raPeriodVal(A.monthly[a],atPeriod), vb=raPeriodVal(A.monthly[b],atPeriod), s=va+vb;
+    const pa=s? va/s*100 : 0, pb=100-pa;
+    const vaP=raPeriodPrior(A.monthly[a],atPeriod), vbP=raPeriodPrior(A.monthly[b],atPeriod);
+    const priorLbl = atPeriod==='yp' ? BY+'년' : atPeriod==='yb' ? null : PY+'년';
+    const paP = (priorLbl!=null && vaP!=null && vbP!=null && (vaP+vbP)) ? vaP/(vaP+vbP)*100 : null;
+    const le=document.getElementById(labEl); if(le) le.textContent = `${prefix} 내부 구성 · ${raPeriodLabel(atPeriod)}`;
+    document.getElementById(el).innerHTML=
+      `<div class="split"><div style="width:${pa}%;background:${cvar(ATCOL[a])}">${pa.toFixed(1)}%</div>
+       <div style="width:${pb}%;background:${cvar(ATCOL[b])}">${pb.toFixed(1)}%</div></div>
+       <div class="split-lab"><span><i class="sw" style="background:${cvar(ATCOL[a])}"></i>${a} ${fmt(va)}</span>
+       <span>${b} ${fmt(vb)}<i class="sw" style="background:${cvar(ATCOL[b])}"></i></span></div>`+
+       (paP!=null ? `<div class="split-lab" style="color:var(--ink-3)"><span>${priorLbl} ${a} 비중 ${paP.toFixed(1)}% → ${pa.toFixed(1)}%</span></div>` : '');
+  };
+  split('split-kr','split-kr-lab','국적사','국적 FSC','국적 LCC');
+  split('split-fr','split-fr-lab','외항사','외항 FSC','외항 LCC');
+
+  if(atShowAll){
+    const items = T.map(t=>({name:t, yb:raPeriodVal(A.monthly[t],'yb'), yp:raPeriodVal(A.monthly[t],'yp'), ytdc:raPeriodVal(A.monthly[t],'ytdc')}));
+    atYearBarChart('c-atype', items);
+    document.getElementById('l-atype').innerHTML =
+      [['yb',BY],['yp',PY],['ytdc',CY]].map(([p,yc])=>
+        `<span><i class="sw" style="background:${cvar(YCOL[yc])}"></i>${raPeriodLabel(p)}</span>`).join('');
+  } else {
+    const idxs = atPeriodMonths(atPeriod), months = idxs.map(x=>x.m);
+    lineChart('c-atype', T.map(t=>({name:trType(t),v:idxs.map(x=>A.monthly[t][x.i]),color:ATCOL[t],label:trType(t)})),{h:260,l:48,r:78,months});
+    document.getElementById('l-atype').innerHTML=
+      T.map(t=>`<span><i class="sw" style="background:${cvar(ATCOL[t])}"></i>${trType(t)}</span>`).join('');
+  }
+}
+
+function renderRouteTrend(){
+  const rn=D.topRoutes.slice(0,6).map(r=>r.name);
+  lineChart('c-routeline', rn.map((n,i)=>({name:trRoute(n),v:D.routeMonthly[n],color:SER[i],label:trRoute(n)})),{h:270,r:74});
+  document.getElementById('l-routeline').innerHTML=rn.map((n,i)=>`<span><i class="sw" style="background:${cvar(SER[i])}"></i>${trRoute(n)}</span>`).join('');
+}
+function renderAirlineTrend(){
+  const an=D.topAirlines.slice(0,6).map(r=>r.name);
+  lineChart('c-airline', an.map((n,i)=>({name:trAirline(n),v:D.airMonthly[n],color:SER[i],label:trAirline(n)})),{h:270,r:80});
+  document.getElementById('l-airline').innerHTML=an.map((n,i)=>`<span><i class="sw" style="background:${cvar(SER[i])}"></i>${trAirline(n)}</span>`).join('');
+}
+function renderKrShareChart(){
+  lineChart('c-kr',[{name:DOCCAP?LB('국적사 점유율','Korean Carrier Share'):'국적사 점유율',v:D.krShare,color:'--s3'}],
+    {h:210,lo:Math.floor(Math.min(...D.krShare)-2),hi:Math.ceil(Math.max(...D.krShare)+2),ticks:4,
+     fy:v=>v.toFixed(0)+'%',ft:v=>v.toFixed(1)+'%'});
+  document.getElementById('l-kr').innerHTML='';
+}
+/* 2.1 노선 TOP 30 — 집계 기간(2024/2025 전체, 2026 1~9월 누적) 전환 */
+function renderRouteTop30(){
+  document.querySelectorAll('.seg button[data-rtp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rtp===routeTopPeriod)));
+  const cap=document.getElementById('s-route'), hint=document.getElementById('route-basis-hint');
+  let items, opts;
+  if(routeTopPeriod==='yb'){
+    items=(D.topRoutesFY||{})[BY]||[];
+    if(cap) cap.textContent='단위: 명 · '+BY+'년 1~12월 합계';
+    if(hint) hint.textContent='이전 연도('+PRE_BY+') 데이터가 없어 증감은 표시하지 않습니다';
+    opts={tipTitle:BY+'년 전체 여객', yrLabels:[BY]};
+  } else if(routeTopPeriod==='yp'){
+    items=(D.topRoutesFY||{})[PY]||[];
+    if(cap) cap.textContent='단위: 명 · 우측 칩은 '+BY+'년 전체 대비';
+    if(hint) hint.textContent='';
+    opts={tipTitle:PY+'년 전체 여객', yrLabels:[PY,BY]};
+  } else {
+    items=D.topRoutes;
+    if(cap) cap.textContent='단위: 명 · 우측 칩은 전년 동기 대비';
+    if(hint) hint.textContent='';
+    opts={tipTitle:RG+' 누계 여객', yrLabels:[CY,PY,BY]};
+  }
+  barChart('c-route', items, opts);
+}
+
+/* 3.3 항공사 TOP 15 — 집계 기간(2024/2025 전체, 2026 1~9월 누적) 전환 */
+function renderAirTop15(){
+  document.querySelectorAll('.seg button[data-atp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.atp===airTopPeriod)));
+  const cap=document.getElementById('s-air'), hint=document.getElementById('air-basis-hint');
+  let items, opts;
+  if(airTopPeriod==='yb'){
+    items=(D.topAirlinesFY||{})[BY]||[];
+    if(cap) cap.textContent='단위: 명 · '+BY+'년 1~12월 합계';
+    if(hint) hint.textContent='이전 연도('+PRE_BY+') 데이터가 없어 증감은 표시하지 않습니다';
+    opts={tipTitle:BY+'년 전체 여객', yrLabels:[BY], rowH:32, scrollCap:20};
+  } else if(airTopPeriod==='yp'){
+    items=(D.topAirlinesFY||{})[PY]||[];
+    if(cap) cap.textContent='단위: 명 · 우측 칩은 '+BY+'년 전체 대비';
+    if(hint) hint.textContent='';
+    opts={tipTitle:PY+'년 전체 여객', yrLabels:[PY,BY], rowH:32, scrollCap:20};
+  } else {
+    items=D.topAirlines;
+    if(cap) cap.textContent='단위: 명 · 우측 칩은 전년 동기 대비';
+    if(hint) hint.textContent='';
+    opts={tipTitle:RG+' 누계 여객', yrLabels:[CY,PY,BY], rowH:32, scrollCap:20};
+  }
+  barChart('c-air', items, opts);
+}
+function renderAll(){
+  renderKpi();
+  renderApCompare();
+  renderSec1();
+  renderAirType();
+  renderRouteTop30();
+  const sel=document.getElementById('rt-sel');
+  if(sel){
+    const gs=D.routeGroups;
+    sel.innerHTML=gs?gs.map(g=>`<optgroup label="${g.label}">`+g.routes.map(r=>`<option value="${r}">${r}</option>`).join('')+'</optgroup>').join(''):'';
+    curRoute=null;
+    const s2=document.getElementById('s-rtair2'); if(s2) s2.textContent='';
+  }
+  renderRouteAirline();
+  renderRouteTrend();
+
+  document.getElementById('tbl-new').innerHTML='<table><thead><tr><th>노선</th><th>운항(편)</th><th>여객(명)</th></tr></thead><tbody>'+
+    D.newRoutes.map(r=>`<tr><td><b>${r.name}</b></td><td class="num">${fmt(r.f)}</td><td class="num">${fmt(r.v)}</td></tr>`).join('')+'</tbody></table>';
+  document.getElementById('tbl-gone').innerHTML='<table><thead><tr><th>노선</th><th>운항(편)</th><th>여객(명)</th></tr></thead><tbody>'+
+    D.goneRoutes.map(r=>`<tr><td><b>${r.name}</b></td><td class="num">${fmt(r.f)}</td><td class="num">${fmt(r.v)}</td></tr>`).join('')+'</tbody></table>';
+
+  renderKrShareChart();
+
+  renderAirTop15();
+  renderAirlineTrend();
+
+  const y=D.ytd, L=apLabel(ap), isAll=ap==='ALL';
+  const a=y[CY], p=y[PY], b=y[BY];
+  const ppf26=Math.round(a.pax/a.flight), ppf24=Math.round(b.pax/b.flight);
+  const R=D.topRoutes, r1=R[0];
+  const grew=R.filter(x=>x.p>0).slice().sort((x,z)=>(z.v-z.p)-(x.v-x.p))[0];
+  const fell=R.filter(x=>x.p>0).slice().sort((x,z)=>(x.v-x.p)-(z.v-z.p))[0];
+  const krSh=a.kr/a.pax*100, krSh24=b.kr/b.pax*100;
+  const A=D.airType, T=A.types, sum=yy=>T.reduce((s,t)=>s+A.ytd[t][yy],0);
+  const krF=A.ytd['국적 FSC'][CY], krL=A.ytd['국적 LCC'][CY];
+  const lccIn=krF+krL? krL/(krF+krL)*100 : 0;
+  const lccIn24=(A.ytd['국적 FSC'][BY]+A.ytd['국적 LCC'][BY])
+    ? A.ytd['국적 LCC'][BY]/(A.ytd['국적 FSC'][BY]+A.ytd['국적 LCC'][BY])*100 : 0;
+  const AI=D.topAirlines, aUp=AI.filter(x=>x.p>0).slice().sort((x,z)=>pct(z.v,z.p)-pct(x.v,x.p))[0];
+  const aDn=AI.filter(x=>x.p>0).slice().sort((x,z)=>pct(x.v,x.p)-pct(z.v,z.p))[0];
+  const where=isAll?'5개 공항':L;
+  const items=[
+    [pctS(pct(a.pax,p.pax)),'여객 전년비',
+     `<b>${where} 출발 국제선은 ${CY}년 ${RG} ${fmt(a.pax)}명입니다.</b> 운항은 ${pctS(pct(a.flight,p.flight))}, 여객은 ${pctS(pct(a.pax,p.pax))} 늘었고 편당 여객은 ${BY}년 ${fmt(ppf24)}명에서 ${fmt(ppf26)}명이 됐습니다. ${ppf26>ppf24?'증편보다 기재 대형화·탑승률이 성장을 만들고 있습니다.':'편당 여객은 오히려 줄어, 성장이 증편에서 나오고 있습니다.'}`],
+    [pctS(pct(r1.v,r1.p)),'1위 노선 '+r1.name,
+     `<b>${r1.name}이 ${fmt(r1.v)}명으로 1위입니다.</b> 상위 30개 노선이 ${where} 여객의 ${(R.reduce((s,x)=>s+x.v,0)/a.pax*100).toFixed(1)}%를 담당합니다.`],
+    [grew?pctS(pct(grew.v,grew.p)):'—','최다 증가 '+(grew?grew.name:''),
+     grew?`<b>가장 많이 늘어난 노선은 ${grew.name}(+${fmt(grew.v-grew.p)}명)입니다.</b>${fell&&fell.v<fell.p?` 반대로 ${fell.name}은 ${fmt(fell.p-fell.v)}명 줄어 ${pctS(pct(fell.v,fell.p))}를 기록했습니다.`:''}`:'비교할 전년 실적이 없습니다.'],
+    [krSh.toFixed(1)+'%','국적사 점유율',
+     `<b>국적사 비중은 ${krSh.toFixed(1)}%입니다.</b> ${BY}년 ${krSh24.toFixed(1)}% 대비 ${(krSh-krSh24>=0?'+':'')}${(krSh-krSh24).toFixed(1)}%p 움직였습니다.`],
+    [lccIn.toFixed(1)+'%','국적사 중 LCC',
+     `<b>국적사 안에서 LCC 비중이 ${lccIn.toFixed(1)}%입니다.</b> ${BY}년 ${lccIn24.toFixed(1)}%에서 ${(lccIn-lccIn24>=0?'+':'')}${(lccIn-lccIn24).toFixed(1)}%p 이동했습니다. 외항사 중 LCC는 ${(A.ytd['외항 LCC'][CY]/(A.ytd['외항 FSC'][CY]+A.ytd['외항 LCC'][CY])*100).toFixed(1)}%입니다.`],
+    [(D.newRoutes.length)+'/'+(D.goneRoutes.length),'신규 / 중단 노선',
+     `<b>${CY}년에 새로 뜬 노선 ${D.newRoutes.length}개, 끊긴 노선 ${D.goneRoutes.length}개입니다.</b>${aUp?` 항공사로는 ${aUp.name} ${pctS(pct(aUp.v,aUp.p))}로 가장 빠르게 늘었고${aDn&&aDn.v<aDn.p?`, ${aDn.name}은 ${pctS(pct(aDn.v,aDn.p))}로 가장 많이 줄었습니다`:''}.`:''}`],
+  ];
+  document.getElementById('finds').innerHTML=items.map(([k,l,t])=>`<div class="find"><div class="k">${k}<em>${l}</em></div><p>${t}</p></div>`).join('');
+}
+
+/* 기간·기준월에 따라 바뀌는 정적 문구 */
+(function fillStatic(){
+  const set=(id,txt)=>{const e=document.getElementById(id); if(e) e.textContent=txt;};
+  const lastM=+PER.last.slice(4);
+  set('h1-period', PERIOD_RANGE);
+  set('lede-add', '('+CY+'년 '+lastM+'월분까지)');
+  set('mb-months', D.months.length+'개월');
+  set('mb-date', META.updated_at);
+  document.querySelectorAll('[data-plbl]').forEach(b=>{ b.textContent=LBL[b.dataset.plbl]; });
+  set('t-new', CY+'년에 새로 생긴 노선');
+  set('s-new', BY+'~'+PY+'년에는 운항 기록이 없던 목적지 · '+CY+'년 '+RG+' 실적');
+  set('t-gone', CY+'년에 끊긴 노선');
+  set('s-gone', PY+'년 '+RG+'에 운항했으나 '+CY+'년 운항 없음 · '+PY+'년 '+RG+' 실적');
+  set('colo-upd', META.updated_at+' 업데이트 ('+CY+'년 '+lastM+'월분 반영)');
+  set('foot-asof', META.as_of);
+  set('foot-upd', META.updated_at);
+  const i=DATA.ALL.months.length-1;
+  const chk=['ICN','PUS','GMP','CJJ','TAE'].map(c=>apLabel(c)+' '+fmt(DATA[c].total.flight[i])+'편/'+fmt(DATA[c].total.pax[i])+'명').join(', ');
+  set('foot-chk', '최신월('+CY+'년 '+lastM+'월) 출발 국제선 — '+chk+'. 공항별 월 1일~말일 조회 결과(출발 값)를 그대로 합산했습니다.');
+})();
+renderAll();
+let rt,lastW=window.innerWidth;
+window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(Math.abs(window.innerWidth-lastW)>40){lastW=window.innerWidth;renderAll();}},450);});
+
+/* 섹션 내비 — 현재 위치 표시 (스크롤 위치 기준: 마지막으로 지나친 섹션) */
+(function(){
+  const links=[...document.querySelectorAll('.sb-nav a')];
+  if(!links.length) return;
+  const secs=links.map(a=>({a, el:document.getElementById(a.dataset.sec)})).filter(x=>x.el);
+  let tick=false;
+  function spy(){
+    tick=false;
+    let cur=secs[0];
+    for(const s of secs) if(s.el.getBoundingClientRect().top<=80) cur=s;
+    // 문서 끝에 닿으면 마지막 섹션을 활성으로
+    const de=document.documentElement;
+    if(window.innerHeight+window.scrollY>=Math.max(de.scrollHeight,document.body.scrollHeight)-4) cur=secs[secs.length-1];
+    links.forEach(a=>a.classList.toggle('active', a===cur.a));
+  }
+  addEventListener('scroll',()=>{ if(!tick){tick=true;requestAnimationFrame(spy);} },{passive:true});
+  addEventListener('resize',()=>{ if(!tick){tick=true;requestAnimationFrame(spy);} });
+  spy();
+})();
+
+</script>
+<script type="text/plain" id="app-doc">
+/* =========================================================
+   문서 만들기 (뉴스레터용 복사 / PDF / Word / 미리보기)
+   ========================================================= */
+var LANG='both';
+var DL=null, DLASKED=false, PDFBUSY=false;
+var AP_EN={ALL:'All 5 Airports', ICN:'Incheon', PUS:'Gimhae (Busan)', GMP:'Gimpo (Seoul)', CJJ:'Cheongju', TAE:'Daegu'};
+
+function LB(ko,en){return LANG==='en'?en:(LANG==='ko'?ko:ko+' / '+en);}
+function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+var SECDEF=[
+ ['s1',function(){return '01 출발 총량';},function(){return '01 Departure Totals';}],
+ ['s2',function(){return '02 노선';},function(){return '02 Routes';}],
+ ['s3',function(){return '03 항공사';},function(){return '03 Airlines';}]
+];
+function secLabel(id,which){var s=SECDEF.filter(function(x){return x[0]===id;})[0];return which==='ko'?s[1]():s[2]();}
+function secTitleFull(id){return LB(secLabel(id,'ko'),secLabel(id,'en'));}
+
+/* ---------- 항목별 데이터 헬퍼 ---------- */
+function apDocLabel(){return apLabel(ap)==='전체 5개 공항'?LB('5개 공항 합계','5-Airport Total'):LB(apLabel(ap)+' 공항',AP_EN[ap]);}
+function periodDocLabel(){
+ return kpiPeriod==='yb'?LB(BY+'년 전체','Full Year '+BY):
+  kpiPeriod==='yp'?LB(PY+'년 전체','Full Year '+PY):
+  LB(CY+'년 '+RG+' 누적',RG_EN+' '+CY+' Cumulative');
+}
+/* 항공사/노선 이름 영문 표기 — ROUTE_EN/AIRLINE_EN은 메인 스크립트(차트 캡처용)에 이미 정의돼 있어 그대로 재사용 */
+function docTrRoute(n){ var en=ROUTE_EN[n]; return LB(n, en||n); }
+function docTrAirline(n){ var en=AIRLINE_EN[n]; return LB(n, en||n); }
+function docApCompareTable(){
+ var C=DATA.apCompare, tv=C.reduce(function(s,x){return s+x.v;},0), tp=C.reduce(function(s,x){return s+x.p;},0);
+ var rows=C.map(function(x){
+  return [LB(x.label, AP_EN[x.code]||x.label), fmt(x.v), x.share.toFixed(1)+'%', pctS(pct(x.v,x.p)), pctS(pct(x.v,x.pb)), fmt(x.f), fmt(x.c), String(x.n)];
+ });
+ rows.push([LB('합계','Total'), fmt(tv), '100.0%', pctS(pct(tv,tp)), '—', fmt(C.reduce(function(s,x){return s+x.f;},0)), fmt(C.reduce(function(s,x){return s+x.c;},0)), '—']);
+ return {headers:[LB('공항','Airport'),LB(CY+' '+RG+' 여객',RG_EN+' '+CY+' Pax'),LB('점유율','Share'),LB('전년비','YoY'),LB(YS(BY)+'년비','vs '+BY),LB('운항(편)','Flights'),LB('화물(톤)','Cargo (t)'),LB('노선수','Routes')], rows:rows};
+}
+function docRankTable(list, nameLbl, isAirline){
+ var tr=isAirline?docTrAirline:docTrRoute;
+ var rows=list.map(function(r,i){
+  return [String(i+1), tr(r.name), fmt(r.v), fmt(r.p), r.p?pctS(pct(r.v,r.p)):LB('신규','New'), r.pb?fmt(r.pb):'—', r.pb?pctS(pct(r.v,r.pb)):'—'];
+ });
+ return {headers:[LB('순위','Rank'), nameLbl, LB(CY+' '+RG,RG_EN+' '+CY), LB(PY+' '+RG,RG_EN+' '+PY), LB('전년비','YoY'), LB(BY+' '+RG,RG_EN+' '+BY), LB(YS(BY)+'년비','vs '+BY)], rows:rows};
+}
+function docNewGoneTable(list){
+ var rows=list.map(function(r){return [docTrRoute(r.name), fmt(r.f), fmt(r.v)];});
+ return {headers:[LB('노선','Route'),LB('운항(편)','Flights'),LB('여객(명)','Passengers')], rows:rows};
+}
+function docRouteAirlineData(){
+ var RA=D.routeAirline||{};
+ var rt=(curRoute && RA[curRoute])?curRoute:Object.keys(RA)[0];
+ if(!rt)return null;
+ var CA=cityAggOf(rt);
+ return {rt:rt, o:CA||RA[rt], CA:CA};
+}
+function raPeriodLabelLB(period){
+ return period==='yb'?LB(BY+'년 전체','Full Year '+BY):period==='yp'?LB(PY+'년 전체','Full Year '+PY):LB(CY+'년 '+RG,RG_EN+' '+CY);
+}
+function docRouteAirlineTableFor(o, period){
+ var RS=raStats(o, period);
+ var curLbl=period==='yb'?LB(BY+'년 전체','Full Year '+BY):period==='yp'?LB(PY+'년 전체','Full Year '+PY):LB(CY+' '+RG,RG_EN+' '+CY);
+ var priorLbl=period==='yb'?'':period==='yp'?LB(BY+'년 전체','Full Year '+BY):LB(PY+' '+RG,RG_EN+' '+PY);
+ var rows=RS.rows.map(function(r,i){
+  var sh=RS.total?r.v/RS.total*100:0;
+  var nm=r.name==='기타'?LB('기타','Other'):docTrAirline(r.name);
+  var base=[nm, fmt(r.v), sh.toFixed(1)+'%'];
+  if(priorLbl) base=base.concat([fmt(r.p||0), r.p?pctS(pct(r.v,r.p)):LB('신규','New')]);
+  return base;
+ });
+ var totalRow=[LB('합계','Total'), fmt(RS.total), '100.0%'];
+ if(priorLbl) totalRow=totalRow.concat([fmt(RS.priorTotal||0), RS.priorTotal?pctS(pct(RS.total,RS.priorTotal)):'—']);
+ rows.push(totalRow);
+ var headers=[LB('항공사','Airline'), curLbl, LB('점유율','Share')];
+ if(priorLbl) headers=headers.concat([priorLbl, LB('전년비','YoY')]);
+ return {headers:headers, rows:rows};
+}
+function docRouteAirlineTable(){
+ var d=docRouteAirlineData(); if(!d)return {headers:[],rows:[]};
+ if(raShowAll){
+  return ['yb','yp','ytdc'].map(function(p){
+   var t=docRouteAirlineTableFor(d.o, p);
+   t.label=raPeriodLabelLB(p);
+   return t;
+  });
+ }
+ return docRouteAirlineTableFor(d.o, raPeriod);
+}
+function docRouteAirlineCaption(){
+ var d=docRouteAirlineData(); if(!d)return '';
+ var ttl=d.CA?(docTrRoute(d.CA.city)+' '+LB('도시권','Metro Area')):docTrRoute(d.rt);
+ if(raShowAll){
+  return ttl+' · '+LB('연도별 전체 보기 ('+BY+'년 전체 / '+PY+'년 전체 / '+CY+'년 '+RG+')','All Periods (Full Year '+BY+' / Full Year '+PY+' / '+RG_EN+' '+CY+')');
+ }
+ var RS=raStats(d.o, raPeriod);
+ var periodLbl=raPeriodLabelLB(raPeriod);
+ return ttl+' · '+periodLbl+' '+LB(fmt(RS.total)+'명', fmt(RS.total)+' pax');
+}
+function docAirTypeTable(){
+ var A=D.airType; if(!A)return {headers:[],rows:[]};
+ var T=A.types, tot=function(y){return T.reduce(function(s,t){return s+A.ytd[t][y];},0);};
+ var t26=tot(CY), t25=tot(PY), t24=tot(BY);
+ var TYPE_EN={'국적 FSC':'Domestic FSC','국적 LCC':'Domestic LCC','외항 FSC':'Foreign FSC','외항 LCC':'Foreign LCC'};
+ var rows=T.map(function(t){
+  var v=A.ytd[t][CY],p=A.ytd[t][PY],q=A.ytd[t][BY],sh=t26?v/t26*100:0;
+  return [LB(t,TYPE_EN[t]||t), fmt(v), sh.toFixed(1)+'%', fmt(p), pctS(pct(v,p)), fmt(q), pctS(pct(v,q))];
+ });
+ rows.push([LB('합계','Total'), fmt(t26), '100.0%', fmt(t25), pctS(pct(t26,t25)), fmt(t24), pctS(pct(t26,t24))]);
+ return {headers:[LB('유형','Type'),LB(CY+' '+RG,RG_EN+' '+CY),LB('점유율','Share'),LB(PY+' '+RG,RG_EN+' '+PY),LB('전년비','YoY'),LB(BY+' '+RG,RG_EN+' '+BY),LB(YS(BY)+'년비','vs '+BY)], rows:rows};
+}
+
+/* ---------- 항목 정의 (14개 카드) ---------- */
+var ITEMDEFS={
+ s1:[
+  {k:'1_1',num:'1.1',ko:'공항별 비교',en:'Airport Comparison',t:'table',table:docApCompareTable},
+  {k:'1_2',num:'1.2',ko:'월별 여객',en:'Monthly Passengers',t:'chart',el:'c-pax'},
+  {k:'1_3',num:'1.3',ko:'월별 운항',en:'Monthly Flights',t:'chart',el:'c-flt'},
+  {k:'1_4',num:'1.4',ko:'월별 화물',en:'Monthly Cargo',t:'chart',el:'c-crg'},
+  {k:'1_5',num:'1.5',ko:'편당 여객',en:'Passengers per Flight',t:'chart',el:'c-ppf'}
+ ],
+ s2:[
+  {k:'2_1',num:'2.1',ko:'노선 TOP 30',en:'Top 30 Routes',t:'table',table:function(){return docRankTable(D.topRoutes, LB('노선','Route'), false);}},
+  {k:'2_2',num:'2.2',ko:'상위 6개 노선 월별 궤적',en:'Top 6 Routes — Monthly Trend',t:'chart',el:'c-routeline'},
+  {k:'2_3',num:'2.3',ko:'노선별 취항 항공사 비교',en:'Airlines by Route',t:'both',el:'c-rtair',table:docRouteAirlineTable,caption:docRouteAirlineCaption},
+  {k:'2_4',num:'2.4',ko:CY+'년에 새로 생긴 노선',en:'New Routes in '+CY,t:'table',table:function(){return docNewGoneTable(D.newRoutes);}},
+  {k:'2_5',num:'2.5',ko:CY+'년에 끊긴 노선',en:'Discontinued Routes in '+CY,t:'table',table:function(){return docNewGoneTable(D.goneRoutes);}}
+ ],
+ s3:[
+  {k:'3_1',num:'3.1',ko:'국적사 여객 점유율',en:'Korean Carrier Share',t:'chart',el:'c-kr'},
+  {k:'3_2',num:'3.2',ko:'항공사 유형별 점유율',en:'Share by Carrier Type',t:'both',el:'c-atype',table:docAirTypeTable},
+  {k:'3_3',num:'3.3',ko:'항공사 TOP 15',en:'Top 15 Airlines',t:'table',table:function(){return docRankTable(D.topAirlines, LB('항공사','Airline'), true);}},
+  {k:'3_4',num:'3.4',ko:'상위 6개 항공사 월별 궤적',en:'Top 6 Airlines — Monthly Trend',t:'chart',el:'c-airline'}
+ ]
+};
+function itemsFor(sec){return ITEMDEFS[sec]||[];}
+function itemDef(sec,k){return (ITEMDEFS[sec]||[]).filter(function(x){return x.k===k;})[0];}
+
+var SEL={};
+['s1','s2','s3'].forEach(function(sec){itemsFor(sec).forEach(function(it){SEL[sec+'.'+it.k]=true;});});
+function sel(sec,k){return !!SEL[sec+'.'+k];}
+function secItemCount(sec){return (ITEMDEFS[sec]||[]).length;}
+function secSelCount(sec){return (ITEMDEFS[sec]||[]).filter(function(it){return sel(sec,it.k);}).length;}
+function secAny(sec){return secSelCount(sec)>0;}
+function selCount(){return Object.keys(SEL).filter(function(k){return SEL[k];}).length;}
+function totalCount(){return Object.keys(SEL).length;}
+function selectedChartElIds(){
+ var out=[];
+ ['s1','s2','s3'].forEach(function(sec){
+  itemsFor(sec).forEach(function(it){
+   if((it.t==='chart'||it.t==='both')&&sel(sec,it.k)&&out.indexOf(it.el)<0)out.push(it.el);
+  });
+ });
+ return out;
+}
+function fileNameBase(){return 'major-airport-routes-'+ap.toLowerCase()+'-'+LANG;}
+
+/* ---------- 패널 UI ---------- */
+function docPanel(){
+ var h=['<h2>문서 만들기</h2><p class="lead">담을 항목과 언어를 골라 메일 본문으로 복사하거나 문서 파일로 내려받습니다. 문서는 현재 화면의 공항 선택 · 집계 기간 · 노선 선택을 그대로 반영합니다.</p>'];
+ h.push('<div class="doc-row"><span class="doc-lab">항목</span>'+
+  '<button type="button" class="doc-sum" id="docsumbtn" aria-expanded="false" aria-controls="docpickwrap">'+
+  '<span id="docselcount"></span><span class="car" id="docpickcar">▾</span></button>'+
+  '<button type="button" class="doc-lnk" data-docall="1">전체 선택</button>'+
+  '<button type="button" class="doc-lnk" data-docall="0">전체 해제</button></div>');
+ h.push('<div class="doc-pickwrap" id="docpickwrap" hidden><div class="doc-pick2">');
+ SECDEF.forEach(function(s){
+  var sec=s[0], items=itemsFor(sec);
+  if(!items.length)return;
+  h.push('<div class="doc-sec-blk">');
+  h.push('<label class="doc-sec-row"><input type="checkbox" class="docsecbox" data-sec="'+sec+'"><span>'+esc(s[1]())+'</span></label>');
+  items.forEach(function(it){
+   var tag=it.t==='chart'?'<span class="doc-item-tag">그래프</span>':(it.t==='both'?'<span class="doc-item-tag">표+그래프</span>':'');
+   h.push('<label class="doc-item-row"><input type="checkbox" class="docitembox" data-sec="'+sec+'" data-item="'+it.k+'"><span class="pn">'+it.num+'</span><span>'+esc(it.ko)+'</span>'+tag+'</label>');
+  });
+  h.push('</div>');
+ });
+ h.push('</div></div>');
+ h.push('<div class="doc-row"><span class="doc-lab">언어</span><div class="seg sm" id="doclangseg">'+
+  [['ko','한국어'],['en','English'],['both','한/영 병기']].map(function(x){
+   return '<button type="button" aria-pressed="'+(LANG===x[0]?'true':'false')+'" data-doclang="'+x[0]+'">'+x[1]+'</button>';}).join('')+'</div></div>');
+ h.push('<div class="doc-go">'+
+  '<div class="doc-grp"><span class="doc-grp-l">보내기</span><button type="button" class="doc-btn p" id="doccpbtn">뉴스레터용 복사</button></div>'+
+  '<div class="doc-grp"><span class="doc-grp-l">저장</span><button type="button" class="doc-btn s" id="docpdbtn">PDF</button>'+
+  '<button type="button" class="doc-btn s" id="docdxbtn">Word (.docx)</button></div>'+
+  '<button type="button" class="doc-lnk2" id="docpvbtn">미리보기</button></div>');
+ h.push('<div class="doc-note" id="dochint"></div>');
+ h.push('<div class="doc-msg" id="docmsg" hidden></div>');
+ return h.join('');
+}
+function syncDocPanel(){
+ var panel=document.getElementById('docpanel');
+ if(!panel||panel.hidden)return;
+ Array.prototype.forEach.call(document.querySelectorAll('.docitembox'),function(b){
+  b.checked=sel(b.dataset.sec,b.dataset.item);
+ });
+ Array.prototype.forEach.call(document.querySelectorAll('.docsecbox'),function(b){
+  var sec=b.dataset.sec,tt=secItemCount(sec),ss=secSelCount(sec);
+  b.checked=(tt>0&&ss===tt);b.indeterminate=(ss>0&&ss<tt);
+ });
+ Array.prototype.forEach.call(document.querySelectorAll('#doclangseg button'),function(b){
+  b.setAttribute('aria-pressed',String(b.dataset.doclang===LANG));
+ });
+ var n=selCount(),t=totalCount();
+ var c=document.getElementById('docselcount');
+ if(c)c.textContent=(n===t?'전체 '+t+'개 항목 선택됨':(n===0?'선택 없음 · 전체 '+t+'개':t+'개 중 '+n+'개 선택됨'));
+ var cp=document.getElementById('doccpbtn');if(cp)cp.disabled=!n;
+ var pv=document.getElementById('docpvbtn');if(pv)pv.disabled=!n;
+ ['docpdbtn','docdxbtn'].forEach(function(id){
+  var b=document.getElementById(id);if(!b)return;
+  b.disabled=!n||!DL||PDFBUSY;});
+ var pf=document.getElementById('docpdbtn');
+ if(pf)pf.textContent=PDFBUSY?'PDF 만드는 중…':(DL?'PDF':(DLASKED?'PDF (사용 불가)':'확인 중…'));
+ var dx=document.getElementById('docdxbtn');
+ if(dx)dx.textContent=DL?'Word (.docx)':(DLASKED?'Word (사용 불가)':'확인 중…');
+ var hint=document.getElementById('dochint');
+ if(hint)hint.textContent=DL?'':(DLASKED?'PDF · Word 저장은 이 화면에서 다운로드 권한이 켜져 있을 때만 됩니다. 그전까지는 뉴스레터용 복사 또는 미리보기 → 인쇄로 PDF 저장을 쓰세요.':'');
+}
+
+/* ---------- 문서 본문 (미리보기/PDF 공용) ---------- */
+function tableHtml(t){
+ return '<table><thead><tr>'+t.headers.map(function(h){return '<th>'+esc(h)+'</th>';}).join('')+'</tr></thead><tbody>'+
+  t.rows.map(function(r){return '<tr>'+r.map(function(c,i){return '<td'+(i>0?'':' style="text-align:left"')+'>'+esc(c)+'</td>';}).join('')+'</tr>';}).join('')+
+  '</tbody></table>';
+}
+function chartImgBlock(it,imgMap){
+ var img=imgMap&&imgMap[it.el];
+ if(!img)return '<div class="fchart"><p class="fchart-warn">'+esc(LB('그래프를 불러오지 못했습니다.','Chart could not be captured.'))+'</p></div>';
+ var w=Math.min(640,img.w||640);
+ return '<div class="fchart"><img src="'+img.url+'" style="width:'+w+'px;max-width:100%;display:block;margin:0 auto"></div>';
+}
+function buildDoc(imgMap){
+ imgMap=imgMap||{};
+ var now=new Date(),pad=function(n){return(n<10?'0':'')+n;};
+ var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+ var titleKo='주요 공항 출발 국제선 노선 분석 브리프', titleEn='Major Airport Departure Route Analysis Brief';
+ var h=['<div class="fdoc">'];
+ h.push('<div class="fh"><div class="fh-b">Air Portal System · International Departure Route Statistics</div>'+
+  '<h1>'+LB(titleKo,titleEn)+'</h1><div class="fh-m">'+PERIOD_RANGE+' · '+apDocLabel()+' · '+periodDocLabel()+' · '+
+  LB('생성','Generated')+' '+stamp+' · AVIAREPS Korea</div></div>');
+ ['s1','s2','s3'].forEach(function(sec){
+  if(!secAny(sec))return;
+  h.push('<div class="fs"><div class="fs-h"><b>'+esc(secTitleFull(sec))+'</b></div>');
+  itemsFor(sec).forEach(function(it){
+   if(!sel(sec,it.k))return;
+   h.push('<p class="fnote" style="font-weight:600;color:#0f1419;margin:10px 0 6px">'+it.num+' '+esc(LB(it.ko,it.en))+'</p>');
+   if(it.t==='table'||it.t==='both'){
+    if(it.caption)h.push('<p class="fnote">'+esc(it.caption())+'</p>');
+    var tres=it.table();
+    if(Array.isArray(tres)){
+     tres.forEach(function(blk){
+      h.push('<div class="ftbl-block"><p class="ftbl-h">'+esc(blk.label||'')+'</p>'+tableHtml(blk)+'</div>');
+     });
+    }else{
+     h.push(tableHtml(tres));
+    }
+   }
+   if(it.t==='chart'||it.t==='both')h.push(chartImgBlock(it,imgMap));
+  });
+  h.push('</div>');
+ });
+ h.push('<div class="ffoot">'+LB('출처: 국토교통부 항공정보포털시스템(airportal.go.kr) 항공통계 상세조회 · 일자별 통계 · 노선','Source: Air Portal System, Ministry of Land, Infrastructure and Transport (Korea) · Daily Statistics · Routes')+
+  ' · AVIAREPS Korea</div>');
+ h.push('</div>');
+ return {title:LB(titleKo,titleEn), body:h.join('')};
+}
+
+/* ---------- 미리보기 ---------- */
+function doDocPreview(){
+ var n=selCount();
+ if(!n){docMsg('err','담을 항목을 하나 이상 골라주세요.');return;}
+ var pv=document.getElementById('docpv');
+ var chartKeys=selectedChartElIds();
+ if(chartKeys.length){
+  pv.innerHTML='<div class="docpv-bar"><span class="t">그래프 캡처 중…</span></div>';
+  pv.hidden=false;pv.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ captureCharts(chartKeys).then(function(imgMap){
+  var d=buildDoc(imgMap);
+  pv.innerHTML='<div class="docpv-bar"><span class="t">미리보기 · '+LANG.toUpperCase()+' · '+n+'개 항목</span>'+
+   '<button type="button" class="doc-btn s" id="docpvclose">닫기</button></div>'+d.body;
+  pv.hidden=false;pv.scrollIntoView({behavior:'smooth',block:'start'});
+ });
+}
+
+/* ---------- 뉴스레터용 복사 ---------- */
+var MFB="font-family:Aptos,'Malgun Gothic','Apple SD Gothic Neo',Arial,sans-serif;";
+var CINK='#0F1419',CHEAD='#0F1419',CMUT='#4A5561',CFAINT='#79838F',CACC='#2A78D6',CTINT='#EAF2FC',CLINE='#E3E7EA';
+function mrow(inner,pad,extra){return '<tr><td style="padding:'+(pad||'0')+';'+(extra||'')+'">'+inner+'</td></tr>';}
+function msp(t,st){return '<span style="'+MFB+st+'">'+t+'</span>';}
+function mailTable(t){
+ var head='<tr>'+t.headers.map(function(h){return '<td bgcolor="'+CTINT+'" style="padding:6px 9px;border:1px solid '+CLINE+'">'+
+  msp(esc(h),'font-size:8pt;font-weight:bold;color:'+CMUT+';letter-spacing:.3px;')+'</td>';}).join('')+'</tr>';
+ var body=t.rows.map(function(r){return '<tr>'+r.map(function(c,i){return '<td style="padding:6px 9px;border:1px solid '+CLINE+';text-align:'+(i>0?'right':'left')+'">'+
+  msp(esc(c),'font-size:8.5pt;color:'+CINK+';')+'</td>';}).join('')+'</tr>';}).join('');
+ return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse">'+head+body+'</table>';
+}
+function mailChartImg(it,imgMap){
+ var img=imgMap&&imgMap[it.el];if(!img)return '';
+ var w=Math.min(640,img.w||640);
+ return '<img src="'+img.url+'" width="'+w+'" style="display:block;max-width:100%;height:auto;border:1px solid '+CLINE+';margin-top:5px">';
+}
+function buildMail(imgMap){
+ imgMap=imgMap||{};
+ var now=new Date(),pad=function(n){return(n<10?'0':'')+n;};
+ var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+ var titleKo='주요 공항 출발 국제선 노선 분석 브리프', titleEn='Major Airport Departure Route Analysis Brief';
+ var h=['<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="680" style="width:680px;max-width:680px;border-collapse:collapse;'+MFB+'">'];
+ h.push(mrow(msp('AIR PORTAL SYSTEM','font-size:8pt;font-weight:bold;color:'+CACC+';letter-spacing:1.5px;'),'0 0 6px 0'));
+ h.push(mrow(msp(LB(titleKo,titleEn),'font-size:18pt;font-weight:bold;color:'+CHEAD+';'),'0 0 6px 0'));
+ h.push(mrow(msp(PERIOD_RANGE.replace(' – ','–')+' &middot; '+apDocLabel()+' &middot; '+periodDocLabel()+' &middot; '+LB('생성','Generated')+' '+stamp+' &middot; AVIAREPS Korea','font-size:8.5pt;color:'+CMUT+';'),'0 0 12px 0','border-bottom:2px solid '+CACC));
+ ['s1','s2','s3'].forEach(function(sec){
+  if(!secAny(sec))return;
+  h.push(mrow('<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse"><tr>'+
+   '<td bgcolor="'+CTINT+'" style="padding:9px 14px;border-left:4px solid '+CACC+'">'+msp(esc(secTitleFull(sec)),'font-size:12pt;font-weight:bold;color:'+CACC+';')+'</td></tr></table>','24px 0 0 0'));
+  itemsFor(sec).forEach(function(it){
+   if(!sel(sec,it.k))return;
+   h.push(mrow(msp(it.num+' '+esc(LB(it.ko,it.en)),'font-size:10.5pt;font-weight:bold;color:'+CINK+';'),'14px 0 4px 0'));
+   if(it.t==='table'||it.t==='both'){
+    if(it.caption)h.push(mrow(msp(esc(it.caption()),'font-size:8.5pt;color:'+CMUT+';'),'0 0 4px 0'));
+    var tres=it.table();
+    if(Array.isArray(tres)){
+     tres.forEach(function(blk,bi){
+      h.push(mrow(msp(esc(blk.label||''),'font-size:9pt;font-weight:bold;color:'+CINK+';'),(bi===0?'2px 0 3px 0':'14px 0 3px 0')));
+      h.push(mrow(mailTable(blk),'0 0 0 0'));
+     });
+    }else{
+     h.push(mrow(mailTable(tres),'4px 0 0 0'));
+    }
+   }
+   if(it.t==='chart'||it.t==='both'){
+    var img=mailChartImg(it,imgMap);
+    if(img)h.push(mrow(img,'8px 0 0 0'));
+   }
+  });
+ });
+ h.push(mrow(msp('Air Portal System · Ministry of Land, Infrastructure and Transport &middot; AVIAREPS Korea','font-size:8pt;color:'+CFAINT+';'),'14px 0 0 0','border-top:1px solid '+CLINE));
+ h.push('</table>');
+ return h.join('');
+}
+function legacyCopy(html,ok,fail){
+ var d=document.createElement('div');
+ d.setAttribute('contenteditable','true');
+ d.style.cssText='position:fixed;left:-10000px;top:0;width:700px;white-space:normal';
+ d.innerHTML=html;document.body.appendChild(d);
+ var r=document.createRange();r.selectNodeContents(d);
+ var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+ var done=false;try{done=document.execCommand('copy');}catch(e){}
+ s.removeAllRanges();document.body.removeChild(d);
+ done?ok():fail();
+}
+function doDocCopy(){
+ var n=selCount();
+ if(!n){docMsg('err','담을 항목을 하나 이상 골라주세요.');return;}
+ var chartKeys=selectedChartElIds();
+ docMsg('ok',chartKeys.length?'그래프를 캡처하는 중…':'복사 준비 중…');
+ captureCharts(chartKeys).then(function(imgMap){
+  var html=buildMail(imgMap);
+  var tmp=document.createElement('div');tmp.innerHTML=html;
+  var plain=tmp.innerText||tmp.textContent||'';
+  var ok=function(){docMsg('ok','뉴스레터용 서식이 복사됐습니다 ('+n+'개 항목, '+
+   ({ko:'한국어',en:'English',both:'한/영 병기'}[LANG])+'). 메일 작성창에 그대로 붙여넣으면 서식이 유지됩니다.');};
+  var fail=function(){docMsg('err','클립보드 복사가 차단됐습니다. 미리보기를 연 뒤 문서 영역을 드래그해 직접 복사해 주세요.');};
+  if(navigator.clipboard&&window.ClipboardItem){
+   try{
+    navigator.clipboard.write([new window.ClipboardItem({
+     'text/html':new Blob([html],{type:'text/html'}),
+     'text/plain':new Blob([plain],{type:'text/plain'})})]).then(ok,function(){legacyCopy(html,ok,fail);});
+    return;
+   }catch(e){}
+  }
+  legacyCopy(html,ok,fail);
+ });
+}
+
+/* ---------- Word (.docx) ---------- */
+function xe(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function dxRun(t,o){o=o||{};
+ return '<w:r><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:cs="Aptos" w:eastAsia="Malgun Gothic"/>'+
+  (o.b?'<w:b/>':'')+(o.i?'<w:i/>':'')+(o.color?'<w:color w:val="'+o.color+'"/>':'')+
+  '<w:sz w:val="'+(o.sz||24)+'"/><w:szCs w:val="'+(o.sz||24)+'"/></w:rPr>'+
+  '<w:t xml:space="preserve">'+xe(t)+'</w:t></w:r>';}
+function dxP(runs,o){o=o||{};
+ return '<w:p><w:pPr><w:spacing w:before="'+(o.before||0)+'" w:after="'+(o.after||60)+'"/>'+
+  (o.bdr?'<w:pBdr><w:bottom w:val="single" w:sz="'+o.bdr+'" w:space="2" w:color="0F1419"/></w:pBdr>':'')+
+  (o.jc?'<w:jc w:val="'+o.jc+'"/>':'')+
+  '</w:pPr>'+runs+'</w:p>';}
+function dxCell(text,w,o){o=o||{};
+ return '<w:tc><w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'+(o.shade?'<w:shd w:val="clear" w:fill="'+o.shade+'"/>':'')+
+  '<w:tcMar><w:top w:w="40" w:type="dxa"/><w:bottom w:w="40" w:type="dxa"/><w:left w:w="80" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tcMar></w:tcPr>'+
+  dxP(dxRun(text,{b:o.b,sz:o.sz||17,color:o.color}),{after:0})+'</w:tc>';}
+function dxTable(t){
+ var n=t.headers.length,total=9000,w=Math.floor(total/n);
+ var grid=t.headers.map(function(){return '<w:gridCol w:w="'+w+'"/>';}).join('');
+ var head='<w:tr>'+t.headers.map(function(h){return dxCell(h,w,{b:1,sz:15,color:'4A5561',shade:'EDF0F2'});}).join('')+'</w:tr>';
+ var body=t.rows.map(function(r){return '<w:tr>'+r.map(function(c){return dxCell(String(c),w,{sz:17});}).join('')+'</w:tr>';}).join('');
+ return '<w:tbl><w:tblPr><w:tblW w:w="'+total+'" w:type="dxa"/><w:tblBorders>'+
+  ['top','left','bottom','right','insideH','insideV'].map(function(b){return '<w:'+b+' w:val="single" w:sz="4" w:color="D3DAE0"/>';}).join('')+
+  '</w:tblBorders></w:tblPr><w:tblGrid>'+grid+'</w:tblGrid>'+head+body+'</w:tbl>';
+}
+function dxDrawingP(img,idNum){
+ var maxW=650,w=img.w||maxW,h=img.h||Math.round(maxW*0.5);
+ var dispW=Math.min(maxW,w),dispH=Math.round(dispW*(h/w));
+ var cx=Math.round(dispW*9525),cy=Math.round(dispH*9525);
+ return '<w:p><w:pPr><w:spacing w:before="60" w:after="20"/><w:jc w:val="center"/></w:pPr>'+
+  '<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0">'+
+  '<wp:extent cx="'+cx+'" cy="'+cy+'"/><wp:effectExtent l="0" t="0" r="0" b="0"/>'+
+  '<wp:docPr id="'+idNum+'" name="Picture '+idNum+'"/>'+
+  '<wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr>'+
+  '<a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'+
+  '<pic:pic><pic:nvPicPr><pic:cNvPr id="'+idNum+'" name="Picture '+idNum+'"/><pic:cNvPicPr/></pic:nvPicPr>'+
+  '<pic:blipFill><a:blip r:embed="rId'+idNum+'"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'+
+  '<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="'+cx+'" cy="'+cy+'"/></a:xfrm>'+
+  '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>'+
+  '</a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>';
+}
+function buildDocx(imgMap){
+ imgMap=imgMap||{};
+ var body=[],media=[],imgN=0;
+ var now=new Date(),pad=function(n){return(n<10?'0':'')+n;};
+ var stamp=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+ var titleKo='주요 공항 출발 국제선 노선 분석 브리프', titleEn='Major Airport Departure Route Analysis Brief';
+ function chartPara(it){
+  var img=imgMap[it.el];
+  if(!img){
+   body.push(dxP(dxRun(LB('그래프를 불러오지 못했습니다.','Chart could not be captured.'),{sz:17,color:'B23B3B',i:1}),{before:60,after:80}));
+   return;
+  }
+  imgN++;media.push({id:imgN,data:img.url.split(',')[1]});
+  body.push(dxDrawingP(img,imgN));
+ }
+ body.push(dxP(dxRun('AIR PORTAL SYSTEM',{b:1,sz:18,color:'2A78D6'}),{after:40}));
+ body.push(dxP(dxRun(LB(titleKo,titleEn),{b:1,sz:36}),{after:40}));
+ body.push(dxP(dxRun(PERIOD_RANGE.replace(' – ','–')+' · '+apDocLabel()+' · '+periodDocLabel()+' · '+LB('생성','Generated')+' '+stamp+' · AVIAREPS Korea',{sz:18,color:'5A6A76'}),{after:160,bdr:12}));
+ body.push(dxP('',{after:60}));
+ ['s1','s2','s3'].forEach(function(sec){
+  if(!secAny(sec))return;
+  body.push(dxP(dxRun(secTitleFull(sec),{b:1,sz:28}),{before:220,after:80,bdr:8}));
+  itemsFor(sec).forEach(function(it){
+   if(!sel(sec,it.k))return;
+   body.push(dxP(dxRun(it.num+' '+LB(it.ko,it.en),{b:1,sz:20}),{before:100,after:60}));
+   if(it.t==='table'||it.t==='both'){
+    if(it.caption)body.push(dxP(dxRun(it.caption(),{sz:17,color:'5A6A76',i:1}),{after:40}));
+    var tres=it.table();
+    if(Array.isArray(tres)){
+     tres.forEach(function(blk,bi){
+      body.push(dxP(dxRun(blk.label||'',{b:1,sz:18}),{before:(bi===0?0:120),after:40}));
+      body.push(dxTable(blk));
+     });
+     body.push(dxP('',{after:100}));
+    }else{
+     body.push(dxTable(tres));body.push(dxP('',{after:100}));
+    }
+   }
+   if(it.t==='chart'||it.t==='both'){
+    chartPara(it);
+    body.push(dxP('',{after:100}));
+   }
+  });
+ });
+ body.push(dxP(dxRun(LB('출처: 국토교통부 항공정보포털시스템(airportal.go.kr) 항공통계 상세조회 · 일자별 통계 · 노선','Source: Air Portal System, Ministry of Land, Infrastructure and Transport (Korea) · Daily Statistics · Routes')+' · AVIAREPS Korea',{sz:16,color:'8494A0'}),{before:220,after:0,bdr:8}));
+ var doc='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+  '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'+
+  ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'+
+  ' xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'+
+  ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'+
+  ' xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>'+
+  body.join('')+
+  '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'+
+  '<w:pgMar w:top="794" w:right="794" w:bottom="794" w:left="794" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>'+
+  '</w:body></w:document>';
+ return {xml:doc, media:media};
+}
+function withJSZip(cb){
+ if(window.JSZip)return cb();
+ var s=document.createElement('script');
+ s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+ s.onload=function(){window.JSZip?cb():docMsg('err','Word 변환 모듈을 불러오지 못했습니다.');};
+ s.onerror=function(){docMsg('err','Word 변환 모듈을 불러오지 못했습니다. 네트워크를 확인해 주세요.');};
+ document.head.appendChild(s);
+}
+function doDocx(){
+ if(!DL){docMsg('err','이 화면에서는 파일 저장을 쓸 수 없습니다.');return;}
+ var n=selCount();
+ if(!n){docMsg('err','담을 항목을 하나 이상 골라주세요.');return;}
+ var chartKeys=selectedChartElIds();
+ docMsg('ok',chartKeys.length?'그래프를 캡처하고 Word 문서를 만드는 중…':'Word 문서를 만드는 중…');
+ captureCharts(chartKeys).then(function(imgMap){
+  withJSZip(function(){
+   try{
+    var built=buildDocx(imgMap),zip=new window.JSZip();
+    var hasMedia=built.media.length>0;
+    zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+     '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
+     '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'+
+     '<Default Extension="xml" ContentType="application/xml"/>'+
+     (hasMedia?'<Default Extension="png" ContentType="image/png"/>':'')+
+     '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'+
+     '</Types>');
+    zip.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+     '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+     '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'+
+     '</Relationships>');
+    zip.folder('word').file('document.xml',built.xml);
+    if(hasMedia){
+     var relXml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+      '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
+      built.media.map(function(m){return '<Relationship Id="rId'+m.id+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/image'+m.id+'.png"/>';}).join('')+
+      '</Relationships>';
+     zip.folder('word').folder('_rels').file('document.xml.rels',relXml);
+     var mediaFolder=zip.folder('word').folder('media');
+     built.media.forEach(function(m){mediaFolder.file('image'+m.id+'.png',m.data,{base64:true});});
+    }
+    zip.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
+     .then(function(blob){return DL.save({filename:fileNameBase()+'.docx',data:blob});})
+     .then(function(){docMsg('ok','Word 문서를 저장했습니다 — '+fileNameBase()+'.docx ('+n+'개 항목).');})
+     .catch(function(e){
+      var c=e&&e.code;
+      docMsg('err',({declined:'저장을 취소하셨습니다.',rate_limited:'저장 요청이 몰렸습니다. 잠시 후 다시 눌러주세요.',
+       too_large:'문서가 16MB를 넘습니다. 항목을 줄여주세요.',rejected_extension:'docx 형식을 저장할 수 없습니다.',
+       extension_not_enabled:'이 화면에서는 Word 저장이 꺼져 있습니다.'}[c])||'Word 문서 저장에 실패했습니다.');});
+   }catch(err){docMsg('err','Word 문서를 만들지 못했습니다.');}
+  });
+ });
+}
+
+/* ---------- PDF ---------- */
+var CDN={h2c:'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+ jspdf:'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'};
+function loadScript(src,test,cb,err){
+ if(test())return cb();
+ var s=document.createElement('script');s.src=src;
+ s.onload=function(){test()?cb():err();};s.onerror=err;
+ document.head.appendChild(s);
+}
+var IMGCACHE={};
+/* 이 요소(id)를 다시 그리면 캡처 직전 그래프 텍스트(월/노선/항공사/유형명)를 문서 언어로 바꿀 수 있는지 — 메인 스크립트의 renderSec1/renderRouteTrend 등은 DOCCAP 플래그를 보고 trMonth/trRoute/trAirline/trType으로 텍스트를 고른다 */
+var CHART_REDRAW={
+ 'c-pax':function(){renderSec1();}, 'c-flt':function(){renderSec1();}, 'c-crg':function(){renderSec1();}, 'c-ppf':function(){renderSec1();},
+ 'c-routeline':function(){renderRouteTrend();},
+ 'c-airline':function(){renderAirlineTrend();},
+ 'c-kr':function(){renderKrShareChart();},
+ 'c-atype':function(){renderAirType();},
+ 'c-rtair':function(){renderRouteAirline();}
+};
+function ensureH2C(){
+ return new Promise(function(res,rej){
+  loadScript(CDN.h2c,function(){return !!window.html2canvas;},res,rej);
+ });
+}
+function captureOneChart(elId){
+ var el=document.getElementById(elId);
+ if(!el)return Promise.resolve(null);
+ var redraw=CHART_REDRAW[elId];
+ var needsRedraw=!!(redraw && LANG!=='ko');
+ if(needsRedraw){ DOCCAP=true; redraw(); }
+ function restore(){ if(needsRedraw){ DOCCAP=false; redraw(); } }
+ /* 차트 옆에 별도 DOM으로 붙는 범례(id: c-xxx 옆 l-xxx)는 캡처 대상(el) 밖에 있어
+    html2canvas(el)만으로는 잘려서 안 보인다 — 범례가 있으면 차트+범례를 오프스크린 래퍼에
+    함께 복제해 그 래퍼를 캡처한다 (실제 화면 레이아웃은 건드리지 않음) */
+ var legendEl = elId.indexOf('c-')===0 ? document.getElementById('l-'+elId.slice(2)) : null;
+ var hasLegend = !!(legendEl && legendEl.innerHTML && legendEl.innerHTML.trim());
+ var wrap=null, target=el;
+ if(hasLegend){
+  wrap=document.createElement('div');
+  wrap.style.cssText='position:absolute;left:-99999px;top:0;background:#fff;width:'+(el.offsetWidth||760)+'px';
+  wrap.appendChild(el.cloneNode(true));
+  wrap.appendChild(legendEl.cloneNode(true));
+  document.body.appendChild(wrap);
+  target=wrap;
+ }
+ function cleanup(){ if(wrap&&wrap.parentNode) wrap.parentNode.removeChild(wrap); }
+ return window.html2canvas(target,{scale:2,backgroundColor:'#ffffff',logging:false}).then(function(c){
+  restore(); cleanup();
+  if(!c.width||!c.height)return null;
+  return {url:c.toDataURL('image/png'),w:Math.round(c.width/2),h:Math.round(c.height/2)};
+ }).catch(function(){ restore(); cleanup(); return null; });
+}
+function captureCharts(elIds){
+ var need=elIds.filter(function(k){return !IMGCACHE[k];});
+ if(!need.length)return Promise.resolve(IMGCACHE);
+ return ensureH2C().then(function(){
+  return need.reduce(function(p,k){
+   return p.then(function(){return captureOneChart(k).then(function(r){IMGCACHE[k]=r;});});
+  },Promise.resolve());
+ }).then(function(){return IMGCACHE;}).catch(function(){return IMGCACHE;});
+}
+function resetChartCache(){IMGCACHE={};}
+function doPdf(){
+ if(!DL){docMsg('err','이 화면에서는 파일 저장을 쓸 수 없습니다.');return;}
+ var n=selCount();
+ if(!n){docMsg('err','담을 항목을 하나 이상 골라주세요.');return;}
+ if(PDFBUSY)return;
+ var chartKeys=selectedChartElIds();
+ var fail=function(m){PDFBUSY=false;syncDocPanel();docMsg('err',m||'PDF를 만들지 못했습니다. Word로 저장해 주세요.');};
+ PDFBUSY=true;syncDocPanel();
+ docMsg('ok','PDF를 만드는 중입니다… 항목이 많으면 10초 이상 걸릴 수 있습니다.');
+ captureCharts(chartKeys).then(function(imgMap){
+  loadScript(CDN.h2c,function(){return !!window.html2canvas;},function(){
+   loadScript(CDN.jspdf,function(){return !!(window.jspdf&&window.jspdf.jsPDF);},function(){
+    renderPdf(imgMap,fail);
+   },function(){fail('PDF 변환 모듈(jsPDF)을 불러오지 못했습니다.');});
+  },function(){fail('PDF 변환 모듈(html2canvas)을 불러오지 못했습니다.');});
+ });
+}
+var FDOCCSS='.fdoc{max-width:900px;margin:0 auto;font-family:Aptos,"Malgun Gothic","Apple SD Gothic Neo","IBM Plex Sans KR",sans-serif;font-size:12px;line-height:1.62;color:#0f1419}'+
+'.fdoc .fh{border-bottom:2px solid #0f1419;padding-bottom:10px;margin-bottom:14px}.fdoc .fh-b{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#2a78d6;font-weight:700}'+
+'.fdoc .fh h1{font-size:20px;margin:6px 0 4px;letter-spacing:-.01em}.fdoc .fh-m{font-size:10px;color:#5a6a76;letter-spacing:.02em}'+
+'.fdoc .fs{margin-top:16px}.fdoc .fs-h{display:flex;align-items:baseline;gap:8px;border-bottom:1px solid #0f1419;padding-bottom:3px;margin-bottom:8px}'+
+'.fdoc .fs-h b{font-size:13.5px}'+
+'.fdoc p.fnote{margin:0 0 10px;font-size:10.5px;color:#5a6a76}'+
+'.fdoc .ftbl-block{margin-bottom:14px}.fdoc .ftbl-block:last-child{margin-bottom:0}'+
+'.fdoc .ftbl-h{font-weight:600;font-size:10.5px;color:#0f1419;margin:0 0 4px;letter-spacing:.02em}'+
+'.fdoc table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:8px}'+
+'.fdoc th,.fdoc td{padding:5px 8px;text-align:right;border-bottom:1px solid #e9edf0}'+
+'.fdoc th{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:#5a6a76;font-weight:600;border-bottom:1px solid #0f1419;white-space:nowrap}'+
+'.fdoc td:first-child,.fdoc th:first-child{text-align:left}'+
+'.fdoc .fchart{margin:10px 0 16px;text-align:center}'+
+'.fdoc .fchart-warn{font-size:9.5px;color:#b23b3b;margin:0;text-align:left}'+
+'.fdoc .fchart img{max-width:100%;border:1px solid #e3e7ea;border-radius:2px}'+
+'.fdoc .ffoot{margin-top:14px;padding-top:8px;border-top:1px solid #0f1419;font-size:9px;color:#8494a0;line-height:1.6}';
+function renderPdf(imgMap,fail){
+ var W=760;
+ var d=buildDoc(imgMap);
+ var host=document.createElement('div');
+ host.style.cssText='position:fixed;left:-20000px;top:0;width:'+W+'px;background:#ffffff;padding:0;z-index:-1';
+ host.innerHTML='<style>'+FDOCCSS+'</style><div style="width:'+W+'px;background:#fff">'+d.body+'</div>';
+ document.body.appendChild(host);
+ var doc=host.querySelector('.fdoc');
+ doc.style.maxWidth=W+'px';
+ var blocks=[],base=doc.getBoundingClientRect().top;
+ Array.prototype.forEach.call(doc.querySelectorAll('.fh,.fs-h,.ffoot,.fchart'),function(el){
+  var r=el.getBoundingClientRect();blocks.push({top:r.top-base,bottom:r.bottom-base});});
+ var total=doc.getBoundingClientRect().height;
+ window.html2canvas(doc,{scale:2,backgroundColor:'#ffffff',logging:false,windowWidth:W,width:W})
+  .then(function(canvas){
+   try{
+    var jsPDF=window.jspdf.jsPDF,pdf=new jsPDF({unit:'pt',format:'a4',orientation:'p'});
+    var pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),M=30;
+    var iw=pw-M*2,k=iw/W,pageCss=(ph-M*2)/k;
+    var cuts=[0],cur=0;
+    blocks.forEach(function(b){
+     if(b.bottom-cur>pageCss){
+      var start=(b.top-cur>2)?b.top:b.bottom;
+      if(start-cur<=0)start=cur+pageCss;
+      cuts.push(start);cur=start;}});
+    cuts.push(total);
+    var sc=canvas.height/total,pages=0;
+    for(var i=0;i<cuts.length-1;i++){
+     var y0=Math.round(cuts[i]*sc),y1=Math.round(cuts[i+1]*sc);
+     if(y1-y0<4)continue;
+     var c=document.createElement('canvas');c.width=canvas.width;c.height=y1-y0;
+     var cx=c.getContext('2d');cx.fillStyle='#ffffff';cx.fillRect(0,0,c.width,c.height);
+     cx.drawImage(canvas,0,y0,canvas.width,y1-y0,0,0,canvas.width,y1-y0);
+     if(pages)pdf.addPage();
+     pdf.addImage(c.toDataURL('image/jpeg',0.9),'JPEG',M,M,iw,(y1-y0)/sc*k);
+     pages++;}
+    var blob=pdf.output('blob');
+    host.parentNode.removeChild(host);
+    var fn=fileNameBase()+'.pdf';
+    DL.save({filename:fn,data:blob}).then(function(){
+     PDFBUSY=false;syncDocPanel();
+     docMsg('ok','PDF를 저장했습니다 — '+fn+' ('+pages+'쪽). PDF는 페이지 이미지로 만들어져 글자 선택·검색은 되지 않습니다. 편집이나 검색이 필요하면 Word를 쓰세요.');
+    }).catch(function(e){
+     var c2=e&&e.code;
+     fail(c2==='declined'?'저장을 취소하셨습니다.':(c2==='too_large'?'PDF가 16MB를 넘습니다. 항목을 줄여주세요.':null));});
+   }catch(err){if(host.parentNode)host.parentNode.removeChild(host);fail();}
+  }).catch(function(){if(host.parentNode)host.parentNode.removeChild(host);fail();});
+}
+function docMsg(kind,text){
+ var m=document.getElementById('docmsg');if(!m)return;
+ m.className='doc-msg '+kind;m.innerHTML=text;m.hidden=false;
+}
+
+/* ---------- 화면 상태 변경 시 문서 패널 동기화 ---------- */
+function docStateChanged(){
+ resetChartCache();
+ var panel=document.getElementById('docpanel');
+ if(panel&&!panel.hidden)syncDocPanel();
+ var pv=document.getElementById('docpv');
+ if(pv&&!pv.hidden)doDocPreview();
+}
+Array.prototype.forEach.call(document.querySelectorAll('.seg button[data-ap], .seg button[data-kpi], .seg button[data-view], .seg button[data-ra], .seg button[data-apcmp], .seg button[data-rtp], .seg button[data-atp], #kpi-showall, #apcmp-showall'),function(el){
+ el.addEventListener('click',function(){setTimeout(docStateChanged,0);});
+});
+(function(){var rtSel=document.getElementById('rt-sel');if(rtSel)rtSel.addEventListener('change',function(){setTimeout(docStateChanged,0);});})();
+
+/* ---------- 배선 ---------- */
+/* 표준 브라우저 다운로드 (Blob + <a download>) */
+DL={save:function(o){
+ return new Promise(function(res,rej){
+  try{
+   var url=URL.createObjectURL(o.data), a=document.createElement('a');
+   a.href=url; a.download=o.filename; a.rel='noopener'; a.style.display='none';
+   document.body.appendChild(a); a.click();
+   setTimeout(function(){URL.revokeObjectURL(url); if(a.parentNode)a.parentNode.removeChild(a);},1500);
+   res();
+  }catch(e){rej(e);}
+ });
+}};
+DLASKED=true;
+
+document.addEventListener('click',function(ev){
+ var t=ev.target,b=t.closest?t.closest('button'):null;
+ if(!b)return;
+ if(b.id==='docbtn'){
+  var p=document.getElementById('docpanel');
+  if(p.hidden){p.innerHTML=docPanel();}
+  p.hidden=!p.hidden;
+  b.setAttribute('aria-expanded',String(!p.hidden));
+  var dc=document.getElementById('doccar');if(dc)dc.textContent=p.hidden?'▾':'▴';
+  if(!p.hidden){syncDocPanel();p.scrollIntoView({behavior:'smooth',block:'start'});}
+  return;
+ }
+ if(b.id==='docsumbtn'){var w=document.getElementById('docpickwrap');w.hidden=!w.hidden;
+  b.setAttribute('aria-expanded',String(!w.hidden));
+  var pc=document.getElementById('docpickcar');if(pc)pc.textContent=w.hidden?'▾':'▴';return;}
+ if(b.dataset.doclang){LANG=b.dataset.doclang;resetChartCache();syncDocPanel();
+  var pv=document.getElementById('docpv');if(pv&&!pv.hidden)doDocPreview();return;}
+ if(b.dataset.docall){var on=b.dataset.docall==='1';Object.keys(SEL).forEach(function(k){SEL[k]=on;});syncDocPanel();return;}
+ if(b.id==='doccpbtn'){doDocCopy();return;}
+ if(b.id==='docpdbtn'){doPdf();return;}
+ if(b.id==='docdxbtn'){doDocx();return;}
+ if(b.id==='docpvbtn'){doDocPreview();return;}
+ if(b.id==='docpvclose'){var v=document.getElementById('docpv');v.hidden=true;v.innerHTML='';
+  document.getElementById('docpanel').scrollIntoView({behavior:'smooth',block:'start'});return;}
+});
+document.addEventListener('change',function(ev){
+ var t=ev.target;
+ if(!t.classList)return;
+ if(t.classList.contains('docitembox')){SEL[t.dataset.sec+'.'+t.dataset.item]=t.checked;syncDocPanel();return;}
+ if(t.classList.contains('docsecbox')){
+  var sec=t.dataset.sec,on=t.checked;
+  itemsFor(sec).forEach(function(it){SEL[sec+'.'+it.k]=on;});
+  syncDocPanel();return;
+ }
+});
+</script>
+<script>
+/* 데이터 로드 → 앱 스크립트 실행 (두 앱 스크립트는 전역 범위를 공유한다) */
+(function(){
+  function run(id){var s=document.createElement('script');s.text=document.getElementById(id).textContent;document.body.appendChild(s);}
+  function fail(msg){
+    var w=document.querySelector('.wrap'); var d=document.createElement('div');
+    d.setAttribute('role','alert');
+    d.style.cssText='margin:24px 0;padding:14px 16px;border:1px solid var(--down);border-radius:3px;color:var(--down);background:var(--card)';
+    d.textContent='데이터를 불러오지 못했습니다 ('+msg+'). 잠시 후 새로고침해 주세요.';
+    if(w) w.insertBefore(d,w.firstChild); else document.body.appendChild(d);
+  }
+  fetch('../data/airport-routes.json',{cache:'no-cache'})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(j){ window.__ROUTES=j; run('app-main'); run('app-doc'); })
+    .catch(function(e){ fail(e && e.message || e); });
+})();
+</script>
+
+</body></html>
